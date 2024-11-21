@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using Verse;
 
@@ -9,13 +10,26 @@ namespace DragonBall
     {
         private Vector2 scrollPosition = Vector2.zero;
         private readonly Map map;
+        private readonly Pawn TargetPawn;
         private readonly Building_DragonBallAltar altar;
-        private readonly List<BaseWish> availableWishes;
-        private static readonly Vector2 WinSize = new Vector2(400f, 600f);
+        private readonly Dictionary<string, List<BaseWish>> categorizedWishes;
+        private static readonly Vector2 WinSize = new Vector2(800f, 600f);
+        private const float WISH_BUTTON_SIZE = 120f;
+        private const float WISH_BUTTON_PADDING = 10f;
+        private const float SECTION_PADDING = 20f;
+        private const int WISHES_PER_ROW = 4;
+        private const float CATEGORY_HEADER_HEIGHT = 30f;
+
+        private const float LABEL_HEIGHT = 40f;
+        private const float TITLE_HEIGHT = 35f;
+        private Color TITLE_COLOR = new Color(0.3f, 0.3f, 0.3f, 0.3f);
+        private Color FOOTER_COLOR = new Color(0.3f, 0.3f, 0.3f, 0.3f);
+        private Color CATEGORY_COLOR = new Color(0.3f, 0.3f, 0.3f, 0.3f);
+        private const float INNER_PADDING = 5f;
 
         public override Vector2 InitialSize => WinSize;
 
-        public Window_WishSelection(Map map, Building_DragonBallAltar altar)
+        public Window_WishSelection(Map map, Building_DragonBallAltar altar, Pawn TargetPawn)
         {
             this.map = map;
             this.altar = altar;
@@ -23,55 +37,195 @@ namespace DragonBall
             this.doCloseButton = true;
             this.absorbInputAroundWindow = true;
             this.forcePause = true;
+            this.TargetPawn = TargetPawn;
 
-            // Generate all available wishes
-            availableWishes = new List<BaseWish>();
+            categorizedWishes = new Dictionary<string, List<BaseWish>>();
+
             foreach (WishDef wishDef in DefDatabase<WishDef>.AllDefs)
             {
-                // Create instance of the wish type
-                BaseWish wishPrototype = (BaseWish)Activator.CreateInstance(wishDef.wishClass);
-                wishPrototype.def = wishDef;
+                if (wishDef == null)
+                {
+                    Log.Warning("Encountered null WishDef in DefDatabase");
+                    continue;
+                }
 
-                // Generate all concrete wishes from this type
-                availableWishes.AddRange(wishPrototype.GenerateWishes(map, altar));
+                if (wishDef.wishClass == null)
+                {
+                    Log.Warning($"WishDef {wishDef.defName} has null wishClass");
+                    continue;
+                }
+
+                BaseWish wishPrototype;
+                try
+                {
+                    wishPrototype = (BaseWish)Activator.CreateInstance(wishDef.wishClass);
+                    if (wishPrototype == null)
+                    {
+                        Log.Warning($"Failed to create wish instance for {wishDef.defName}");
+                        continue;
+                    }
+
+                    wishPrototype.def = wishDef;
+                    var wishes = wishPrototype.GenerateWishes(map, altar, TargetPawn);
+
+                    string category = wishDef.category ?? "Miscellaneous";
+                    if (!categorizedWishes.ContainsKey(category))
+                    {
+                        categorizedWishes[category] = new List<BaseWish>();
+                    }
+
+                    if (wishes != null && wishes.Any())
+                    {
+                        foreach (var wish in wishes)
+                        {
+                            if (wish.def == null)
+                            {
+                                Log.Warning($"Generated wish of type {wish.GetType().Name} has null def");
+                                wish.def = wishDef;
+                            }
+                        }
+                        categorizedWishes[category].AddRange(wishes);
+                    }
+                }
+                catch (Exception e)
+                {
+                    Log.Error($"Error creating wish for def {wishDef.defName}: {e}");
+                    continue;
+                }
             }
+        }
+
+
+
+        private void TryDrawIcon(Rect iconRect, BaseWish wish)
+        {
+            Texture2D iconTexture = wish.GetIcon();
+            if (iconTexture != null)
+            {
+                Widgets.DrawTextureFitted(iconRect, iconTexture, 0.8f);
+            }
+        }
+
+
+        private void DrawTitle(Rect inRect)
+        {
+            // Draw title
+            Text.Font = GameFont.Medium;
+            Text.Anchor = TextAnchor.MiddleCenter;
+            Rect titleRect = new Rect(0f, 0f, inRect.width, TITLE_HEIGHT);
+            GUI.DrawTexture(titleRect, SolidColorMaterials.NewSolidColorTexture(TITLE_COLOR));
+            Widgets.Label(titleRect, "Make Your Wish");
+            Text.Anchor = TextAnchor.UpperLeft;
         }
 
         public override void DoWindowContents(Rect inRect)
         {
-            Text.Font = GameFont.Medium;
-            Widgets.Label(new Rect(0f, 0f, inRect.width, 35f), "Make Your Wish");
-            Text.Font = GameFont.Small;
+            DrawTitle(inRect);
 
-            Rect outRect = new Rect(0f, 40f, inRect.width, inRect.height - 40f);
-            float viewHeight = availableWishes.Count * 50f; // Height per wish
-            Rect viewRect = new Rect(0f, 0f, outRect.width - 16f, viewHeight);
-
-            Widgets.BeginScrollView(outRect, ref scrollPosition, viewRect);
-
-            float curY = 0f;
-            foreach (BaseWish wish in availableWishes)
+            // Calculate total height needed for all sections
+            float totalHeight = 40f;
+            foreach (var category in categorizedWishes)
             {
-                Rect wishRect = new Rect(0f, curY, viewRect.width, 45f);
-
-                if (Widgets.ButtonText(wishRect, wish.Label))
+                if (category.Value.Count > 0)
                 {
-                    if (wish.CanBeGranted(map, altar))
-                    {
-                        wish.Grant(map, altar);
-                        altar.ScatterGatheredDragonBalls();
-                        Close();
-                    }
+                    totalHeight += CATEGORY_HEADER_HEIGHT;
+                    totalHeight += Mathf.Ceil(category.Value.Count / (float)WISHES_PER_ROW) * (WISH_BUTTON_SIZE + WISH_BUTTON_PADDING);
+                    totalHeight += SECTION_PADDING;
                 }
 
-                // Draw description
-                Widgets.DrawHighlightIfMouseover(wishRect);
-                TooltipHandler.TipRegion(wishRect, wish.Description);
+            }
 
-                curY += 50f;
+            // Create view rect
+            Rect outRect = new Rect(0f, 40f, inRect.width, inRect.height - 40f);
+            Rect viewRect = new Rect(0f, 0f, outRect.width - 16f, totalHeight);
+
+            Widgets.BeginScrollView(outRect, ref scrollPosition, viewRect);
+            float curY = 0f;
+
+            foreach (var category in categorizedWishes)
+            {
+                if (category.Value.Count <= 0)
+                {
+                    continue;
+                }
+
+                // Draw category header
+                Text.Font = GameFont.Medium;
+                Rect headerRect = new Rect(0f, curY, viewRect.width, CATEGORY_HEADER_HEIGHT);
+                GUI.DrawTexture(headerRect, SolidColorMaterials.NewSolidColorTexture(CATEGORY_COLOR));
+                Widgets.Label(headerRect, category.Key);
+                curY += 35f;
+
+                // Draw wishes in a grid
+                float curX = 0f;
+                foreach (BaseWish wish in category.Value)
+                {
+                    if (curX + WISH_BUTTON_SIZE > viewRect.width)
+                    {
+                        curX = 0f;
+                        curY += WISH_BUTTON_SIZE + WISH_BUTTON_PADDING;
+                    }
+
+                    Rect wishRect = new Rect(curX, curY, WISH_BUTTON_SIZE, WISH_BUTTON_SIZE);
+                    DrawWishButton(wishRect, wish);
+                    curX += WISH_BUTTON_SIZE + WISH_BUTTON_PADDING;
+                }
+
+                curY += WISH_BUTTON_SIZE + SECTION_PADDING;
             }
 
             Widgets.EndScrollView();
+        }
+
+
+        private void DrawWishButton(Rect buttonRect, BaseWish wish)
+        {
+            GUI.color = wish.CanBeGranted(map, altar, TargetPawn) ? Color.white : Color.gray;
+
+            Widgets.DrawBox(buttonRect, 1, SolidColorMaterials.NewSolidColorTexture(Color.grey));
+            Rect innerRect = buttonRect.ContractedBy(INNER_PADDING);
+
+            float labelHeight = LABEL_HEIGHT;
+            Rect iconRect = new Rect(
+                innerRect.x,
+                innerRect.y,
+                innerRect.width,
+                innerRect.height - labelHeight
+            );
+
+            TryDrawIcon(iconRect, wish);
+
+
+            Rect footerRect = new Rect(
+                buttonRect.x,
+                buttonRect.y + buttonRect.height - labelHeight,
+                buttonRect.width,
+                labelHeight
+            );
+            GUI.DrawTexture(footerRect, SolidColorMaterials.NewSolidColorTexture(FOOTER_COLOR));
+
+            // Draw the label
+            Text.Font = GameFont.Small;
+            Text.Anchor = TextAnchor.MiddleCenter;
+            Widgets.Label(footerRect, wish.Label);
+
+            // Handle mouse interaction
+            if (Mouse.IsOver(buttonRect))
+            {
+                Widgets.DrawHighlight(buttonRect);
+                TooltipHandler.TipRegion(buttonRect, wish.Description);
+
+                if (Widgets.ButtonInvisible(buttonRect) && wish.CanBeGranted(map, altar, TargetPawn))
+                {
+                    wish.Grant(map, altar, TargetPawn);
+                    altar.ScatterGatheredDragonBalls();
+                    Close();
+                }
+            }
+
+            // Reset drawing settings
+            Text.Anchor = TextAnchor.UpperLeft;
+            GUI.color = Color.white;
         }
     }
 }

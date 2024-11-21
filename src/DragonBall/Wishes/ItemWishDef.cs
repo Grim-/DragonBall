@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using RimWorld;
+using System.Collections.Generic;
 
 namespace DragonBall
 {
@@ -6,4 +7,5 @@ namespace DragonBall
     {
         public List<ItemOption> itemOptions;
     }
+
 }

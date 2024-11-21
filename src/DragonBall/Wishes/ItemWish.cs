@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using UnityEngine;
 using Verse;
 
 namespace DragonBall
@@ -10,9 +11,8 @@ namespace DragonBall
 
         public override string Label => $"Wish for {count}x {thingDef.label}";
 
-        public override IEnumerable<BaseWish> GenerateWishes(Map map, Building_DragonBallAltar altar)
+        public override IEnumerable<BaseWish> GenerateWishes(Map map, Building_DragonBallAltar altar, Pawn Pawn)
         {
-            // Generate wishes based on def settings
             if (def is ItemWishDef itemWishDef)
             {
                 foreach (var option in itemWishDef.itemOptions)
@@ -27,9 +27,14 @@ namespace DragonBall
             }
         }
 
-        public override bool CanBeGranted(Map map, Building_DragonBallAltar altar) => map != null;
+        public override Texture2D GetIcon()
+        {
+            return thingDef != null && thingDef.uiIcon != null ? thingDef.uiIcon : base.GetIcon();
+        }
 
-        public override void Grant(Map map, Building_DragonBallAltar altar)
+        public override bool CanBeGranted(Map map, Building_DragonBallAltar altar, Pawn pawn) => map != null;
+
+        public override void Grant(Map map, Building_DragonBallAltar altar, Pawn pawn)
         {
             Thing thing = ThingMaker.MakeThing(thingDef);
             thing.stackCount = count;

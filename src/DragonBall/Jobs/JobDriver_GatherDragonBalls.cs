@@ -25,25 +25,21 @@ namespace DragonBall
 
             });
 
-
-            // Go to the dragon ball
             yield return Toils_Goto.GotoThing(TargetIndex.A, PathEndMode.Touch)
                 .FailOnDespawnedOrNull(TargetIndex.A);
 
             this.job.count = 1;
 
-            // Pick up the dragon ball
+
             yield return Toils_Haul.StartCarryThing(TargetIndex.A);
 
             Toil GoTo = Toils_Goto.GotoThing(TargetIndex.B, PathEndMode.Touch)
                 .FailOnDespawnedOrNull(TargetIndex.B);
 
-            // Go to the altar
             yield return GoTo;
 
             Toil Store = Toils_General.Wait(300, TargetIndex.B);
 
-            // Go to the altar
             yield return Store;
 
             Store.AddFinishAction(() =>

@@ -1,5 +1,7 @@
 ﻿using LudeonTK;
+using SaiyanMod;
 using System.Collections.Generic;
+using TaranMagicFramework;
 using Verse;
 
 namespace DragonBall
@@ -53,6 +55,23 @@ namespace DragonBall
             }
 
             return IntVec3.Zero;
+        }
+
+        public static bool TryGetKiAbilityClass(this Pawn Pawn, out AbilityClassKI abilityClass)
+        {
+            abilityClass = null;
+
+            var compAbility = Pawn.GetComp<CompAbilities>();
+
+            if (compAbility == null) return false;
+
+            if (compAbility.TryGetKIAbilityClass(out AbilityClassKI kiClass))
+            {
+                abilityClass = kiClass;
+                return true;
+            }
+
+            return false;
         }
     }
 }

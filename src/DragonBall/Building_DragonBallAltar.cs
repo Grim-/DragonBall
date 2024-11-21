@@ -12,14 +12,11 @@ namespace DragonBall
 {
     public class Building_DragonBallAltar : Building
     {
-        public static bool HasDragonBallOfType(ThingDef dragonBall)
+        public void ShowWishUI(Map map, Pawn TargetPawn)
         {
-            return Find.Maps
-                .SelectMany(m => m.listerBuildings.AllBuildingsColonistOfClass<Building_DragonBallAltar>())
-                .Any(altar => altar.GetDragonBallAtPosition(dragonBall) != null);
+            Find.WindowStack.Add(new Window_WishSelection(map, this, TargetPawn));
         }
 
-        // Helper method to get dragon ball at a specific position
         public Thing GetDragonBallAtPosition(ThingDef dragonBallDef)
         {
             IntVec3 position = GetDragonBallPosition(dragonBallDef);
@@ -27,12 +24,11 @@ namespace DragonBall
                 .FirstOrDefault(t => t.def == dragonBallDef);
         }
 
-        // Add this method to find collectible dragon balls
         public IEnumerable<Thing> FindCollectibleDragonBalls()
         {
             return Map.listerThings.AllThings
                 .Where(t => t.def.thingCategories?.Contains(DBDefOf.DragonBallsCategory) ?? false)
-                .Where(t => GetDragonBallAtPosition(t.def) == null) // Check if position is empty
+                .Where(t => GetDragonBallAtPosition(t.def) == null)
                 .Where(t => !t.IsForbidden(Faction.OfPlayer));
         }
 
@@ -77,16 +73,16 @@ namespace DragonBall
         {
             foreach (var item in GetDragonBallsInProximity())
             {
-                IntVec3 targetCell = CellFinder.RandomEdgeCell(Map);
-
+                IntVec3 targetCell = CellFinder.RandomEdgeCell(Rot4.Random, Map);
                 DragonBallFlying flying = (DragonBallFlying)ThingMaker.MakeThing(DBDefOf.DragonBallFlying);
+                GenSpawn.Spawn(flying, item.Position, Map);
                 flying.Launch(
                     launcher: this, 
-                    usedTarget : this,
-                    intendedTarget: new LocalTargetInfo(targetCell),
-                    hitFlags: ProjectileHitFlags.None 
+                    origin : item.Position.ToVector3(),
+                    usedTarget : targetCell,
+                    intendedTarget: targetCell,
+                    hitFlags: ProjectileHitFlags.IntendedTarget 
                 );
-
                 item.DeSpawn();
             }
         }
@@ -107,27 +103,7 @@ namespace DragonBall
             return dragonBallsToScatter;
         }
 
-        private Gizmo CreateSummonGizmo()
-        {
-            return new Command_Action
-            {
-                defaultLabel = "Start Dragon Summoning",
-                defaultDesc = "Begin the ritual to summon the dragon.",
-                icon = ContentFinder<Texture2D>.Get("Things/Building/Misc/DropBeacon"),
-                action = delegate
-                {
-                    Pawn bestPawn = this.Map.mapPawns.FreeColonistsSpawned
-                        .OrderByDescending(p => p.skills.GetSkill(SkillDefOf.Intellectual).Level)
-                        .FirstOrDefault();
 
-                    if (bestPawn != null)
-                    {
-                        Job job = JobMaker.MakeJob(DBDefOf.DragonBallSummoning, this);
-                        bestPawn.jobs.TryTakeOrderedJob(job);
-                    }
-                }
-            };
-        }
 
         public override IEnumerable<Gizmo> GetGizmos()
         {
@@ -136,51 +112,101 @@ namespace DragonBall
                 yield return gizmo;
             }
 
-            if (HasAllDragonBalls())
+            if (DebugSettings.godMode)
             {
-                yield return CreateSummonGizmo();
+                foreach (var pawn in Map.mapPawns.SpawnedPawnsInFaction(Faction.OfPlayer))
+                {
+                    yield return new Command_Action
+                    {
+                        defaultLabel = $"DEV Instant Summon Dragon for {pawn.LabelShort}",
+                        defaultDesc = "Instantly summons the wish UI",
+                        icon = ContentFinder<Texture2D>.Get("Things/Building/Misc/MarriageSpot"),
+                        action = delegate
+                        {
+                            ShowWishUI(Map, pawn);
+                        }
+                    };
+
+                }
             }
 
-            // Add collect dragon balls button
+            if (HasAllDragonBalls())
+            {
+                var summonOptions =  CreateSummonGizmo();
+
+                foreach (var item in summonOptions)
+                {
+                    yield return item;
+                }
+            }
+
             if (!HasAllDragonBalls())
             {
                 var collectibleDragonBalls = FindCollectibleDragonBalls().ToList();
                 if (collectibleDragonBalls.Count > 0)
                 {
-                    yield return new Command_Action
-                    {
-                        defaultLabel = "Collect Dragon Balls",
-                        defaultDesc = "Order a colonist to collect all available dragon balls and bring them to the altar.",
-                        icon = ContentFinder<Texture2D>.Get("Things/Building/Misc/MarriageSpot"),
-                        action = delegate
-                        {
-                            Pawn bestPawn = this.Map.mapPawns.FreeColonistsSpawned
-                                .Where(p => p.CanReach(this.Position, PathEndMode.Touch, Danger.Deadly))
-                                .OrderBy(p => p.Position.DistanceTo(this.Position))
-                                .FirstOrDefault();
+                    var gatherOptions = CreateGatherGizmo(collectibleDragonBalls);
 
-                            if (bestPawn != null)
-                            {
-                                if (collectibleDragonBalls.FirstOrDefault() != null)
-                                {
-                                    Job job = JobMaker.MakeJob(DBDefOf.GatherDragonBalls, collectibleDragonBalls.FirstOrDefault(), this);
-                                    bestPawn.jobs.TryTakeOrderedJob(job);
-                                }
-                            }
-                        }
-                    };
+                    foreach (var item in gatherOptions)
+                    {
+                        yield return item;
+                    }            
                 }
             }
         }
-    }
 
-    public class DragonBallFlying : Projectile
-    {
-        protected override void Impact(Thing hitThing, bool blockedByShield = false)
+        private void StartGatherJob(List<Thing> CollectibleDragonBalls, Pawn pawn)
         {
-            base.Impact(hitThing, blockedByShield);
-            // Destroy the flyer itself
-            this.Destroy();
+            if (pawn != null)
+            {
+                if (CollectibleDragonBalls.FirstOrDefault() != null)
+                {
+                    Job job = JobMaker.MakeJob(DBDefOf.GatherDragonBalls, CollectibleDragonBalls.FirstOrDefault(), this);
+                    pawn.jobs.TryTakeOrderedJob(job);
+                }
+            }
         }
+
+
+        private IEnumerable<Gizmo> CreateGatherGizmo(List<Thing> CollectibleDragonBalls)
+        {
+            foreach (var item in Map.mapPawns.FreeColonistsSpawned)
+            {
+                yield return new Command_Action
+                {
+                    defaultLabel = $"Collect Dragon Balls ({item.LabelShort})",
+                    defaultDesc = "Order a colonist to collect all available dragon balls and bring them to the altar.",
+                    icon = ContentFinder<Texture2D>.Get("Things/Building/Misc/MarriageSpot"),
+                    action = delegate
+                    {
+                        StartGatherJob(CollectibleDragonBalls, item);
+                    }
+                };
+            }
+        }
+
+        private IEnumerable<Gizmo> CreateSummonGizmo()
+        {
+            foreach (var item in Map.mapPawns.FreeColonistsSpawned)
+            {
+                yield return new Command_Action
+                {
+                    defaultLabel = $"Start Dragon Summoning ({item.LabelShort})",
+                    defaultDesc = "Begin the ritual to summon the dragon.",
+                    icon = ContentFinder<Texture2D>.Get("Things/Building/Misc/DropBeacon"),
+                    action = delegate
+                    {
+                        if (item != null)
+                        {
+                            Job job = JobMaker.MakeJob(DBDefOf.DragonBallSummoning, this);
+                            item.jobs.TryTakeOrderedJob(job);
+                        }
+                    }
+                };
+            }
+
+
+        }
+
     }
 }

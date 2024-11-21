@@ -9,5 +9,6 @@ namespace DragonBall
         public int silverAmount; 
         public bool requiresTargetPawn;
         public string iconPath;
+        public string category = "Default";
     }
 }
