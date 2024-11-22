@@ -90,6 +90,15 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DragonBallFlying.cs" />
+    <Compile Include="Quest\AbilityOption.cs" />
+    <Compile Include="Quest\AbilityScoreBonus.cs" />
+    <Compile Include="Quest\QuestNode_LearnFromSupremeKai.cs" />
+    <Compile Include="Quest\QuestNode_TournamentFight.cs" />
+    <Compile Include="Quest\TournamentHistoryEntry.cs" />
+    <Compile Include="Quest\TournamentHistoryWindow.cs" />
+    <Compile Include="Quest\TournamentMatchResult.cs" />
+    <Compile Include="Quest\TournamentSettings.cs" />
+    <Compile Include="Quest\TournamentTracker.cs" />
     <Compile Include="Wishes\BaseWish.cs" />
     <Compile Include="Building_DragonBallAltar.cs" />
     <Compile Include="DBDefOf.cs" />

@@ -2,6 +2,7 @@
 using SaiyanMod;
 using System.Collections.Generic;
 using TaranMagicFramework;
+using UnityEngine;
 using Verse;
 
 namespace DragonBall
@@ -23,6 +24,12 @@ namespace DragonBall
                 Thing thing = ThingMaker.MakeThing(item.Key);
                 GenSpawn.Spawn(thing, Origin + GetDragonBallOffset(thing), Find.CurrentMap);
             }
+        }
+
+        [DebugAction("The Saiyans - Dragon Ball", "View Tournament History")]
+        private static void OpenTournamentHistory()
+        {
+            Current.Game.GetComponent<TournamentTracker>().OpenHistoryWindow();
         }
 
         public static readonly Dictionary<ThingDef, IntVec3> DragonBallPositions = new Dictionary<ThingDef, IntVec3>
@@ -55,6 +62,20 @@ namespace DragonBall
             }
 
             return IntVec3.Zero;
+        }
+
+        public static void LevelUp(this TaranMagicFramework.Ability ability)
+        {
+            int currentLevel = ability.level;
+            int maxLevel = ability.MaxLevel;
+            ability.ChangeLevel(Mathf.Clamp(currentLevel + 1, 0, maxLevel));
+        }
+
+        public static void LevelToMax(this TaranMagicFramework.Ability ability)
+        {
+            int currentLevel = ability.level;
+            int maxLevel = ability.MaxLevel;
+            ability.ChangeLevel(maxLevel);
         }
 
         public static bool TryGetKiAbilityClass(this Pawn Pawn, out AbilityClassKI abilityClass)
