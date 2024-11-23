@@ -48,6 +48,10 @@ namespace DragonBall
         public static ThoughtDef DragonWishOpinionBoost;
         public static ThoughtDef DragonBallTookPartInTournament;
         public static ThoughtDef DragonBallWonTournament;
+
+        public static TaranMagicFramework.AnimationDef BeamClashMeetingPoint;
+
+        public static JobDef DragonBallTrainOnDummy;
     }
 
 
@@ -55,4 +59,6 @@ namespace DragonBall
     {
         protected override Color TransformedColor => Color.red;
     }
+
+
 }

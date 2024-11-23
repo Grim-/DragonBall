@@ -3,6 +3,7 @@ using RimWorld;
 using SaiyanMod;
 using System.Collections.Generic;
 using System.Linq;
+using TaranMagicFramework;
 using UnityEngine;
 using Verse;
 
@@ -14,158 +15,489 @@ namespace DragonBall
         private bool isInBeamBattle = false;
         private KIBeam_Projectile battleOpponent = null;
         private Vector3 lockedPosition;
+        private Vector3 originalClashPoint;
+        private float battleAdvantage = 0f;
+        private const float ADVANTAGE_CHANGE_RATE = 0.1f;
+        private const float MINIMUM_SAFE_DISTANCE = 2f;
+        private Mote_Animation ClashAnimation = null;
+        private Vector3 targetPosition;
+        private Vector3 currentPosition;
+        private Vector3 currentClashPosition;
+        private Vector3 targetClashPosition;
+        private const float BEAM_MOVE_SPEED = 0.25f;
+        private const float CLASH_MOVE_SPEED = 0.15f;
+        private const float BATTLE_MOMENTUM = 0.85f;
 
         public override void SpawnSetup(Map map, bool respawningAfterLoad)
         {
             base.SpawnSetup(map, respawningAfterLoad);
             ActiveBeams.Add(this);
+            currentPosition = this.DrawPos;
+            targetPosition = currentPosition;
+            currentClashPosition = currentPosition;
+            targetClashPosition = currentPosition;
         }
 
         public override void DeSpawn(DestroyMode mode = DestroyMode.Vanish)
         {
             ActiveBeams.Remove(this);
+            CleanupClashAnimation();
             base.DeSpawn(mode);
+        }
+
+        private void CleanupClashAnimation()
+        {
+            if (ClashAnimation != null && !ClashAnimation.Destroyed)
+            {
+                ClashAnimation.expireInTick = 0;
+                ClashAnimation.Destroy();
+                ClashAnimation = null;
+            }
         }
 
         public override void Tick()
         {
-            if (this.Spawned && this.Map != null)
+            if (!this.Spawned || base.Map == null || this.Position == null || this.ability?.pawn == null)
+            {
+                return;
+            }
+
+            try
             {
                 if (!isInBeamBattle)
                 {
-                    base.Tick();
                     CheckBeamCollisions();
+                    if (this.Spawned && this.Map != null)
+                    {
+                        try
+                        {
+                            base.Tick();
+                        }
+                        catch (System.Exception e)
+                        {
+                            Log.Error($"Error in base.Tick(): {e.Message}");
+                        }
+                    }
                 }
                 else
                 {
-                    // We're in a beam battle - drain Ki and check if we should lose
-                    if (this.ability.pawn.TryGetKiAbilityClass(out AbilityClassKI kiClass))
-                    {
-                        if (this.ability.pawn.IsHashIntervalTick(120))
-                        {
-                            // Drain Ki faster during beam battle
-                            kiClass.abilityResource.energy -= 2f;  // Adjust drain rate as needed
+                    HandleBeamBattle();
+                    UpdatePosition();
+                    UpdateClashAnimationPosition();
+                }
+            }
+            catch (System.Exception ex)
+            {
+                Log.Error($"Error in KIBeam_ProjectileBeamBattle.Tick(): {ex.Message}\n{ex.StackTrace}");
+                if (!this.Destroyed) this.Destroy();
+            }
+        }
+        private void UpdateClashAnimationPosition()
+        {
+            if (ClashAnimation != null && ClashAnimation.Spawned && battleOpponent != null)
+            {
+                Vector3 myPawnPos = this.ability.pawn.DrawPos;
+                Vector3 theirPawnPos = battleOpponent.ability.pawn.DrawPos;
+                Vector3 battleDirection = (theirPawnPos - myPawnPos).normalized;
+                float totalDistance = Vector3.Distance(myPawnPos, theirPawnPos);
+                float availableBattleSpace = totalDistance - (MINIMUM_SAFE_DISTANCE * 2);
+                Vector3 battleStartPoint = myPawnPos + (battleDirection * MINIMUM_SAFE_DISTANCE);
+                float pushDistance = ((battleAdvantage + 1f) / 2f) * availableBattleSpace;
 
-                            if (kiClass.abilityResource.energy <= 0)
-                            {
-                                // Out of Ki - we lose!
-                                LoseBeamBattle();
-                            }
-                        }
-                    }
+                targetClashPosition = battleStartPoint + (battleDirection * pushDistance);
+                currentClashPosition = Vector3.Lerp(currentClashPosition, targetClashPosition, CLASH_MOVE_SPEED);
 
-                    // Lock position during beam battle
-                    this.Position = lockedPosition.ToIntVec3();
-                    //this.DrawPos = lockedPosition;
+                ClashAnimation.exactPosition = currentClashPosition;
+            }
+        }
+        private void UpdatePosition()
+        {
+            if (!this.Spawned || this.Map == null || battleOpponent == null)
+            {
+                return;
+            }
 
-                    // Create ongoing collision effects
-                    if (Find.TickManager.TicksGame % 120 == 0)  // Adjust frequency as needed
-                    {
-                        CreateBeamBattleEffects();
-                    }
+            currentPosition = Vector3.Lerp(currentPosition, targetPosition, BEAM_MOVE_SPEED);
+            IntVec3 newPos = currentPosition.ToIntVec3();
+
+            // Verify the new position is valid before setting it
+            if (newPos.InBounds(this.Map))
+            {
+                this.Position = newPos;
+
+                if (ClashAnimation != null && !ClashAnimation.Destroyed)
+                {
+                    ClashAnimation.Position = newPos;
                 }
             }
         }
 
-        public override void Impact(Thing hitThing, bool blockedByShield = false)
+        private void HandleBeamBattle()
         {
-            // Don't trigger impact if we're in a beam battle
-            if (!isInBeamBattle)
+            if (ability?.pawn == null || !this.ability.pawn.TryGetKiAbilityClass(out AbilityClassKI kiClass))
             {
-                base.Impact(hitThing, blockedByShield);
+                return;
+            }
+
+            if (this.ability.pawn.IsHashIntervalTick(60))
+            {
+                kiClass.abilityResource.energy -= kiClass.abilityResource.MaxEnergy * 0.05f;
+
+                if (kiClass.abilityResource.energy <= 0 || battleOpponent == null)
+                {
+                    LoseBeamBattle();
+                    return;
+                }
+
+                UpdateBattleAdvantage(kiClass);
+                CalculateTargetPosition();
+            }
+
+            if (Find.TickManager.TicksGame % 30 == 0)
+            {
+                CreateBeamBattleEffects();
+            }
+        }
+
+        private void UpdateBattleAdvantage(AbilityClassKI kiClass)
+        {
+            if (battleOpponent == null || kiClass == null)
+            {
+                return;
+            }
+
+            float myKiPercent = kiClass.abilityResource.energy / kiClass.abilityResource.MaxEnergy;
+            float theirKiPercent = 0f;
+
+            if (battleOpponent.ability?.pawn != null &&
+                battleOpponent.ability.pawn.TryGetKiAbilityClass(out AbilityClassKI theirKiClass))
+            {
+                theirKiPercent = theirKiClass.abilityResource.energy / theirKiClass.abilityResource.MaxEnergy;
+            }
+
+            float previousAdvantage = battleAdvantage;
+            float newAdvantageChange = (myKiPercent - theirKiPercent) * ADVANTAGE_CHANGE_RATE;
+            battleAdvantage = (previousAdvantage * BATTLE_MOMENTUM) + (newAdvantageChange * (1 - BATTLE_MOMENTUM));
+            battleAdvantage = Mathf.Clamp(battleAdvantage, -1f, 1f);
+
+            if (Rand.Value < 0.3f)
+            {
+                battleAdvantage += Rand.Range(-0.1f, 0.1f);
+                battleAdvantage = Mathf.Clamp(battleAdvantage, -1f, 1f);
+            }
+        }
+
+        private void CalculateTargetPosition()
+        {
+            if (battleOpponent == null || ability?.pawn == null || battleOpponent.ability?.pawn == null)
+            {
+                return;
+            }
+
+            Vector3 myPawnPos = this.ability.pawn.DrawPos;
+            Vector3 theirPawnPos = battleOpponent.ability.pawn.DrawPos;
+
+            float totalDistance = Vector3.Distance(myPawnPos, theirPawnPos);
+            float availableBattleSpace = totalDistance - (MINIMUM_SAFE_DISTANCE * 2);
+
+            if (availableBattleSpace <= 0)
+            {
+                LoseBeamBattle();
+                return;
+            }
+
+            Vector3 battleDirection = (theirPawnPos - myPawnPos).normalized;
+            Vector3 battleStartPoint = myPawnPos + (battleDirection * MINIMUM_SAFE_DISTANCE);
+            float pushDistance = ((battleAdvantage + 1f) / 2f) * availableBattleSpace;
+
+            targetPosition = battleStartPoint + (battleDirection * pushDistance);
+
+            if (battleOpponent is KIBeam_ProjectileBeamBattle battleBeam)
+            {
+                Vector3 opponentOffset = battleBeam.DrawPos - originalClashPoint;
+                battleBeam.targetPosition = targetPosition + opponentOffset;
             }
         }
 
         private void CheckBeamCollisions()
         {
-            foreach (var otherBeam in ActiveBeams)
+            if (!this.Spawned || this.Map == null)
             {
-                if (otherBeam == this || otherBeam.Launcher == this.launcher)
+                return;
+            }
+
+            foreach (var otherBeam in ActiveBeams.ToList()) // Use ToList() to avoid modification during enumeration
+            {
+                if (otherBeam == null || otherBeam == this || otherBeam.Launcher == this.launcher)
                     continue;
 
-                var myCells = GenRadial.RadialCellsAround(this.Position, 2f, true);
-                var theirCells = GenRadial.RadialCellsAround(otherBeam.Position, 2f, true);
-
-                if (myCells.Intersect(theirCells).Any())
+                try
                 {
-                    StartBeamBattle(otherBeam);
-                    break;
+                    var myCells = GenRadial.RadialCellsAround(this.Position, 1f, true).ToList();
+                    var theirCells = GenRadial.RadialCellsAround(otherBeam.Position, 1f, true).ToList();
+
+                    if (myCells.Intersect(theirCells).Any())
+                    {
+                        StartBeamBattle(otherBeam);
+                        break;
+                    }
+                }
+                catch (System.Exception ex)
+                {
+                    Log.Error($"Error in CheckBeamCollisions: {ex.Message}");
                 }
             }
         }
-
+        public Mote_Animation MakeAnimation(TaranMagicFramework.AnimationDef overlay)
+        {
+            Mote_Animation mote_Animation = ThingMaker.MakeThing(overlay) as Mote_Animation;
+            mote_Animation.sourceAbility = this.ability;
+            GenSpawn.Spawn(mote_Animation, this.Position, this.ability.pawn.Map);
+            return mote_Animation;
+        }
         private void StartBeamBattle(KIBeam_Projectile otherBeam)
         {
-            // Lock both beams in place
+            if (otherBeam == null || ability?.pawn == null || otherBeam.ability?.pawn == null)
+            {
+                return;
+            }
+
+            float pawnDistance = Vector3.Distance(this.ability.pawn.DrawPos, otherBeam.ability.pawn.DrawPos);
+            if (pawnDistance <= (MINIMUM_SAFE_DISTANCE * 2))
+            {
+                return;
+            }
+
+            IntVec3 otherTravelDirection = IntVec3.East;
+            if (otherBeam is KIBeam_ProjectileBeamBattle otherbattleBeam)
+            {
+                otherTravelDirection = otherBeam.Position - otherbattleBeam.destination.ToIntVec3();
+            }
+            IntVec3 thisTravelDirection = this.Position - this.destination.ToIntVec3();
+
+            float dotProduct = (thisTravelDirection.x * otherTravelDirection.x + thisTravelDirection.z * otherTravelDirection.z) /
+                              (Mathf.Sqrt(thisTravelDirection.x * thisTravelDirection.x + thisTravelDirection.z * thisTravelDirection.z) *
+                               Mathf.Sqrt(otherTravelDirection.x * otherTravelDirection.x + otherTravelDirection.z * otherTravelDirection.z));
+
+            if (dotProduct > -0.3f)
+            {
+                return;
+            }
+
             isInBeamBattle = true;
             lockedPosition = this.DrawPos;
+            originalClashPoint = GetCollisionPoint(otherBeam).ToVector3();
+            battleAdvantage = 0f;
+            currentClashPosition = originalClashPoint;
+            targetClashPosition = originalClashPoint;
 
             if (otherBeam is KIBeam_ProjectileBeamBattle battleBeam)
             {
                 battleBeam.isInBeamBattle = true;
                 battleBeam.lockedPosition = otherBeam.DrawPos;
                 battleBeam.battleOpponent = this;
+                battleBeam.originalClashPoint = originalClashPoint;
+                battleBeam.battleAdvantage = 0f;
+                battleBeam.currentClashPosition = originalClashPoint;
+                battleBeam.targetClashPosition = originalClashPoint;
             }
 
             battleOpponent = otherBeam;
 
-            CreateBeamBattleEffects();
-        }
+            if (ClashAnimation == null && this.Map != null)
+            {
+                ClashAnimation = MakeAnimation(DBDefOf.BeamClashMeetingPoint);
+                if (ClashAnimation != null)
+                {
+                    ClashAnimation.Position = originalClashPoint.ToIntVec3();
+                    ClashAnimation.exactPosition = originalClashPoint;
+                }
+            }
 
-        private void CreateBeamBattleEffects()
-        {
-            IntVec3 collisionPoint = GetCollisionPoint(battleOpponent);
-            GenExplosion.DoExplosion(
-                center: collisionPoint,
-                map: Map,
-                radius: 1.9f,  // Smaller radius for continuous effects
-                damType: DamageDefOf.Bomb,
-                instigator: launcher,
-                damAmount: 5,  // Reduced damage for continuous effects
-                armorPenetration: 2f,
-                explosionSound: null,
-                weapon: null,
-                projectile: def,
-                intendedTarget: null,
-                postExplosionSpawnThingDef: null,
-                postExplosionSpawnChance: 0,
-                postExplosionSpawnThingCount: 0,
-                postExplosionGasType: null,
-                applyDamageToExplosionCellsNeighbors: false,
-                preExplosionSpawnThingDef: null,
-                preExplosionSpawnChance: 0,
-                preExplosionSpawnThingCount: 0,
-                chanceToStartFire: 0f,
-                damageFalloff: true,
-                direction: null,
-                ignoredThings: null,
-                affectedAngle: null,
-                doVisualEffects: true,
-                propagationSpeed: 1f,
-                excludeRadius: 0f,
-                doSoundEffects: false,  // Disable sound for continuous effects
-                postExplosionSpawnThingDefWater: null,
-                screenShakeFactor: 0.5f
-            );
+            CreateBeamBattleEffects();
         }
 
         private void LoseBeamBattle()
         {
-            this.ability.End();
-            this.Destroy();
-            // If our opponent was also in a beam battle, let them know they won
+            CleanupClashAnimation();
+
             if (battleOpponent is KIBeam_ProjectileBeamBattle battleBeam)
             {
                 battleBeam.isInBeamBattle = false;
                 battleBeam.battleOpponent = null;
             }
+
+            this.ability?.End();
+            if (!this.Destroyed) this.Destroy(DestroyMode.KillFinalize);
         }
 
         private IntVec3 GetCollisionPoint(KIBeam_Projectile otherBeam)
         {
+            if (this.Map == null || otherBeam == null)
+            {
+                return this.Position;
+            }
             var myCells = GenRadial.RadialCellsAround(this.Position, 5f, true);
             var theirCells = GenRadial.RadialCellsAround(otherBeam.Position, 5f, true);
             return myCells.Intersect(theirCells).First();
         }
+        public override void Impact(Thing hitThing, bool blockedByShield = false)
+        {
+            if (!isInBeamBattle)
+            {
+                base.Impact(hitThing, blockedByShield);
+            }
+        }
+
+        private void CreateBeamBattleEffects()
+        {
+            if (battleOpponent == null || ability?.pawn == null || battleOpponent.ability?.pawn == null || this.Map == null)
+            {
+                return;
+            }
+
+            Vector3 myPawnPos = this.ability.pawn.DrawPos;
+            Vector3 theirPawnPos = battleOpponent.ability.pawn.DrawPos;
+            Vector3 battleDirection = (theirPawnPos - myPawnPos).normalized;
+            float totalDistance = Vector3.Distance(myPawnPos, theirPawnPos);
+            float availableBattleSpace = totalDistance - (MINIMUM_SAFE_DISTANCE * 2);
+            Vector3 battleStartPoint = myPawnPos + (battleDirection * MINIMUM_SAFE_DISTANCE);
+            float pushDistance = ((battleAdvantage + 1f) / 2f) * availableBattleSpace;
+            Vector3 currentClashPoint = battleStartPoint + (battleDirection * pushDistance);
+
+            //GenExplosion.DoExplosion(
+            //    center: currentClashPoint.ToIntVec3(),
+            //    map: Map,
+            //    radius: 1.9f,
+            //    damType: DamageDefOf.Bomb,
+            //    instigator: launcher,
+            //    damAmount: 5,
+            //    armorPenetration: 2f,
+            //    explosionSound: null,
+            //    weapon: null,
+            //    projectile: def,
+            //    intendedTarget: null,
+            //    postExplosionSpawnThingDef: null,
+            //    postExplosionSpawnChance: 0,
+            //    postExplosionSpawnThingCount: 0,
+            //    postExplosionGasType: null,
+            //    applyDamageToExplosionCellsNeighbors: false,
+            //    preExplosionSpawnThingDef: null,
+            //    preExplosionSpawnChance: 0,
+            //    preExplosionSpawnThingCount: 0,
+            //    chanceToStartFire: 0f,
+            //    damageFalloff: true,
+            //    direction: null,
+            //    ignoredThings: null,
+            //    affectedAngle: null,
+            //    doVisualEffects: true,
+            //    propagationSpeed: 1f,
+            //    excludeRadius: 0f,
+            //    doSoundEffects: false,
+            //    postExplosionSpawnThingDefWater: null,
+            //    screenShakeFactor: 0.5f + Mathf.Abs(battleAdvantage) * 0.5f
+            //);
+        }
     }
+
+    public class KIAbility_KaioKen : KIAbility
+    {
+        public override bool IsInstantAction
+        {
+            get
+            {
+                return false;
+            }
+        }
+
+        public override void Start(bool consumeEnergy = true)
+        {
+            // End all other power-up abilities before starting KaioKen
+            foreach (TaranMagicFramework.Ability ability in this.abilityClass.LearnedAbilities)
+            {
+                //if (ability != this && ability.Active)
+                //{
+                //    //// Check if the ability is a transformation and end it
+                //    //bool isTransformation = ability.def == SR_DefOf.SR_SuperSaiyan ||
+                //    //                        ability.def == DBDefOf.SR_SuperSaiyan2 ||
+                //    //                      ability.def == SR_DefOf.SR_LegendarySuperSaiyan ||
+                //    //                      ability.def == SR_DefOf.SR_TrueSuperSaiyan ||
+                //    //                      ability.def == SR_DefOf.SR_Awakened ||
+                //    //                      ability.def == SR_DefOf.SR_PowerUp;
+
+                //    //if (isTransformation)
+                //    //{
+                //    //    ability.End();
+                //    //    ability.DestroyAllOverlay();
+                //    //}
+                //}
+            }
+            base.Start(true);
+        }
+
+        public override void Tick()
+        {
+            base.Tick();
+
+            // End KaioKen if energy is depleted
+            if (this.Active && this.abilityResource.energy <= 0f)
+            {
+                this.End();
+            }
+        }
+
+        public override TaranMagicFramework.AnimationDef AnimationDef(OverlayProps overlayProps)
+        {
+            // Return KaioKen specific animation overlay
+            return SR_DefOf.SR_AwakenedOverlay;
+        }
+
+        public override Mote_Animation MakeAnimation(OverlayProps overlayProps)
+        {
+            Mote_Animation mote_Animation = base.MakeAnimation(overlayProps);
+
+            // Set KaioKen specific color (typically red)
+            if (mote_Animation.def == SR_DefOf.SR_AwakenedOverlay)
+            {
+                mote_Animation.instanceColor = new UnityEngine.Color(1f, 0f, 0f, 0.8f); // Red color with some transparency
+            }
+
+            return mote_Animation;
+        }
+
+        public override void RegisterCast()
+        {
+            // Add any specific effects when KaioKen is cast
+        }
+
+        public override IEnumerable<Gizmo> GetGizmos()
+        {
+            Command_ToggleAbility command_ToggleAbility = new Command_ToggleAbility(this);
+            command_ToggleAbility.icon = this.AbilityIcon();
+            command_ToggleAbility.defaultLabel = this.AbilityLabel();
+            command_ToggleAbility.defaultDesc = this.AbilityDescription();
+
+            command_ToggleAbility.toggleAction = delegate ()
+            {
+                if (this.Active)
+                {
+                    this.End();
+                }
+                else
+                {
+                    this.Start(true);
+                }
+            };
+
+            command_ToggleAbility.isActive = (() => this.Active);
+
+            string failReason;
+            command_ToggleAbility.Disabled = !this.CanBeActivated(this.EnergyCost, out failReason, base.LevelHumanReadable == 3, () => "");
+            command_ToggleAbility.disabledReason = failReason;
+
+            yield return command_ToggleAbility;
+            yield break;
+        }
+    }
+
 }

@@ -89,7 +89,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CompProperties_TrainingDummy.cs" />
     <Compile Include="DragonBallFlying.cs" />
+    <Compile Include="JobDriver_TrainOnDummy.cs" />
     <Compile Include="Quest\AbilityOption.cs" />
     <Compile Include="Quest\AbilityScoreBonus.cs" />
     <Compile Include="Quest\BattleLogEntry_TournamentFight.cs" />
