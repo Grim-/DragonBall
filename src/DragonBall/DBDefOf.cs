@@ -20,6 +20,9 @@ namespace DragonBall
         public static ThingDef DragonBallSixStar;
         public static ThingDef DragonBallSevenStar;
 
+        public static HediffDef DragonBallAgingSlowed;
+        public static HediffDef DragonBallBlessingOfFullBelly;
+
         public static ThingDef DragonBallRitualSpot;
 
         public static ThingDef DragonBallFlying;
@@ -43,6 +46,7 @@ namespace DragonBall
         public static RulePackDef NamerFighterDragonBall;
 
         public static ThoughtDef DragonWishOpinionBoost;
+        public static ThoughtDef DragonBallTookPartInTournament;
         public static ThoughtDef DragonBallWonTournament;
     }
 

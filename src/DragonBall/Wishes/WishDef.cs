@@ -10,5 +10,6 @@ namespace DragonBall
         public bool requiresTargetPawn;
         public string iconPath;
         public string category = "Default";
+        public int wishCost = 1;
     }
 }

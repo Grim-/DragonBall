@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using RimWorld;
+using System.Collections.Generic;
 using UnityEngine;
 using Verse;
 
@@ -8,7 +9,7 @@ namespace DragonBall
     {
         public ThingDef thingDef;
         public int count;
-
+        public QualityCategory quality;
         public override string Label => $"Wish for {count}x {thingDef.label}";
 
         public override IEnumerable<BaseWish> GenerateWishes(Map map, Building_DragonBallAltar altar, Pawn Pawn)
@@ -21,7 +22,8 @@ namespace DragonBall
                     {
                         def = this.def,
                         thingDef = option.thing,
-                        count = option.count
+                        count = option.count,
+                        quality = option.quality
                     };
                 }
             }
@@ -38,9 +40,22 @@ namespace DragonBall
         {
             Thing thing = ThingMaker.MakeThing(thingDef);
             thing.stackCount = count;
+
+            if (CanHaveQuality(thingDef))
+            {
+                CompQuality compQuality = thing.TryGetComp<CompQuality>();
+                if (compQuality != null)
+                {
+                    compQuality.SetQuality(quality, ArtGenerationContext.Colony);
+                }
+            }
+
             GenPlace.TryPlaceThing(thing, altar.Position, map, ThingPlaceMode.Near);
         }
-
+        private bool CanHaveQuality(ThingDef def)
+        {
+            return def.HasComp(typeof(CompQuality));
+        }
         public override void ExposeData()
         {
             base.ExposeData();

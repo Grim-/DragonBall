@@ -23,7 +23,7 @@ namespace DragonBall
 
             int tournamentId = results.First().TournamentID;
 
-            // Get or create tournament dictionary for this tournament ID
+
             if (!tournaments.TryGetValue(tournamentId, out var tournamentEntries))
             {
                 tournamentEntries = new Dictionary<string, Tournament>();
@@ -31,40 +31,37 @@ namespace DragonBall
                 totalTournaments++;
             }
 
-            // Get or create tournament record specific to this fighter
+
             if (!tournamentEntries.TryGetValue(fighter.ThingID, out var tournament))
             {
                 tournament = new Tournament
                 {
                     TournamentID = tournamentId,
-                    FighterID = fighter.ThingID  // Add FighterID to Tournament class
+                    FighterID = fighter.ThingID,
+                    WinnerID = winnerID
                 };
                 tournamentEntries.Add(fighter.ThingID, tournament);
             }
 
-            // Get or create fighter history entry
             if (!fighterHistory.TryGetValue(fighter.ThingID, out var entry))
             {
                 entry = new TournamentHistoryEntry
                 {
                     fighterName = fighter.Label,
-                    fighterID = fighter.ThingID,  // Add fighterID to TournamentHistoryEntry class
+                    fighterID = fighter.ThingID, 
                     tournaments = new List<Tournament>()
                 };
                 fighterHistory.Add(fighter.ThingID, entry);
             }
 
-            // Only add tournament to fighter's history if not already there
             if (!entry.tournaments.Any(t => t.TournamentID == tournamentId))
             {
                 entry.tournaments.Add(tournament);
             }
 
-            // Update tournament matches - only for this fighter
-            tournament.Matches.Clear();  // Clear existing matches to prevent duplicates
+            tournament.Matches.Clear(); 
             tournament.Matches.AddRange(results);
 
-            // Update fighter stats
             entry.totalFights += results.Count;
             entry.victories += results.Count(r => r.Victory);
             entry.totalExperience += results.Sum(r => r.ExperienceGained);
@@ -92,7 +89,8 @@ namespace DragonBall
                 }
                 Scribe_Collections.Look(ref flattenedTournaments, "tournaments", LookMode.Deep);
             }
-            else
+            //else
+            else if(Scribe.mode == LoadSaveMode.PostLoadInit)
             {
                 tournaments.Clear();
                 List<SaveableTournament> flattenedTournaments = new List<SaveableTournament>();

@@ -116,18 +116,52 @@ namespace DragonBall
             {
                 foreach (var pawn in Map.mapPawns.SpawnedPawnsInFaction(Faction.OfPlayer))
                 {
-                    yield return new Command_Action
+                    if (pawn.RaceProps.Humanlike)
                     {
-                        defaultLabel = $"DEV Instant Summon Dragon for {pawn.LabelShort}",
-                        defaultDesc = "Instantly summons the wish UI",
-                        icon = ContentFinder<Texture2D>.Get("Things/Building/Misc/MarriageSpot"),
-                        action = delegate
+                        yield return new Command_Action
                         {
-                            ShowWishUI(Map, pawn);
-                        }
-                    };
-
+                            defaultLabel = $"DEV Instant Summon Dragon for {pawn.LabelShort}",
+                            defaultDesc = "Instantly summons the wish UI",
+                            icon = ContentFinder<Texture2D>.Get("Things/Building/Misc/MarriageSpot"),
+                            action = delegate
+                            {
+                                ShowWishUI(Map, pawn);
+                            }
+                        };
+                    }
                 }
+
+                yield return new Command_Action
+                {
+                    defaultLabel = $"DEV Reset CS",
+                    defaultDesc = "Resets the Wish cooldown",
+                    icon = ContentFinder<Texture2D>.Get("Things/Building/Misc/MarriageSpot"),
+                    action = delegate
+                    {
+                        var wishTracker = Current.Game.GetComponent<DragonBallWishTracker>();
+
+                        if (wishTracker != null)
+                        {
+                            wishTracker.ResetCooldowns();
+                        }
+                    }
+                };
+
+                yield return new Command_Action
+                {
+                    defaultLabel = $"DEV Reset Wishes",
+                    defaultDesc = "Resets wishses",
+                    icon = ContentFinder<Texture2D>.Get("Things/Building/Misc/MarriageSpot"),
+                    action = delegate
+                    {
+                        var wishTracker = Current.Game.GetComponent<DragonBallWishTracker>();
+
+                        if (wishTracker != null)
+                        {
+                            wishTracker.ResetWishes();
+                        }
+                    }
+                };
             }
 
             if (HasAllDragonBalls())
@@ -172,40 +206,47 @@ namespace DragonBall
         {
             foreach (var item in Map.mapPawns.FreeColonistsSpawned)
             {
-                yield return new Command_Action
+                if (item.RaceProps.Humanlike)
                 {
-                    defaultLabel = $"Collect Dragon Balls ({item.LabelShort})",
-                    defaultDesc = "Order a colonist to collect all available dragon balls and bring them to the altar.",
-                    icon = ContentFinder<Texture2D>.Get("Things/Building/Misc/MarriageSpot"),
-                    action = delegate
+                    yield return new Command_Action
                     {
-                        StartGatherJob(CollectibleDragonBalls, item);
-                    }
-                };
+                        defaultLabel = $"Collect Dragon Balls ({item.LabelShort})",
+                        defaultDesc = "Order a colonist to collect all available dragon balls and bring them to the altar.",
+                        icon = ContentFinder<Texture2D>.Get("Things/Building/Misc/MarriageSpot"),
+                        action = delegate
+                        {
+                            StartGatherJob(CollectibleDragonBalls, item);
+                        }
+                    };
+                }
             }
         }
 
         private IEnumerable<Gizmo> CreateSummonGizmo()
         {
+            var wishTracker = Current.Game.GetComponent<DragonBallWishTracker>();
             foreach (var item in Map.mapPawns.FreeColonistsSpawned)
-            {
-                yield return new Command_Action
+            {              
+                if (wishTracker != null && item.RaceProps.Humanlike)
                 {
-                    defaultLabel = $"Start Dragon Summoning ({item.LabelShort})",
-                    defaultDesc = "Begin the ritual to summon the dragon.",
-                    icon = ContentFinder<Texture2D>.Get("Things/Building/Misc/DropBeacon"),
-                    action = delegate
+                    yield return new Command_Action
                     {
-                        if (item != null)
+                        defaultLabel = $"Start Dragon Summoning ({item.LabelShort})",
+                        defaultDesc = "Begin the ritual to summon the dragon.",
+                        icon = ContentFinder<Texture2D>.Get("Things/Building/Misc/DropBeacon"),
+                        action = delegate
                         {
-                            Job job = JobMaker.MakeJob(DBDefOf.DragonBallSummoning, this);
-                            item.jobs.TryTakeOrderedJob(job);
-                        }
-                    }
-                };
+                            if (item != null)
+                            {
+                                Job job = JobMaker.MakeJob(DBDefOf.DragonBallSummoning, this);
+                                item.jobs.TryTakeOrderedJob(job);
+                            }
+                        },
+                        Disabled = !wishTracker.IsWishOffCooldown(this.Map),
+                        disabledReason = $"You still have {wishTracker.GetCooldownTicksRemaining(Map).ToStringTicksToDays()} remaining before you can wish again."
+                    };
+                }
             }
-
-
         }
 
     }

@@ -1,16 +1,15 @@
-﻿using System.Collections.Generic;
+﻿using RimWorld;
+using System.Collections.Generic;
 using Verse;
 
 namespace DragonBall
 {
     public class DragonBallWishTracker : GameComponent
     {
-        // Dictionary to track per-colony dragon ball usage
         private Dictionary<int, ColonyWishData> coloniesWishData = new Dictionary<int, ColonyWishData>();
 
-        // Settings that could be exposed to mod settings later
         public int MaximumWishesPerGathering = 3;
-        public int CooldownTicks = 60000;
+        public int CooldownTicks => 1 * GenDate.TicksPerYear;
 
         public DragonBallWishTracker(Game game)
         {
@@ -29,6 +28,20 @@ namespace DragonBall
             }
         }
 
+
+        public int GetCooldownTicksRemaining(Map map)
+        {
+            if (map == null) return 0;
+
+            int colonyIndex = map.Tile;
+            if (coloniesWishData.ContainsKey(colonyIndex))
+            {
+                return Find.TickManager.TicksGame - coloniesWishData[colonyIndex].LastDragonBallUseTick + CooldownTicks;
+            }
+
+            return 0;
+        }
+
         public bool IsWishOffCooldown(Map map)
         {
             if (map == null) return false;
@@ -37,6 +50,21 @@ namespace DragonBall
             EnsureColonyDataExists(colonyIndex);
 
             return Find.TickManager.TicksGame > coloniesWishData[colonyIndex].LastDragonBallUseTick + CooldownTicks;
+        }
+        public void ResetWishes()
+        {
+            foreach (var item in coloniesWishData)
+            {
+                item.Value.RemainingWishes = 3;
+            }
+        }
+
+        public void ResetCooldowns()
+        {
+            foreach (var item in coloniesWishData)
+            {
+                item.Value.LastDragonBallUseTick = 1;
+            }
         }
 
         public int GetRemainingWishes(Map map)

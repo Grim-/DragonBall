@@ -5,8 +5,10 @@ using SaiyanMod;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using TaranMagicFramework;
 using UnityEngine;
 using Verse;
+using Verse.Grammar;
 
 namespace DragonBall
 {
@@ -232,7 +234,6 @@ namespace DragonBall
             {
                 List<FighterData> allFighters = new List<FighterData>();
 
-                // Initialize fighterResults for all pawns
                 fighterResults.Clear();
                 foreach (Pawn pawn in lendPart.LentColonistsListForReading)
                 {
@@ -258,14 +259,44 @@ namespace DragonBall
 
         private void GenerateOpponents(List<FighterData> allFighters)
         {
-            int desiredFighters = Mathf.NextPowerOfTwo(allFighters.Count + 2); // Ensure power of 2
+            // Get quest difficulty (defaults to 100 if not found)
+            float questDifficulty = 100f;
+            if (quest?.challengeRating != null)
+            {
+                questDifficulty = quest.challengeRating;
+            }
+
+            // Calculate how many fighters we need
+            int desiredFighters = Mathf.NextPowerOfTwo(allFighters.Count + 2);
+
             while (allFighters.Count < desiredFighters)
             {
+                // Calculate average score of existing fighters
                 float avgScore = allFighters.Average(f => f.CalculateScore()["Total Score"]);
-                var npc = OpponentGenerator.GenerateOpponent(avgScore);
+
+                // Generate opponent using quest difficulty
+                var npc = OpponentGenerator.GenerateOpponent(
+                    targetScore: avgScore,
+                    difficultyLevel: questDifficulty
+                );
+
                 npc.IsPawn = false;
                 allFighters.Add(npc);
             }
+        }
+
+        private float GetScaledDifficulty(int currentRound, int totalRounds)
+        {
+            if (quest?.challengeRating == null)
+                return 100f;
+
+            float baseDifficulty = quest.challengeRating;
+
+            //Scale difficulty up in later rounds
+            float roundProgression = (float)currentRound / totalRounds;
+            float difficultyScaling = 1f + (roundProgression * 0.5f); // Up to 50% harder in final round
+
+            return baseDifficulty * difficultyScaling;
         }
 
         private void SkipToNextFight()
@@ -381,6 +412,7 @@ namespace DragonBall
             }
 
             match.IsComplete = true;
+            TournamentBattleLogger.LogTournamentFight(match.Winner, match.Loser);
             RecordAllMatchResults(match);
         }
         private void RecordAllMatchResults(TournamentMatch match)
@@ -501,7 +533,7 @@ namespace DragonBall
                 Pawn pawn = FindPawnByID(thingID);
                 if (pawn == null)
                 {
-                    Log.Message($"Could not find Pawn with ThingID {thingID}");
+                    //Log.Message($"Could not find Pawn with ThingID {thingID}");
                     continue;
                 }
 
@@ -512,11 +544,11 @@ namespace DragonBall
 
                     if (isWinner)
                     {
-                        PlayerPawnWonTournament(pawn, victories);
+                        OnPlayerPawnWonTournament(pawn, victories);
                     }
                     else
                     {
-                        PlayerPawnsLost(pawn, victories);
+                        OnPlayerPawnLostTournament(pawn, victories);
                     }
 
                     tracker.RecordTournamentResults(pawn, results, 0, 0, pawn.ThingID);
@@ -586,7 +618,8 @@ namespace DragonBall
         private string GetDebugDescription()
         {
             StringBuilder sb = new StringBuilder();
-            sb.AppendLine($"Tournament Active: {tournamentActive}");
+            sb.AppendLine($"[Tournament] Info");
+            sb.AppendLine($"[Tournament] Active: {tournamentActive}");
             sb.AppendLine($"Current Day: {currentDay}/{maxFights}");
             sb.AppendLine($"Time until next update: {ticksUntilNextUpdate.ToStringTicksToPeriod(true, true, true)}");
 
@@ -658,7 +691,7 @@ namespace DragonBall
         }
     
 
-        private void PlayerPawnWonTournament(Pawn fighter, int victories)
+        private void OnPlayerPawnWonTournament(Pawn fighter, int victories)
         {
             if (fighter.TryGetKiAbilityClass(out AbilityClassKI abilityClassKI))
             {
@@ -667,29 +700,62 @@ namespace DragonBall
 
             fighter.needs?.mood?.thoughts?.memories?.TryGainMemory(DBDefOf.DragonBallWonTournament);
             GenerateRewards(fighter);
-            Messages.Message($"{fighter.LabelShort} won the tournament with {victories} victories!", MessageTypeDefOf.PositiveEvent);
+            Messages.Message($"{fighter.LabelShort} won the tournament with {victories} victories! They gained {this.tournamentWinXP} experience.", MessageTypeDefOf.PositiveEvent);
         }
 
-        private void PlayerPawnsLost(Pawn fighter, int victories)
+        private void OnPlayerPawnLostTournament(Pawn fighter, int victories)
         {
             if (fighter.TryGetKiAbilityClass(out AbilityClassKI abilityClassKI))
             {
                 abilityClassKI.GainXP(this.tournamentLoseXP);
             }
 
-            Messages.Message($"{fighter.LabelShort} finished the tournament with {victories} victories, they did not win.", MessageTypeDefOf.NeutralEvent);
+            fighter.needs?.mood?.thoughts?.memories?.TryGainMemory(DBDefOf.DragonBallTookPartInTournament);
+            Messages.Message($"{fighter.LabelShort} finished the tournament with {victories} victories, they did not win. They gained {this.tournamentLoseXP} experience.", MessageTypeDefOf.NeutralEvent);
         }
 
         private void GenerateRewards(Pawn pawn)
         {
+            var rewardsCopy = rewards.ToList();
+
             for (int i = 0; i < timesToRoll; i++)
             {
-                RewardItemOption rewardItemOption = rewards.RandomElement();
+                RewardItemOption rewardItemOption = rewardsCopy.RandomElement();
+                rewardsCopy.Remove(rewardItemOption);
+
                 Thing thing = ThingMaker.MakeThing(rewardItemOption.thing);
                 thing.stackCount = rewardItemOption.count.RandomInRange;
                 pawn.inventory.TryAddAndUnforbid(thing);
                 Messages.Message($"{pawn.LabelShort} won {thing.Label} in the tournament!", MessageTypeDefOf.PositiveEvent);
+
+                if (rewardsCopy.Count == 0)
+                {
+                    rewardsCopy = rewards.ToList();
+                }
             }
+        }
+    }
+
+    public static class TournamentBattleLogger
+    {
+        public static void LogTournamentFight(FighterData winner, FighterData loser)
+        {
+            // Only log if the winner or loser is an actual pawn
+            if (!winner.IsPawn && !loser.IsPawn)
+                return;
+
+            //Find.BattleLog.Add(
+            //    new BattleLogEntry_Event(
+            //        initiator,
+            //        recipient,
+            //        DefDatabase<RulePackDef>.GetNamed(ruleDef),
+            //        new Dictionary<string, string>()
+            //        {
+            //        { "winner_name", winner.Name },
+            //        { "loser_name", loser.Name }
+            //        }
+            //    )
+            //);
         }
     }
 }

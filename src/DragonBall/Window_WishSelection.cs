@@ -193,7 +193,7 @@ namespace DragonBall
 
         private void DrawWishButton(Rect buttonRect, BaseWish wish)
         {
-            bool canBeGranted = wish.CanBeGranted(map, altar, TargetPawn) && WishTracker.GetRemainingWishes(map) > 0;
+            bool canBeGranted = wish.CanBeGranted(map, altar, TargetPawn) && WishTracker.GetRemainingWishes(map) > wish.def.wishCost;
             GUI.color = canBeGranted ? Color.white : Color.gray;
 
             Widgets.DrawBox(buttonRect, 1, SolidColorMaterials.NewSolidColorTexture(Color.grey));
@@ -227,7 +227,7 @@ namespace DragonBall
             if (Mouse.IsOver(buttonRect))
             {
                 Widgets.DrawHighlight(buttonRect);
-                TooltipHandler.TipRegion(buttonRect, wish.Description);
+                TooltipHandler.TipRegion(buttonRect, canBeGranted ? wish.Description : "this requires more wishes than you have available.");
 
                 if (Widgets.ButtonInvisible(buttonRect) && canBeGranted)
                 {

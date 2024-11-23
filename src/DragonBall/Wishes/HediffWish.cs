@@ -43,41 +43,4 @@ namespace DragonBall
             }
         }
     }
-
-
-    public class CleanseMapWish : BaseWish
-    {
-        public override bool CanBeGranted(Map map, Building_DragonBallAltar altar, Pawn pawn)
-        {
-            throw new System.NotImplementedException();
-        }
-
-        public override IEnumerable<BaseWish> GenerateWishes(Map map, Building_DragonBallAltar altar, Pawn pawn)
-        {
-            throw new System.NotImplementedException();
-        }
-
-        public override void Grant(Map map, Building_DragonBallAltar altar, Pawn pawn)
-        {
-            if (map.weatherManager.curWeather != null)
-            {
-                map.weatherManager.TransitionTo(WeatherDef.Named("Clear"));
-            }
-
-            ClearAllPollution(map);
-        }
-
-        private void ClearAllPollution(Map map)
-        {
-            List<IntVec3> cells = new List<IntVec3>();
-            cells.AddRange(map.areaManager.PollutionClear.ActiveCells);
-            foreach (IntVec3 cell in cells)
-            {
-                if (cell.IsPolluted(map))
-                {
-                    cell.Unpollute(map);
-                }
-            }
-        }
-    }
 }
