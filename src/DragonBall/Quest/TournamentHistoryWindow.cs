@@ -36,13 +36,8 @@ namespace DragonBall
             float summaryHeight = 60f;
             float fighterListWidth = 200f;
 
-            // Search bar
-            Rect searchRect = new Rect(inRect.x, inRect.y, inRect.width, searchHeight);
-            Text.Font = GameFont.Small;
-            searchText = Widgets.TextField(searchRect, searchText);
-
             // Global summary
-            Rect summaryRect = new Rect(inRect.x, searchRect.yMax + padding, inRect.width, summaryHeight);
+            Rect summaryRect = new Rect(inRect.x, inRect.y + padding, inRect.width, summaryHeight);
             DrawGlobalSummary(summaryRect);
 
             // Fighter list (left side)
@@ -90,7 +85,7 @@ namespace DragonBall
             foreach (var fighter in fighters)
             {
                 Rect rowRect = new Rect(0f, curY, viewRect.width, 30f);
-
+                GUI.color = Color.black;
                 Widgets.Label(rowRect, $"{fighter.fighterName} ({fighter.winRate:P0})");
 
                 if (Widgets.ButtonImageWithBG(rowRect,SolidColorMaterials.NewSolidColorTexture(Color.gray)))
@@ -194,18 +189,18 @@ namespace DragonBall
             float curY = 0f;
             foreach (var tournament in tournaments)
             {
-                curY = DrawTournamentRow(new Rect(0f, curY, viewRect.width, totalHeight - curY), tournament);
+                curY = DrawTournamentRow(new Rect(0f, curY, viewRect.width, totalHeight - curY), tournament, tournament.WinnerID == selectedFighter.fighterID);
             }
 
             Widgets.EndScrollView();
         }
-        private float DrawTournamentRow(Rect rect, Tournament tournament)
+        private float DrawTournamentRow(Rect rect, Tournament tournament, bool WasWin)
         {
             float curY = rect.y;
             bool expanded = expandedTournaments.Contains(tournament.TournamentID);
 
             Rect headerRect = new Rect(rect.x, curY, rect.width, 40f);
-            Widgets.DrawBoxSolid(headerRect, new Color(0.2f, 0.2f, 0.2f, 0.3f));
+            Widgets.DrawBoxSolid(headerRect, WasWin ? Color.yellow : new Color(0.2f, 0.2f, 0.2f, 0.3f));
 
             Rect arrowRect = new Rect(headerRect.x + 5f, headerRect.y + 10f, 20f, 20f);
             if (Widgets.ButtonText(arrowRect, expanded ? "▼" : "►", false))

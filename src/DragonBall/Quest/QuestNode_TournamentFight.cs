@@ -66,7 +66,7 @@ namespace DragonBall
         private int currentDay = 0;
         private int ticksUntilNextUpdate = -1;
         private bool tournamentActive = false;
-        private Dictionary<Pawn, List<TournamentMatchResult>> fighterResults = new Dictionary<Pawn, List<TournamentMatchResult>>();
+        private Dictionary<string, List<TournamentMatchResult>> fighterResults = new Dictionary<string, List<TournamentMatchResult>>();
         private Dictionary<string, FighterData> tournamentFighters = new Dictionary<string, FighterData>();
         public override string DescriptionPart => base.DescriptionPart + GetDebugDescription();
 
@@ -89,7 +89,7 @@ namespace DragonBall
             }
         }
 
-        private List<Pawn> pawnKeys;
+        private List<string> pawnThingIDs;
         private List<List<TournamentMatchResult>> matchResultValues;
         private TournamentBracket bracket;
 
@@ -110,31 +110,20 @@ namespace DragonBall
 
             if (Scribe.mode == LoadSaveMode.PostLoadInit)
             {
-              
-
                 if (fighterResults == null)
-                {
-                    fighterResults = new Dictionary<Pawn, List<TournamentMatchResult>>();
-                }
+                    fighterResults = new Dictionary<string, List<TournamentMatchResult>>();
 
                 if (tournamentFighters == null)
-                {
                     tournamentFighters = new Dictionary<string, FighterData>();
-                }
 
-                if (pawnKeys == null)
-                {
-                    pawnKeys = new List<Pawn>();
-                }
+                if (pawnThingIDs == null)
+                    pawnThingIDs = new List<string>();
 
                 if (matchResultValues == null)
-                {
                     matchResultValues = new List<List<TournamentMatchResult>>();
-                }
-            
             }
 
-            Scribe_Collections.Look(ref fighterResults, "fighterResults", LookMode.Reference, LookMode.Deep, ref pawnKeys, ref matchResultValues);
+            Scribe_Collections.Look(ref fighterResults, "fighterResults", LookMode.Value, LookMode.Deep, ref pawnThingIDs, ref matchResultValues);
             Scribe_Collections.Look(ref tournamentFighters, "tournamentFighters", LookMode.Value, LookMode.Deep);
             Scribe_Collections.Look(ref rewards, "rewards", LookMode.Deep);
             Scribe_Deep.Look(ref bracket, "bracket");
@@ -149,37 +138,38 @@ namespace DragonBall
         {
             if (bracket != null)
             {
-                // Fix round tracking
-                if (bracket.CurrentRound > bracket.TotalRounds)
-                {
-                    bracket.IsComplete = true;
-                    tournamentActive = false;
-                }
-
-                // Validate tournament state
-                if (bracket.IsComplete && tournamentActive)
-                {
-                    tournamentActive = false;
-                    HandleTournamentConclusion();
-                }
-
+                // Ensure RoundMatches is initialized
                 if (bracket.RoundMatches == null)
                 {
                     bracket.RoundMatches = new Dictionary<int, List<TournamentMatch>>();
                 }
 
-                for (int round = 1; round <= bracket.CurrentRound; round++)
+                // Validate all matches have proper state
+                for (int round = 1; round <= bracket.TotalRounds; round++)
                 {
-                    if (bracket.RoundMatches.TryGetValue(round, out var matches))
+                    if (!bracket.RoundMatches.ContainsKey(round))
+                        bracket.RoundMatches[round] = new List<TournamentMatch>();
+
+                    foreach (var match in bracket.RoundMatches[round])
                     {
-                        foreach (var match in matches)
+                        // Restore match state based on scores
+                        if (match.Fighter1Score > 0 || match.Fighter2Score > 0)
                         {
-                            if (match.Winner != null && match.Loser != null)
+                            if (match.Winner == null)
                             {
-                                match.IsComplete = true;
+                                match.Winner = match.Fighter1Score > match.Fighter2Score ? match.Fighter1 : match.Fighter2;
+                                match.Loser = match.Fighter1Score > match.Fighter2Score ? match.Fighter2 : match.Fighter1;
                             }
+                            match.IsComplete = true;
                         }
                     }
+                }
+
+                // Update tournament state
+                if (bracket.CurrentRound > bracket.TotalRounds)
+                {
+                    bracket.IsComplete = true;
+                    tournamentActive = false;
                 }
             }
 
@@ -191,9 +181,9 @@ namespace DragonBall
                 {
                     if (tournamentFighters.ContainsKey(pawn.ThingID))
                     {
-                        if (!fighterResults.ContainsKey(pawn))
+                        if (!fighterResults.ContainsKey(pawn.ThingID))
                         {
-                            fighterResults[pawn] = new List<TournamentMatchResult>();
+                            fighterResults[pawn.ThingID] = new List<TournamentMatchResult>();
                         }
                     }
                 }
@@ -246,7 +236,7 @@ namespace DragonBall
                 fighterResults.Clear();
                 foreach (Pawn pawn in lendPart.LentColonistsListForReading)
                 {
-                    fighterResults[pawn] = new List<TournamentMatchResult>();
+                    fighterResults[pawn.ThingID] = new List<TournamentMatchResult>();
                     var fighterData = FighterData.FromPawn(pawn);
                     if (fighterData != null)
                     {
@@ -395,14 +385,15 @@ namespace DragonBall
         }
         private void RecordAllMatchResults(TournamentMatch match)
         {
-            foreach (var pawn in fighterResults.Keys.ToList())
+            foreach (var thingId in fighterResults.Keys.ToList())
             {
-                if (tournamentFighters.TryGetValue(pawn.ThingID, out var fighterData))
+                if (tournamentFighters.TryGetValue(thingId, out var fighterData))
                 {
-                    RecordMatchResult(pawn, fighterData, match);
+                    RecordMatchResult(FindPawnByID(thingId), fighterData, match);
                 }
             }
         }
+
         private void RecordMatchResult(Pawn pawn, FighterData fighterData, TournamentMatch match)
         {
             if (!tournamentFighters.ContainsKey(pawn.ThingID)) return;
@@ -445,7 +436,7 @@ namespace DragonBall
             };
 
             Log.Message($"Recording {(isWinner ? "win" : "loss")} for {pawn.Label} in round {match.Round}");
-            fighterResults[pawn].Add(result);
+            fighterResults[pawn.ThingID].Add(result);
         }
 
         private void HandleTournamentConclusion()
@@ -504,10 +495,17 @@ namespace DragonBall
 
             foreach (var fighterEntry in fighterResults)
             {
-                Pawn pawn = fighterEntry.Key;
+                string thingID = fighterEntry.Key;
                 var results = fighterEntry.Value;
+                // Find the pawn by ThingID
+                Pawn pawn = FindPawnByID(thingID);
+                if (pawn == null)
+                {
+                    Log.Message($"Could not find Pawn with ThingID {thingID}");
+                    continue;
+                }
 
-                if (tournamentFighters.TryGetValue(pawn.ThingID, out var fighterData))
+                if (tournamentFighters.TryGetValue(thingID, out var fighterData))
                 {
                     bool isWinner = fighterData.Name == winner.Name;
                     int victories = results.Count(r => r.Victory);
@@ -521,36 +519,83 @@ namespace DragonBall
                         PlayerPawnsLost(pawn, victories);
                     }
 
-                    tracker.RecordTournamentResults(pawn, results, 0, 0);
+                    tracker.RecordTournamentResults(pawn, results, 0, 0, pawn.ThingID);
                 }
             }
+
+            
 
             Log.Message($"Tournament concluded! Checking results:");
             foreach (var fighterEntry in fighterResults)
             {
+                string thingID = fighterEntry.Key;
                 var results = fighterEntry.Value;
+                Pawn pawn = FindPawnByID(thingID);
+                if (pawn == null) continue;
+
                 int victories = results.Count(r => r.Victory);
-                Log.Message($"{fighterEntry.Key.Label}: {victories} wins out of {results.Count} matches");
+                Log.Message($"{pawn.Label}: {victories} wins out of {results.Count} matches");
             }
 
             Messages.Message($"Tournament Complete! Winner: {winner.Name}", MessageTypeDefOf.PositiveEvent);
             if(this.State == QuestPartState.Enabled) this.Complete();
         }
 
+        public Pawn FindPawnByID(string thingID)
+        {
+            var lendPart = quest.PartsListForReading.OfType<QuestPart_LendColonistsToFaction>().FirstOrDefault();
+            if (lendPart?.LentColonistsListForReading != null)
+            {
+                return lendPart.LentColonistsListForReading.Find(x => x.ThingID == thingID) as Pawn;
+            }
+
+           Pawn foundPawn = null;
+
+            // Check all maps
+            foreach (Map map in Current.Game.Maps)
+            {
+                foreach (var pawn in map.mapPawns.AllPawns)
+                {
+                    if (pawn.ThingID == thingID)
+                        foundPawn =  pawn;
+                }
+            }
+
+            if (foundPawn != null)
+            {
+                return foundPawn;
+            }
+
+            foundPawn = Find.WorldPawns.AllPawnsAliveOrDead
+                .FirstOrDefault(p => p.ThingID == thingID);
+            return foundPawn;
+        }
+
+
+        private List<Pawn> TryGetLentColonists()
+        {
+            var lendPart = quest.PartsListForReading.OfType<QuestPart_LendColonistsToFaction>().FirstOrDefault();
+            if (lendPart?.LentColonistsListForReading != null)
+            {
+                return lendPart.LentColonistsListForReading.Cast<Pawn>().ToList();
+            }
+
+            return null;
+        }
 
         private string GetDebugDescription()
         {
             StringBuilder sb = new StringBuilder();
             sb.AppendLine($"Tournament Active: {tournamentActive}");
             sb.AppendLine($"Current Day: {currentDay}/{maxFights}");
-            sb.AppendLine($"Ticks until next update: {ticksUntilNextUpdate}");
+            sb.AppendLine($"Time until next update: {ticksUntilNextUpdate.ToStringTicksToPeriod(true, true, true)}");
 
             if (bracket != null)
             {
                 sb.AppendLine($"Bracket - Round: {bracket.CurrentRound}/{bracket.TotalRounds}");
                 sb.AppendLine($"Bracket Complete: {bracket.IsComplete}");
 
-                // Show current matches
+
                 var currentMatches = bracket.GetCurrentRoundMatches();
                 if (currentMatches != null && currentMatches.Any())
                 {
@@ -567,6 +612,22 @@ namespace DragonBall
                     }
                 }
 
+                //var previousRoundMatches = bracket.GetPreviousRoundMatches();
+                //if (previousRoundMatches != null && previousRoundMatches.Any())
+                //{
+                //    sb.AppendLine("Previous Matches:");
+                //    foreach (var match in previousRoundMatches)
+                //    {
+                //        sb.AppendLine($"- {match.Fighter1?.Name} vs {match.Fighter2?.Name}");
+                //        sb.AppendLine($"  Complete: {match.IsComplete}");
+                //        if (match.IsComplete)
+                //        {
+                //            sb.AppendLine($"  Winner: {match.Winner?.Name}");
+                //            sb.AppendLine($"  Scores: {match.Fighter1Score:F0} vs {match.Fighter2Score:F0}");
+                //        }
+                //    }
+                //}
+
                 // Show tournament results so far
                 sb.AppendLine("\nFighter Results:");
                 foreach (var kvp in fighterResults)
@@ -575,9 +636,16 @@ namespace DragonBall
                     var results = kvp.Value;
                     if (results != null)
                     {
-                        int wins = results.Count(r => r.Victory);
-                        int totalMatches = results.Count;
-                        sb.AppendLine($"{pawn.LabelShort}: {wins}/{totalMatches} wins");
+                        Pawn foundPawn = FindPawnByID(pawn);
+
+                        if (foundPawn != null)
+                        {
+                            int wins = results.Count(r => r.Victory);
+                            int totalMatches = results.Count;
+                            sb.AppendLine($"{foundPawn.LabelShort}: {wins}/{totalMatches} wins");
+                        }
+
+    
                     }
                 }
             }

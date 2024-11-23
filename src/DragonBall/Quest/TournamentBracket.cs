@@ -114,6 +114,17 @@ namespace DragonBall
             RoundMatches[1] = firstRoundMatches;
         }
 
+        public List<TournamentMatch> GetPreviousRoundMatches()
+        {
+            List<TournamentMatch> matches = new List<TournamentMatch>();
+
+            for (int i = 0; i < CurrentRound; i++)
+            {
+                matches.AddRange(RoundMatches[i]);
+            }
+
+            return matches;
+        }
         public List<TournamentMatch> GetCurrentRoundMatches()
         {
             return RoundMatches.TryGetValue(CurrentRound, out var matches) ? matches : new List<TournamentMatch>();
@@ -283,10 +294,18 @@ namespace DragonBall
             Scribe_Values.Look(ref IsComplete, "isComplete", false);
             Scribe_Values.Look(ref nextMatchIndex, "nextMatchIndex");
 
-            if (Scribe.mode == LoadSaveMode.LoadingVars)
+            if (Scribe.mode == LoadSaveMode.PostLoadInit)
             {
-                Matches = Matches ?? new List<TournamentMatch>();
-                RoundMatches = RoundMatches ?? new Dictionary<int, List<TournamentMatch>>();
+                if (Matches == null)
+                {
+                    Matches = new List<TournamentMatch>();
+                }
+                if (RoundMatches == null)
+                {
+                    RoundMatches = new Dictionary<int, List<TournamentMatch>>();
+                }
+
+
 
                 if (TotalRounds <= 0 && Fighters != null)
                 {

@@ -17,7 +17,7 @@ namespace DragonBall
         {
         }
 
-        public void RecordTournamentResults(Pawn fighter, List<TournamentMatchResult> results, int dragonBallsWon, int goldWon)
+        public void RecordTournamentResults(Pawn fighter, List<TournamentMatchResult> results, int dragonBallsWon, int goldWon, string winnerID)
         {
             if (results == null || !results.Any()) return;
 

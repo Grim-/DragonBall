@@ -21,6 +21,7 @@ namespace DragonBall
         {
             Scribe_Values.Look(ref fighterName, "fighterName");
             Scribe_Values.Look(ref fighterID, "fighterID");
+
             Scribe_Collections.Look(ref tournaments, "tournaments", LookMode.Deep);
             Scribe_Values.Look(ref totalFights, "totalFights");
             Scribe_Values.Look(ref victories, "victories");
@@ -41,6 +42,7 @@ namespace DragonBall
         {
             Scribe_Values.Look(ref TournamentID, "TournamentID");
             Scribe_Values.Look(ref FighterID, "FighterID");
+            Scribe_Values.Look(ref WinnerID, "winnerID");
             Scribe_Collections.Look(ref Matches, "Matches", LookMode.Deep);
         }
     }
