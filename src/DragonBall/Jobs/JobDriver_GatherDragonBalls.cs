@@ -21,7 +21,7 @@ namespace DragonBall
 
             this.FailOn(() =>
             {
-                return altar.HasDragonBallOfTypeAlready(TargetThingA);
+                return altar.HasDragonBallOfTypeAlready(TargetThingA) || altar == null;
 
             });
 

@@ -1,4 +1,6 @@
-﻿using System.Linq;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using Verse;
 
@@ -11,8 +13,8 @@ namespace DragonBall
         private TournamentHistoryEntry selectedFighter = null;
         private string searchText = "";
         private Vector2 matchScrollPosition = Vector2.zero;
-
-
+        private HashSet<int> expandedTournaments = new HashSet<int>();
+        private HashSet<string> expandedMatches = new HashSet<string>();
         public TournamentHistoryWindow(TournamentTracker tracker)
         {
             this.tracker = tracker;
@@ -67,10 +69,6 @@ namespace DragonBall
             float columnWidth = rect.width / 3;
             Widgets.Label(new Rect(10f, 0f, columnWidth, rect.height),
                 $"Total Tournaments: {tracker.GetTotalTournaments()}");
-            Widgets.Label(new Rect(columnWidth + 10f, 0f, columnWidth, rect.height),
-                $"Dragon Balls Won: {tracker.GetTotalDragonBalls()}");
-            Widgets.Label(new Rect(columnWidth * 2 + 10f, 0f, columnWidth, rect.height),
-                $"Total Gold Won: {tracker.GetTotalGold()}");
 
             GUI.EndGroup();
             Text.Anchor = TextAnchor.UpperLeft;
@@ -92,7 +90,10 @@ namespace DragonBall
             foreach (var fighter in fighters)
             {
                 Rect rowRect = new Rect(0f, curY, viewRect.width, 30f);
-                if (Widgets.ButtonText(rowRect, $"{fighter.fighterName} ({fighter.winRate:P0})"))
+
+                Widgets.Label(rowRect, $"{fighter.fighterName} ({fighter.winRate:P0})");
+
+                if (Widgets.ButtonImageWithBG(rowRect,SolidColorMaterials.NewSolidColorTexture(Color.gray)))
                 {
                     selectedFighter = fighter;
                 }
@@ -159,57 +160,153 @@ namespace DragonBall
                 $"Total Experience Gained: {selectedFighter.totalExperience:F0}");
             curY += lineHeight;
 
-            Widgets.Label(new Rect(10f, curY, rect.width - 20f, lineHeight),
-                $"Dragon Balls Won: {selectedFighter.dragonBallsWon}");
-            curY += lineHeight;
-
-            Widgets.Label(new Rect(10f, curY, rect.width - 20f, lineHeight),
-                $"Gold Won: {selectedFighter.goldWon}");
-
             GUI.EndGroup();
         }
 
         private void DrawTournamentHistory(Rect rect)
         {
-            float tournamentHeight = 200f; // Height per tournament section
-            Rect viewRect = new Rect(0f, 0f, rect.width - 16f, selectedFighter.tournaments.Count * tournamentHeight);
+            var tournaments = selectedFighter.tournaments.OrderByDescending(t => t.TournamentID).ToList();
+
+            // Calculate the total height needed
+            float totalHeight = 0f;
+            foreach (var tournament in tournaments)
+            {
+                totalHeight += 40f; // Base tournament row height
+                if (expandedTournaments.Contains(tournament.TournamentID))
+                {
+                    foreach (var match in tournament.Matches.OrderBy(m => m.Round))
+                    {
+                        totalHeight += 30f; // Base match row height
+                        if (expandedMatches.Contains(match.MatchID))
+                        {
+                            // Calculate score breakdown height
+                            int playerScoreLines = match.ScoreContributions.Count + 4;
+                            int opponentScoreLines = match.OpponentScoreContributions.Count + 2;
+                            totalHeight += (playerScoreLines + opponentScoreLines) * 20f;
+                        }
+                    }
+                }
+            }
+
+            Rect viewRect = new Rect(0f, 0f, rect.width - 16f, totalHeight);
             Widgets.BeginScrollView(rect, ref matchScrollPosition, viewRect);
 
             float curY = 0f;
-            foreach (var tournament in selectedFighter.tournaments.OrderByDescending(t => t.TournamentID))
+            foreach (var tournament in tournaments)
             {
-                Rect tournamentRect = new Rect(0f, curY, viewRect.width, tournamentHeight - 10f);
-                DrawTournamentSection(tournamentRect, tournament);
-                curY += tournamentHeight;
+                curY = DrawTournamentRow(new Rect(0f, curY, viewRect.width, totalHeight - curY), tournament);
             }
 
             Widgets.EndScrollView();
         }
-
-        private void DrawTournamentSection(Rect rect, Tournament tournament)
+        private float DrawTournamentRow(Rect rect, Tournament tournament)
         {
-            Widgets.DrawBoxSolid(rect, new Color(0.2f, 0.2f, 0.2f, 0.3f));
-            GUI.BeginGroup(rect);
+            float curY = rect.y;
+            bool expanded = expandedTournaments.Contains(tournament.TournamentID);
 
-            // Tournament header
-            Text.Font = GameFont.Small;
-            Widgets.Label(new Rect(10f, 5f, rect.width - 20f, 25f),
-                $"Tournament #{tournament.TournamentID}");
+            Rect headerRect = new Rect(rect.x, curY, rect.width, 40f);
+            Widgets.DrawBoxSolid(headerRect, new Color(0.2f, 0.2f, 0.2f, 0.3f));
 
-            float curY = 35f;
-            float matchHeight = 30f;
-            float matchWidth = (rect.width - 30f) / tournament.Matches.Count;
-
-            // Draw matches side by side
-            float curX = 10f;
-            foreach (var match in tournament.Matches.OrderBy(m => m.Round))
+            Rect arrowRect = new Rect(headerRect.x + 5f, headerRect.y + 10f, 20f, 20f);
+            if (Widgets.ButtonText(arrowRect, expanded ? "▼" : "►", false))
             {
-                Rect matchRect = new Rect(curX, curY, matchWidth, rect.height - curY - 10f);
-                DrawMatchDetails(matchRect, match);
-                curX += matchWidth + 5f;
+                if (expanded)
+                    expandedTournaments.Remove(tournament.TournamentID);
+                else
+                    expandedTournaments.Add(tournament.TournamentID);
             }
 
-            GUI.EndGroup();
+            Text.Font = GameFont.Small;
+            Rect labelRect = new Rect(headerRect.x + 30f, headerRect.y + 10f, rect.width - 40f, 25f);
+            int victories = tournament.Matches.Count(m => m.Victory);
+            Widgets.Label(labelRect, $"Tournament #{tournament.TournamentID} - {victories}/{tournament.Matches.Count} Victories");
+
+            curY += 40f;
+
+            if (expanded)
+            {
+                foreach (var match in tournament.Matches.OrderBy(m => m.Round))
+                {
+                    curY = DrawMatchRow(new Rect(rect.x + 20f, curY, rect.width - 20f, 30f), match);
+                }
+            }
+
+            return curY;
+        }
+
+        private float DrawMatchRow(Rect rect, TournamentMatchResult match)
+        {
+            float curY = rect.y;
+            bool expanded = expandedMatches.Contains(match.MatchID);
+
+            // Match header row
+            Rect headerRect = new Rect(rect.x, curY, rect.width, 30f);
+            GUI.color = match.Victory ? new Color(0.2f, 0.5f, 0.2f, 0.3f) : new Color(0.5f, 0.2f, 0.2f, 0.3f);
+            Widgets.DrawBoxSolid(headerRect, GUI.color);
+            GUI.color = Color.white;
+
+            // Draw expand/collapse arrow
+            Rect arrowRect = new Rect(headerRect.x + 5f, headerRect.y + 5f, 20f, 20f);
+            if (Widgets.ButtonText(arrowRect, expanded ? "▼" : "►", false))
+            {
+                if (expanded)
+                    expandedMatches.Remove(match.MatchID);
+                else
+                    expandedMatches.Add(match.MatchID);
+            }
+
+            // Match summary
+            Text.Font = GameFont.Small;
+            string result = match.Victory ? "Victory" : "Defeat";
+            Rect labelRect = new Rect(headerRect.x + 30f, headerRect.y + 5f, rect.width - 40f, 20f);
+            Widgets.Label(labelRect, $"Round {match.Round}: {result} vs {match.OpponentName} (Margin: {match.ScoreMargin:P0})");
+
+            curY += 30f;
+
+            if (expanded)
+            {
+                GUI.color = Color.white;
+                float scoreHeight = 20f;
+                float columnWidth = (rect.width - 35f) / 2;
+                float leftColumn = rect.x + 30f;
+                float rightColumn = leftColumn + columnWidth + 5f;
+                float startY = curY;
+
+                // Left column
+                Text.Font = GameFont.Tiny;
+                Widgets.Label(new Rect(leftColumn, curY, columnWidth, scoreHeight), "Your Score Breakdown:");
+                curY += scoreHeight;
+
+                foreach (var score in match.ScoreContributions)
+                {
+                    Widgets.Label(new Rect(leftColumn + 15f, curY, columnWidth - 15f, scoreHeight),
+                        $"{score.Key}: {score.Value:F1}");
+                    curY += scoreHeight;
+                }
+
+
+                float leftHeight = curY + scoreHeight - startY;
+
+                // Right column - Opponent scores
+                curY = startY;  // Reset Y
+                Widgets.Label(new Rect(rightColumn, curY, columnWidth, scoreHeight),
+                    $"{match.OpponentName}'s Score Breakdown:");
+                curY += scoreHeight;
+
+                foreach (var score in match.OpponentScoreContributions)
+                {
+                    Widgets.Label(new Rect(rightColumn + 15f, curY, columnWidth - 15f, scoreHeight),
+                        $"{score.Key}: {score.Value:F1}");
+                    curY += scoreHeight;
+                }
+
+
+                float rightHeight = curY + scoreHeight - startY;
+
+                curY = startY + Math.Max(leftHeight, rightHeight);
+            }
+
+            return curY;
         }
 
         private void DrawMatchDetails(Rect rect, TournamentMatchResult match)
@@ -217,12 +314,12 @@ namespace DragonBall
             GUI.color = match.Victory ? new Color(0.2f, 0.5f, 0.2f, 0.3f) : new Color(0.5f, 0.2f, 0.2f, 0.3f);
             Widgets.DrawBoxSolid(rect, GUI.color);
             GUI.color = Color.white;
-
             GUI.BeginGroup(rect);
             float curY = 5f;
             float lineHeight = 20f;
-
             Text.Font = GameFont.Small;
+
+            // Match basic info
             string result = match.Victory ? "Victory" : "Defeat";
             Widgets.Label(new Rect(5f, curY, rect.width - 10f, lineHeight),
                 $"Round {match.Round}: {result}");
@@ -236,21 +333,59 @@ namespace DragonBall
                 $"Margin: {match.ScoreMargin:P0}");
             curY += lineHeight;
 
+            // Player's score section
+            Text.Font = GameFont.Tiny;
             Widgets.Label(new Rect(5f, curY, rect.width - 10f, lineHeight),
-            $"Margin: {match.ScoreMargin:P0}");
-                    curY += lineHeight;
+                "Your Score Breakdown:");
+            curY += lineHeight;
 
-            // Score breakdowns will go here once added
             if (match.ScoreContributions.Any())
             {
                 foreach (var contribution in match.ScoreContributions)
                 {
-                    Widgets.Label(new Rect(5f, curY, rect.width - 10f, lineHeight),
+                    Widgets.Label(new Rect(15f, curY, rect.width - 20f, lineHeight),
                         $"{contribution.Key}: {contribution.Value:F1}");
                     curY += lineHeight;
                 }
+                Widgets.Label(new Rect(15f, curY, rect.width - 20f, lineHeight),
+                    $"Total Score: {match.TotalScore:F1}");
+                curY += lineHeight;
+            }
+            else
+            {
+                Widgets.Label(new Rect(15f, curY, rect.width - 20f, lineHeight),
+                    "No score details available");
+                curY += lineHeight;
             }
 
+            // Add some spacing between sections
+            curY += 5f;
+
+            // Opponent's score section
+            Widgets.Label(new Rect(5f, curY, rect.width - 10f, lineHeight),
+                $"{match.OpponentName}'s Score Breakdown:");
+            curY += lineHeight;
+
+            if (match.OpponentScoreContributions.Any())
+            {
+                foreach (var contribution in match.OpponentScoreContributions)
+                {
+                    Widgets.Label(new Rect(15f, curY, rect.width - 20f, lineHeight),
+                        $"{contribution.Key}: {contribution.Value:F1}");
+                    curY += lineHeight;
+                }
+                Widgets.Label(new Rect(15f, curY, rect.width - 20f, lineHeight),
+                    $"Total Score: {match.OpponentTotalScore:F1}");
+                curY += lineHeight;
+            }
+            else
+            {
+                Widgets.Label(new Rect(15f, curY, rect.width - 20f, lineHeight),
+                    "No score details available");
+                curY += lineHeight;
+            }
+
+            Text.Font = GameFont.Small;
             GUI.EndGroup();
         }
     }

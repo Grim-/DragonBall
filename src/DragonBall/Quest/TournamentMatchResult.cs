@@ -14,8 +14,9 @@ namespace DragonBall
         public int Round;
         public int TournamentID; 
         public Dictionary<string, float> ScoreContributions = new Dictionary<string, float>();
-
+        public Dictionary<string, float> OpponentScoreContributions = new Dictionary<string, float>();
         public float TotalScore => ScoreContributions.Sum(x => x.Value);
+        public float OpponentTotalScore => OpponentScoreContributions.Sum(x => x.Value);
 
         public void ExposeData()
         {
@@ -27,6 +28,7 @@ namespace DragonBall
             Scribe_Values.Look(ref Round, "Round");
             Scribe_Values.Look(ref TournamentID, "TournamentID");
             Scribe_Collections.Look(ref ScoreContributions, "ScoreContributions", LookMode.Value, LookMode.Value);
+            Scribe_Collections.Look(ref OpponentScoreContributions, "OpponentScoreContributions", LookMode.Value, LookMode.Value);
         }
     }
 }

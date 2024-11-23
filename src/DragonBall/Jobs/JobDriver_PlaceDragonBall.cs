@@ -20,6 +20,10 @@ namespace DragonBall
 
         protected override IEnumerable<Toil> MakeNewToils()
         {
+            this.FailOn(() =>
+            {
+                return AltarBuilding.HasDragonBallOfTypeAlready(TargetThingA) || Altar == null;
+            });
             // Go to placement spot
             yield return Toils_Goto.GotoCell(AltarBuilding.GetDragonBallPosition(DragonBall.def), PathEndMode.ClosestTouch)
                 .FailOnDespawnedNullOrForbidden(TargetIndex.B);

@@ -38,6 +38,12 @@ namespace DragonBall
 
         public static TaranMagicFramework.AbilityDef SR_SuperSaiyan2;
         public static TaranMagicFramework.AbilityDef SR_KaioKen;
+
+
+        public static RulePackDef NamerFighterDragonBall;
+
+        public static ThoughtDef DragonWishOpinionBoost;
+        public static ThoughtDef DragonBallWonTournament;
     }
 
 

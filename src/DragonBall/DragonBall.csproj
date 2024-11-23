@@ -92,10 +92,17 @@
     <Compile Include="DragonBallFlying.cs" />
     <Compile Include="Quest\AbilityOption.cs" />
     <Compile Include="Quest\AbilityScoreBonus.cs" />
+    <Compile Include="Quest\ColonyWishData.cs" />
+    <Compile Include="Quest\DragonBallWishTracker.cs" />
+    <Compile Include="Quest\FighterData.cs" />
+    <Compile Include="Quest\OpponentGenerator.cs" />
     <Compile Include="Quest\QuestNode_LearnFromSupremeKai.cs" />
     <Compile Include="Quest\QuestNode_TournamentFight.cs" />
+    <Compile Include="Quest\TournamentBracket.cs" />
+    <Compile Include="Quest\TournamentFighterDef.cs" />
     <Compile Include="Quest\TournamentHistoryEntry.cs" />
     <Compile Include="Quest\TournamentHistoryWindow.cs" />
+    <Compile Include="Quest\TournamentMatch.cs" />
     <Compile Include="Quest\TournamentMatchResult.cs" />
     <Compile Include="Quest\TournamentSettings.cs" />
     <Compile Include="Quest\TournamentTracker.cs" />

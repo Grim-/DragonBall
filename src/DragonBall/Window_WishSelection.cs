@@ -26,8 +26,9 @@ namespace DragonBall
         private Color FOOTER_COLOR = new Color(0.3f, 0.3f, 0.3f, 0.3f);
         private Color CATEGORY_COLOR = new Color(0.3f, 0.3f, 0.3f, 0.3f);
         private const float INNER_PADDING = 5f;
-
+        
         public override Vector2 InitialSize => WinSize;
+        private DragonBallWishTracker WishTracker = null;
 
         public Window_WishSelection(Map map, Building_DragonBallAltar altar, Pawn TargetPawn)
         {
@@ -38,6 +39,16 @@ namespace DragonBall
             this.absorbInputAroundWindow = true;
             this.forcePause = true;
             this.TargetPawn = TargetPawn;
+
+            if (this.WishTracker == null)
+            {
+                this.WishTracker = Current.Game.GetComponent<DragonBallWishTracker>();
+            }
+
+            if (WishTracker.GetRemainingWishes(map) <= 0)
+            {
+                WishTracker.InitializeWishes(map);
+            }
 
             categorizedWishes = new Dictionary<string, List<BaseWish>>();
 
@@ -109,12 +120,14 @@ namespace DragonBall
 
         private void DrawTitle(Rect inRect)
         {
-            // Draw title
             Text.Font = GameFont.Medium;
             Text.Anchor = TextAnchor.MiddleCenter;
             Rect titleRect = new Rect(0f, 0f, inRect.width, TITLE_HEIGHT);
             GUI.DrawTexture(titleRect, SolidColorMaterials.NewSolidColorTexture(TITLE_COLOR));
-            Widgets.Label(titleRect, "Make Your Wish");
+
+            int remainingWishes = WishTracker.GetRemainingWishes(map);
+            string titleText = $"Make Your Wish ({remainingWishes} remaining)";
+            Widgets.Label(titleRect, titleText);
             Text.Anchor = TextAnchor.UpperLeft;
         }
 
@@ -180,7 +193,8 @@ namespace DragonBall
 
         private void DrawWishButton(Rect buttonRect, BaseWish wish)
         {
-            GUI.color = wish.CanBeGranted(map, altar, TargetPawn) ? Color.white : Color.gray;
+            bool canBeGranted = wish.CanBeGranted(map, altar, TargetPawn) && WishTracker.GetRemainingWishes(map) > 0;
+            GUI.color = canBeGranted ? Color.white : Color.gray;
 
             Widgets.DrawBox(buttonRect, 1, SolidColorMaterials.NewSolidColorTexture(Color.grey));
             Rect innerRect = buttonRect.ContractedBy(INNER_PADDING);
@@ -204,26 +218,31 @@ namespace DragonBall
             );
             GUI.DrawTexture(footerRect, SolidColorMaterials.NewSolidColorTexture(FOOTER_COLOR));
 
-            // Draw the label
+
             Text.Font = GameFont.Small;
             Text.Anchor = TextAnchor.MiddleCenter;
             Widgets.Label(footerRect, wish.Label);
 
-            // Handle mouse interaction
+
             if (Mouse.IsOver(buttonRect))
             {
                 Widgets.DrawHighlight(buttonRect);
                 TooltipHandler.TipRegion(buttonRect, wish.Description);
 
-                if (Widgets.ButtonInvisible(buttonRect) && wish.CanBeGranted(map, altar, TargetPawn))
+                if (Widgets.ButtonInvisible(buttonRect) && canBeGranted)
                 {
                     wish.Grant(map, altar, TargetPawn);
-                    altar.ScatterGatheredDragonBalls();
-                    Close();
+                    WishTracker.UseWish(map);
+
+                    if (WishTracker.GetRemainingWishes(map) <= 0)
+                    {
+                        altar.ScatterGatheredDragonBalls();
+                        Close();
+                    }
                 }
             }
 
-            // Reset drawing settings
+
             Text.Anchor = TextAnchor.UpperLeft;
             GUI.color = Color.white;
         }

@@ -24,6 +24,10 @@ namespace DragonBall
 
         protected override IEnumerable<Toil> MakeNewToils()
         {
+            this.FailOn(() =>
+            {
+                return AltarBuilding.HasDragonBallOfTypeAlready(TargetThingA) || Altar == null;
+            });
 
             yield return Toils_Goto.GotoThing(TargetIndex.A, PathEndMode.InteractionCell).FailOnDespawnedNullOrForbidden(TargetIndex.A);
 
