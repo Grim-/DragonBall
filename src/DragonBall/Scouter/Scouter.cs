@@ -25,7 +25,6 @@ namespace DragonBall
         {
             base.Notify_Equipped(pawn);
             EquipOwner = pawn;
-            Log.Message("EQUIPPED SCOUTER");
         }
 
         public override void Notify_Unequipped(Pawn pawn)

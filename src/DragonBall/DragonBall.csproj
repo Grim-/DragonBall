@@ -91,7 +91,10 @@
   <ItemGroup>
     <Compile Include="BiomeWorker_NeverSpawn.cs" />
     <Compile Include="Hyperbolic Time Chamber\ChamberState.cs" />
-    <Compile Include="Hyperbolic Time Chamber\CompProperties_HyperbolicChamber.cs" />
+    <Compile Include="Hyperbolic Time Chamber\CircularPlatformGenStep.cs" />
+    <Compile Include="Hyperbolic Time Chamber\CompProperties_Tournament.cs" />
+    <Compile Include="Hyperbolic Time Chamber\GenStep_KamisHazards.cs" />
+    <Compile Include="Hyperbolic Time Chamber\HyperbolicChamber_Building.cs" />
     <Compile Include="CompProperties_TrainingDummy.cs" />
     <Compile Include="DragonBallFlying.cs" />
     <Compile Include="Hyperbolic Time Chamber\GenStep_KamisPlatform.cs" />

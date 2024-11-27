@@ -56,9 +56,9 @@ namespace DragonBall
         public static JobDef DragonBallTrainOnDummy;
 
 
-        //public static MapGeneratorDef KamisLookoutGenerator;
-        //public static WorldObjectDef HyperbolicMapParent;
-        //public static BiomeDef KamisLookoutBiome;
+        public static MapGeneratorDef KamisLookoutGenerator;
+        public static WorldObjectDef HyperbolicMapParent;
+        public static BiomeDef KamisLookoutBiome;
 
     }
 

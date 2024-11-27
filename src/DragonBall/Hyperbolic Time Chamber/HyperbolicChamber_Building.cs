@@ -8,32 +8,34 @@ using Verse.AI;
 
 namespace DragonBall
 {
-
-    public class CompProperties_HyperbolicChamber : CompProperties
-    {
-        public TerrainDef FloorTerrain;
-        public TerrainDef SkyTerrain;
-        public int MaxOccupants = 2;
-        public float TimeMultiplier = 365f;
-
-        public CompProperties_HyperbolicChamber()
-        {
-            this.compClass = typeof(CompHyperbolicChamber);
-        }
-    }
-
-    public class CompHyperbolicChamber : ThingComp
+    public class HyperbolicChamber_Building : Building
     {
         public Map pocketMap;
+        public int MaxOccupants = 2;
+        public float TimeMultiplier = 365f;
         private HashSet<Pawn> occupants = new HashSet<Pawn>();
         private Dictionary<Pawn, int> entryTicks = new Dictionary<Pawn, int>();
         private ChamberState state = ChamberState.UNOCCUPIED;
 
-        public CompProperties_HyperbolicChamber Props => (CompProperties_HyperbolicChamber)props;
 
-        public override void PostExposeData()
+        private TournamentComp _TournamentComp;
+        private TournamentComp TournamentComp
         {
-            base.PostExposeData();
+            get
+            {
+                if (_TournamentComp == null)
+                {
+                    _TournamentComp = this.GetComp<TournamentComp>();
+                }
+
+                return _TournamentComp;
+            }
+        }
+
+        private bool EnableTimeDilation = true;
+        public override void ExposeData()
+        {
+            base.ExposeData();
             Scribe_References.Look(ref pocketMap, "pocketMap");
             Scribe_Collections.Look(ref occupants, "occupants", LookMode.Reference);
             Scribe_Collections.Look(ref entryTicks, "entryTicks", LookMode.Reference, LookMode.Value);
@@ -50,11 +52,20 @@ namespace DragonBall
             }
         }
 
-        public override IEnumerable<FloatMenuOption> CompFloatMenuOptions(Pawn selPawn)
+        public override IEnumerable<FloatMenuOption> GetFloatMenuOptions(Pawn selPawn)
         {
-            if (!selPawn.CanReach(parent, PathEndMode.Touch, Danger.Deadly, false, false, TraverseMode.ByPawn))
+            if (!selPawn.CanReach(this, PathEndMode.Touch, Danger.Deadly, false, false, TraverseMode.ByPawn))
             {
                 yield break;
+            }
+
+
+            if (TournamentComp != null && TournamentComp.state == TournamentState.PREPARING)
+            {
+                yield return new FloatMenuOption("Enter as Contender", delegate
+                {
+                    TournamentComp.StartMatch(selPawn);
+                });
             }
 
             if (IsPawnInChamber(selPawn))
@@ -72,12 +83,14 @@ namespace DragonBall
             }
         }
 
-        public override IEnumerable<Gizmo> CompGetGizmosExtra()
+        public override IEnumerable<Gizmo> GetGizmos()
         {
-            foreach (var item in base.CompGetGizmosExtra())
+            foreach (var item in base.GetGizmos())
             {
                 yield return item;
             }
+
+
 
             yield return new Command_Action
             {
@@ -92,6 +105,12 @@ namespace DragonBall
         }
 
 
+        public override void Destroy(DestroyMode mode = DestroyMode.Vanish)
+        {
+            EjectAllOccupants();
+            base.Destroy(mode);
+        }
+
 
         public void EjectAllOccupants()
         {
@@ -102,17 +121,17 @@ namespace DragonBall
                 ExitChamber(item);
             }
         }
-        
 
-        private bool IsPawnInChamber(Pawn pawn)
+
+        public bool IsPawnInChamber(Pawn pawn)
         {
             return occupants.Contains(pawn);
         }
 
-        private bool CanEnterChamber(Pawn pawn)
+        public bool CanEnterChamber(Pawn pawn)
         {
             return state != ChamberState.DISABLED &&
-                   occupants.Count < Props.MaxOccupants &&
+                   occupants.Count < MaxOccupants &&
                    !IsPawnInChamber(pawn);
         }
 
@@ -120,12 +139,12 @@ namespace DragonBall
         {
             if (state == ChamberState.DISABLED)
                 return "Chamber is currently disabled";
-            if (occupants.Count >= Props.MaxOccupants)
+            if (occupants.Count >= MaxOccupants)
                 return "Chamber is at maximum capacity (2 occupants)";
             return "Cannot enter chamber";
         }
 
-        private void CreateAndEnterChamber(Pawn pawn)
+        public void CreateAndEnterChamber(Pawn pawn)
         {
             try
             {
@@ -134,7 +153,7 @@ namespace DragonBall
                 // Create map if it doesn't exist
                 if (pocketMap == null)
                 {
-                    //pocketMap = HyperbolicMapUtility.CreateHyperbolicDimension(parent.Map);
+                    pocketMap = HyperbolicMapUtility.CreateHyperbolicDimension(this.Map);
                     state = ChamberState.UNOCCUPIED;
                 }
 
@@ -153,7 +172,7 @@ namespace DragonBall
             }
         }
 
-        private void ExitChamber(Pawn pawn)
+        public void ExitChamber(Pawn pawn)
         {
             if (!IsPawnInChamber(pawn)) return;
 
@@ -170,14 +189,14 @@ namespace DragonBall
                     entryTicks.Remove(pawn);
                 }
 
-                TransferToMap(pawn, parent.Map, parent.Position);
+                TransferToMap(pawn, this.Map, this.Position);
                 occupants.Remove(pawn);
                 UpdateChamberState();
 
                 // Only destroy the map if it's empty
                 if (!occupants.Any())
                 {
-                    //HyperbolicMapUtility.DestroyHyperbolicDimension(pocketMap);
+                    HyperbolicMapUtility.DestroyHyperbolicDimension(pocketMap);
                     pocketMap = null;
                 }
 
@@ -195,7 +214,7 @@ namespace DragonBall
             {
                 state = ChamberState.UNOCCUPIED;
             }
-            else if (occupants.Count >= Props.MaxOccupants)
+            else if (occupants.Count >= MaxOccupants)
             {
                 state = ChamberState.FULL;
             }
@@ -207,19 +226,17 @@ namespace DragonBall
 
         private void ApplyTimeEffects(Pawn pawn, int ticksSpent)
         {
-            // Convert real time to chamber time using multiplier
-            float chamberTicks = ticksSpent * Props.TimeMultiplier;
+            if (EnableTimeDilation)
+            {
+                // Convert real time to chamber time using multiplier
+                float chamberTicks = ticksSpent * TimeMultiplier;
 
-            Log.Message($"Pawn {pawn.LabelShort} aged {GenDate.ToStringTicksToPeriod((int)chamberTicks)} in the chamber.");
+                Log.Message($"Pawn {pawn.LabelShort} aged {GenDate.ToStringTicksToPeriod((int)chamberTicks)} in the chamber.");
 
-             // Apply aging effects
-            pawn.ageTracker.AgeBiologicalTicks += (long)chamberTicks;
+                pawn.ageTracker.AgeBiologicalTicks += (long)chamberTicks;
+            }
 
-            // You could add additional time-based effects here
-            // For example:
-            // - Skill improvements
-            // - Need changes
-            // - Special buffs/debuffs
+
         }
 
         private void TransferToMap(Pawn pawn, Map targetMap, IntVec3 position)
@@ -229,11 +246,10 @@ namespace DragonBall
             GenSpawn.Spawn(pawn, position, targetMap);
         }
 
-        public override void CompTick()
+        public override void Tick()
         {
-            base.CompTick();
+            base.Tick();
 
-            // Check for dead or missing pawns
             var invalidPawns = occupants.Where(p => p.Dead || p.Destroyed).ToList();
             foreach (var pawn in invalidPawns)
             {
