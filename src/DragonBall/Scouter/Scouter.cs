@@ -87,33 +87,35 @@ namespace DragonBall
             // Mode toggle
             yield return new Command_Action
             {
-                defaultLabel = "Toggle Scouter Mode",
+                defaultLabel = $"Toggle Scouter Mode [Active : {ModeToNiceString()}]",
                 defaultDesc = "Switch between power level overlay and targeting mode",
                 icon = ContentFinder<Texture2D>.Get("Things/Building/Misc/DropBeacon"),
                 action = delegate { ToggleMode(); }
             };
 
-            // Scan speed toggle
-            yield return new Command_Action
+
+            if (scouterMode == ScouterMode.SCANNING)
             {
-                defaultLabel = $"Scan Speed: {scanSpeed}",
-                defaultDesc = "Toggle between normal and fast scanning speeds",
-                icon = ContentFinder<Texture2D>.Get("Things/Building/Misc/DropBeacon"),
-                action = delegate
+                // Scan speed toggle
+                yield return new Command_Action
                 {
-                    scanSpeed = scanSpeed == ScanSpeed.NORMAL ? ScanSpeed.FAST : ScanSpeed.NORMAL;
-                }
-            };
+                    defaultLabel = $"Scan Speed: {scanSpeed}",
+                    defaultDesc = "Toggle between normal and fast scanning speeds",
+                    icon = ContentFinder<Texture2D>.Get("Things/Building/Misc/DropBeacon"),
+                    action = delegate
+                    {
+                        scanSpeed = scanSpeed == ScanSpeed.NORMAL ? ScanSpeed.FAST : ScanSpeed.NORMAL;
+                    }
+                };
 
-            // Range slider using built-in Gizmo_Slider
-            yield return new ScouterRangeGizmo(
-                current: scanRadius,
-                min: minRange,
-                max: maxRange,
-                onChange: (float value) => scanRadius = value
-            );
+                yield return new ScouterRangeGizmo(
+                    current: scanRadius,
+                    min: minRange,
+                    max: maxRange,
+                    onChange: (float value) => scanRadius = value
+                );
+            }
 
-            // Target mode specific gizmo
             if (scouterMode == ScouterMode.TARGET)
             {
                 yield return new Command_Target
@@ -123,10 +125,11 @@ namespace DragonBall
                     icon = ContentFinder<Texture2D>.Get("Things/Building/Misc/DropBeacon"),
                     action = delegate (LocalTargetInfo target)
                     {
-                        if (target.HasThing && target.Thing is Pawn targetPawn)
+                        if (target.Pawn != null && target.Pawn.RaceProps.Humanlike)
                         {
-                            targetedPawn = targetPawn;
-                            float powerLevel = PowerLevelUtility.GetCurrentPowerLevel(targetPawn);
+                            targetedPawn = target.Pawn;
+                            float powerLevel = PowerLevelUtility.GetCurrentPowerLevel(target.Pawn);
+                            Messages.Message($"Tracking {targetedPawn.Label}", MessageTypeDefOf.NeutralEvent);
                             Messages.Message($"Power level reading: {PowerLevelUtility.GetPowerLevelDisplay(powerLevel)}", MessageTypeDefOf.NeutralEvent);
                         }
                     },
@@ -139,6 +142,23 @@ namespace DragonBall
                     }
                 };
             }
+        }
+
+        private string ModeToNiceString()
+        {
+            string Result = "";
+
+            switch (scouterMode)
+            {
+                case ScouterMode.TARGET:
+                    Result = "Target";
+                    break;
+                case ScouterMode.SCANNING:
+                    Result = "Scanner";
+                    break;
+            }
+
+            return Result;
         }
 
         public override void ExposeData()
@@ -239,10 +259,5 @@ namespace DragonBall
             GenMapUI.DrawThingLabel(distanceLabelPos, distanceText, Color.gray);
             Text.Anchor = TextAnchor.UpperLeft;
         }
-    }
-
-    public interface IExtraGUIDrawer
-    {
-        void DrawExtraGUI();
     }
 }

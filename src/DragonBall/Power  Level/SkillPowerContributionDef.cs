@@ -12,7 +12,7 @@ namespace DragonBall
 
         public override float Calculate(Pawn pawn, AbilityClassKI kiClass)
         {
-            return pawn.skills.GetSkill(skill).Level * multiplier;
+            return pawn.skills != null ? pawn.skills.GetSkill(skill).Level * multiplier : 1;
         }
     }
 }
