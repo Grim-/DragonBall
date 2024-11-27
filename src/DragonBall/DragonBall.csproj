@@ -90,6 +90,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BiomeWorker_NeverSpawn.cs" />
+    <Compile Include="Hyperbolic Time Chamber\ArenaMutator.cs" />
     <Compile Include="Hyperbolic Time Chamber\ChamberState.cs" />
     <Compile Include="Hyperbolic Time Chamber\CircularPlatformGenStep.cs" />
     <Compile Include="Hyperbolic Time Chamber\CompProperties_Tournament.cs" />
@@ -102,6 +103,9 @@
     <Compile Include="Hyperbolic Time Chamber\HyperbolicMapUtility.cs" />
     <Compile Include="Hyperbolic Time Chamber\HyperbolicTimeChamberBuilding.cs" />
     <Compile Include="Hyperbolic Time Chamber\HyperbolicTimeChamberManager.cs" />
+    <Compile Include="Hyperbolic Time Chamber\TrapArenaMutator.cs" />
+    <Compile Include="Hyperbolic Time Chamber\VoidSpreadArena.cs" />
+    <Compile Include="Hyperbolic Time Chamber\WallEnclosureArena.cs" />
     <Compile Include="JobDriver_TrainOnDummy.cs" />
     <Compile Include="Ability\KIAbilityKaioKen.cs" />
     <Compile Include="Ability\KIAbility_KaioKen.cs" />
@@ -140,7 +144,7 @@
     <Compile Include="Quest\Tournament\TournamentSettings.cs" />
     <Compile Include="Quest\Tournament\TournamentTracker.cs" />
     <Compile Include="Wishes\BaseWish.cs" />
-    <Compile Include="Building_DragonBallAltar.cs" />
+    <Compile Include="Wishes\Building_DragonBallAltar.cs" />
     <Compile Include="DBDefOf.cs" />
     <Compile Include="DBUtil.cs" />
     <Compile Include="DragonBallEffectController.cs" />

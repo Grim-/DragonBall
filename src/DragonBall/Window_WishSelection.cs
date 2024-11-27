@@ -1,4 +1,5 @@
-﻿using System;
+﻿using RimWorld;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -127,6 +128,15 @@ namespace DragonBall
 
             int remainingWishes = WishTracker.GetRemainingWishes(map);
             string titleText = $"Make Your Wish ({remainingWishes} remaining)";
+
+            // Add cooldown information if applicable
+            int cooldownTicks = WishTracker.GetCooldownTicksRemaining(map);
+            if (cooldownTicks > 0)
+            {
+                int daysLeft = cooldownTicks / GenDate.TicksPerDay;
+                titleText += $" - Cooldown: {daysLeft} days";
+            }
+
             Widgets.Label(titleRect, titleText);
             Text.Anchor = TextAnchor.UpperLeft;
         }

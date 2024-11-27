@@ -191,6 +191,8 @@ namespace DragonBall
 
         private void StartGatherJob(List<Thing> CollectibleDragonBalls, Pawn pawn)
         {
+
+
             if (pawn != null)
             {
                 if (CollectibleDragonBalls.FirstOrDefault() != null)
@@ -215,7 +217,8 @@ namespace DragonBall
                         icon = ContentFinder<Texture2D>.Get("Things/Building/Misc/MarriageSpot"),
                         action = delegate
                         {
-                            StartGatherJob(CollectibleDragonBalls, item);
+                            var list = CollectibleDragonBalls.ToList();
+                            StartGatherJob(list, item);
                         }
                     };
                 }
@@ -238,8 +241,11 @@ namespace DragonBall
                         {
                             if (item != null)
                             {
+                                var pawnScopeCache = item;
+                                Log.Message($"Starting sUmmon Job");
+                                Log.Message(pawnScopeCache);
                                 Job job = JobMaker.MakeJob(DBDefOf.DragonBallSummoning, this);
-                                item.jobs.TryTakeOrderedJob(job);
+                                pawnScopeCache.jobs.TryTakeOrderedJob(job);
                             }
                         },
                         Disabled = !wishTracker.IsWishOffCooldown(this.Map),

@@ -26,7 +26,7 @@ namespace DragonBall
         {
             this.FailOn(() =>
             {
-                return AltarBuilding.HasDragonBallOfTypeAlready(TargetThingA) || Altar == null;
+                return Altar == null;
             });
 
             yield return Toils_Goto.GotoThing(TargetIndex.A, PathEndMode.InteractionCell).FailOnDespawnedNullOrForbidden(TargetIndex.A);
