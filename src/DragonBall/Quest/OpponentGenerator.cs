@@ -18,13 +18,12 @@ namespace DragonBall
             // Scale target score based on difficulty level
             float adjustedTargetScore = ScaleScoreByDifficulty(targetScore, difficultyLevel);
 
-            // Try to use predefined fighter first
             if (ShouldUsePredefinedFighter(difficultyLevel))
             {
                 return GeneratePredefinedFighter(adjustedTargetScore, difficultyVariance);
             }
 
-            // Generate custom fighter based on target score
+
             return GenerateCustomFighter(adjustedTargetScore, difficultyLevel);
         }
 
@@ -65,7 +64,7 @@ namespace DragonBall
             };
         }
 
-        private static FighterData GenerateCustomFighter(float targetScore, float difficultyLevel)
+        private static FighterData GenerateCustomFighter(float targetScore, float difficultyLevel, bool HasTransformations = false)
         {
             // Calculate base stats that would result in roughly the target score
             float baseKiLevel = CalculateBaseKiLevel(targetScore);
@@ -74,17 +73,15 @@ namespace DragonBall
             {
                 Name = GenerateRandomName(),
                 MeleeSkill = GenerateSkillLevel(difficultyLevel),
-                ShootingSkill = GenerateSkillLevel(difficultyLevel * 0.8f), // Slightly lower for shooting
+                ShootingSkill = GenerateSkillLevel(difficultyLevel * 0.8f), 
                 MeleePassion = GeneratePassion(difficultyLevel),
-                MovementCapacity = 0.8f + (difficultyLevel / 500f), // Scales from 0.8 to 1.0
+                MovementCapacity = 0.8f + (difficultyLevel / 500f),
                 ManipulationCapacity = 0.8f + (difficultyLevel / 500f),
                 KiLevel = baseKiLevel,
                 IsPawn = false
             };
 
-            // Add transformations based on target score and difficulty
             AssignTransformations(fighter, targetScore, difficultyLevel);
-
             return fighter;
         }
 
@@ -110,34 +107,28 @@ namespace DragonBall
 
         private static void AssignTransformations(FighterData fighter, float targetScore, float difficultyLevel)
         {
-            // Legendary status (rare but more common at high difficulties)
             fighter.IsLegendarySaiyan = Rand.Value < (LEGENDARY_CHANCE_PER_DIFFICULTY * difficultyLevel);
 
-            // Scale transformation chances with difficulty
-            float transformChance = difficultyLevel / 200f; // 50% at difficulty 100
+            float transformChance = difficultyLevel / 200f; 
 
-            // Kaio-Ken (most common)
             if (Rand.Value < transformChance * 1.5f)
             {
                 fighter.HasKaioKen = true;
                 fighter.KaioKenLevel = Rand.Range(1f, 1f + (difficultyLevel / 50f));
             }
 
-            // Super Saiyan (moderate rarity)
             if (Rand.Value < transformChance)
             {
                 fighter.HasSuperSaiyan = true;
                 fighter.SuperSaiyanLevel = Rand.Range(1f, 1f + (difficultyLevel / 75f));
             }
 
-            // Super Saiyan 2 (rare)
             if (fighter.HasSuperSaiyan && Rand.Value < (transformChance * 0.3f))
             {
                 fighter.HasSuperSaiyan2 = true;
                 fighter.SuperSaiyan2Level = Rand.Range(1f, 1f + (difficultyLevel / 100f));
             }
 
-            // True Super Saiyan (very rare)
             if (fighter.HasSuperSaiyan2 && Rand.Value < (transformChance * 0.1f))
             {
                 fighter.HasTrueSuperSaiyan = true;

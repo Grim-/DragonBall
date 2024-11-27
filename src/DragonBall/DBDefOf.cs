@@ -1,10 +1,8 @@
 ﻿using RimWorld;
-using SaiyanMod;
 using System;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using UnityEngine;
 using Verse;
 
 namespace DragonBall
@@ -22,6 +20,7 @@ namespace DragonBall
 
         public static HediffDef DragonBallAgingSlowed;
         public static HediffDef DragonBallBlessingOfFullBelly;
+        public static HediffDef SR_KaioKenStrainHediff;
 
         public static ThingDef DragonBallRitualSpot;
 
@@ -41,7 +40,9 @@ namespace DragonBall
 
         public static TaranMagicFramework.AbilityDef SR_SuperSaiyan2;
         public static TaranMagicFramework.AbilityDef SR_KaioKen;
-
+        public static TaranMagicFramework.AbilityDef SR_KaioKenX3;
+        public static TaranMagicFramework.AbilityDef SR_KaioKenX10;
+        public static TaranMagicFramework.AbilityDef SR_KaioKenX20;
 
         public static RulePackDef NamerFighterDragonBall;
 
@@ -50,14 +51,15 @@ namespace DragonBall
         public static ThoughtDef DragonBallWonTournament;
 
         public static TaranMagicFramework.AnimationDef BeamClashMeetingPoint;
+        public static TaranMagicFramework.AnimationDef SR_PowerUpOverlaySuperSaiyanIISparks;
 
         public static JobDef DragonBallTrainOnDummy;
-    }
 
 
-    public class KIAbilityKaioKen : KIAbility_SuperSaiyan
-    {
-        protected override Color TransformedColor => Color.red;
+        //public static MapGeneratorDef KamisLookoutGenerator;
+        //public static WorldObjectDef HyperbolicMapParent;
+        //public static BiomeDef KamisLookoutBiome;
+
     }
 
 

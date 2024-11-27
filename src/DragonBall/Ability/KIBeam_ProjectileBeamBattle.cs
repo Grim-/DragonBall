@@ -141,7 +141,7 @@ namespace DragonBall
 
             if (this.ability.pawn.IsHashIntervalTick(60))
             {
-                kiClass.abilityResource.energy -= kiClass.abilityResource.MaxEnergy * 0.05f;
+                kiClass.abilityResource.energy -= 10f;
 
                 if (kiClass.abilityResource.energy <= 0 || battleOpponent == null)
                 {
@@ -226,7 +226,7 @@ namespace DragonBall
                 return;
             }
 
-            foreach (var otherBeam in ActiveBeams.ToList()) // Use ToList() to avoid modification during enumeration
+            foreach (var otherBeam in ActiveBeams.ToList())
             {
                 if (otherBeam == null || otherBeam == this || otherBeam.Launcher == this.launcher)
                     continue;
@@ -397,106 +397,6 @@ namespace DragonBall
             //    postExplosionSpawnThingDefWater: null,
             //    screenShakeFactor: 0.5f + Mathf.Abs(battleAdvantage) * 0.5f
             //);
-        }
-    }
-
-    public class KIAbility_KaioKen : KIAbility
-    {
-        public override bool IsInstantAction
-        {
-            get
-            {
-                return false;
-            }
-        }
-
-        public override void Start(bool consumeEnergy = true)
-        {
-            // End all other power-up abilities before starting KaioKen
-            foreach (TaranMagicFramework.Ability ability in this.abilityClass.LearnedAbilities)
-            {
-                //if (ability != this && ability.Active)
-                //{
-                //    //// Check if the ability is a transformation and end it
-                //    //bool isTransformation = ability.def == SR_DefOf.SR_SuperSaiyan ||
-                //    //                        ability.def == DBDefOf.SR_SuperSaiyan2 ||
-                //    //                      ability.def == SR_DefOf.SR_LegendarySuperSaiyan ||
-                //    //                      ability.def == SR_DefOf.SR_TrueSuperSaiyan ||
-                //    //                      ability.def == SR_DefOf.SR_Awakened ||
-                //    //                      ability.def == SR_DefOf.SR_PowerUp;
-
-                //    //if (isTransformation)
-                //    //{
-                //    //    ability.End();
-                //    //    ability.DestroyAllOverlay();
-                //    //}
-                //}
-            }
-            base.Start(true);
-        }
-
-        public override void Tick()
-        {
-            base.Tick();
-
-            // End KaioKen if energy is depleted
-            if (this.Active && this.abilityResource.energy <= 0f)
-            {
-                this.End();
-            }
-        }
-
-        public override TaranMagicFramework.AnimationDef AnimationDef(OverlayProps overlayProps)
-        {
-            // Return KaioKen specific animation overlay
-            return SR_DefOf.SR_AwakenedOverlay;
-        }
-
-        public override Mote_Animation MakeAnimation(OverlayProps overlayProps)
-        {
-            Mote_Animation mote_Animation = base.MakeAnimation(overlayProps);
-
-            // Set KaioKen specific color (typically red)
-            if (mote_Animation.def == SR_DefOf.SR_AwakenedOverlay)
-            {
-                mote_Animation.instanceColor = new UnityEngine.Color(1f, 0f, 0f, 0.8f); // Red color with some transparency
-            }
-
-            return mote_Animation;
-        }
-
-        public override void RegisterCast()
-        {
-            // Add any specific effects when KaioKen is cast
-        }
-
-        public override IEnumerable<Gizmo> GetGizmos()
-        {
-            Command_ToggleAbility command_ToggleAbility = new Command_ToggleAbility(this);
-            command_ToggleAbility.icon = this.AbilityIcon();
-            command_ToggleAbility.defaultLabel = this.AbilityLabel();
-            command_ToggleAbility.defaultDesc = this.AbilityDescription();
-
-            command_ToggleAbility.toggleAction = delegate ()
-            {
-                if (this.Active)
-                {
-                    this.End();
-                }
-                else
-                {
-                    this.Start(true);
-                }
-            };
-
-            command_ToggleAbility.isActive = (() => this.Active);
-
-            string failReason;
-            command_ToggleAbility.Disabled = !this.CanBeActivated(this.EnergyCost, out failReason, base.LevelHumanReadable == 3, () => "");
-            command_ToggleAbility.disabledReason = failReason;
-
-            yield return command_ToggleAbility;
-            yield break;
         }
     }
 

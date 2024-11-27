@@ -193,22 +193,21 @@ namespace DragonBall
 
         private void DrawWishButton(Rect buttonRect, BaseWish wish)
         {
-            bool canBeGranted = wish.CanBeGranted(map, altar, TargetPawn) && WishTracker.GetRemainingWishes(map) > wish.def.wishCost;
+            bool canBeGranted = wish.CanBeGranted(map, altar, TargetPawn) && WishTracker.GetRemainingWishes(map) >= wish.def.wishCost;
             GUI.color = canBeGranted ? Color.white : Color.gray;
-
             Widgets.DrawBox(buttonRect, 1, SolidColorMaterials.NewSolidColorTexture(Color.grey));
-            Rect innerRect = buttonRect.ContractedBy(INNER_PADDING);
 
+            Rect innerRect = buttonRect.ContractedBy(INNER_PADDING);
             float labelHeight = LABEL_HEIGHT;
+
+
             Rect iconRect = new Rect(
                 innerRect.x,
                 innerRect.y,
                 innerRect.width,
                 innerRect.height - labelHeight
             );
-
             TryDrawIcon(iconRect, wish);
-
 
             Rect footerRect = new Rect(
                 buttonRect.x,
@@ -218,22 +217,42 @@ namespace DragonBall
             );
             GUI.DrawTexture(footerRect, SolidColorMaterials.NewSolidColorTexture(FOOTER_COLOR));
 
+            // Cost box section
+            float costBoxWidth = labelHeight * 0.7f;
+            Rect costBoxRect = new Rect(
+                footerRect.x,
+                footerRect.y,
+                costBoxWidth,
+                labelHeight
+            );
+            GUI.DrawTexture(costBoxRect, SolidColorMaterials.NewSolidColorTexture(FOOTER_COLOR * 0.8f)); // Slightly darker than footer
+            Widgets.DrawBox(costBoxRect, 1, SolidColorMaterials.NewSolidColorTexture(Color.grey));
+
+            // Label section
+            Rect wishLabelRect = new Rect(
+                footerRect.x + costBoxWidth,
+                footerRect.y,
+                footerRect.width - costBoxWidth,
+                labelHeight
+            );
 
             Text.Font = GameFont.Small;
             Text.Anchor = TextAnchor.MiddleCenter;
-            Widgets.Label(footerRect, wish.Label);
 
+            // Draw cost
+            Widgets.Label(costBoxRect, wish.def.wishCost.ToString());
+
+            // Draw wish label
+            Widgets.Label(wishLabelRect, wish.Label);
 
             if (Mouse.IsOver(buttonRect))
             {
                 Widgets.DrawHighlight(buttonRect);
                 TooltipHandler.TipRegion(buttonRect, canBeGranted ? wish.Description : "this requires more wishes than you have available.");
-
                 if (Widgets.ButtonInvisible(buttonRect) && canBeGranted)
                 {
                     wish.Grant(map, altar, TargetPawn);
                     WishTracker.UseWish(map);
-
                     if (WishTracker.GetRemainingWishes(map) <= 0)
                     {
                         altar.ScatterGatheredDragonBalls();
@@ -241,7 +260,6 @@ namespace DragonBall
                     }
                 }
             }
-
 
             Text.Anchor = TextAnchor.UpperLeft;
             GUI.color = Color.white;
