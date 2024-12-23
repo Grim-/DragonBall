@@ -89,7 +89,11 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Ability\CompProperties_SenzuBeanUse.cs" />
+    <Compile Include="Ability\HediffCompProperties_InstantSenzuHeal.cs" />
     <Compile Include="BiomeWorker_NeverSpawn.cs" />
+    <Compile Include="DragonBall.cs" />
+    <Compile Include="DragonBallModSettings.cs" />
     <Compile Include="Hyperbolic Time Chamber\ArenaMutator.cs" />
     <Compile Include="Hyperbolic Time Chamber\ChamberState.cs" />
     <Compile Include="Hyperbolic Time Chamber\CircularPlatformGenStep.cs" />
@@ -108,7 +112,6 @@
     <Compile Include="Hyperbolic Time Chamber\WallEnclosureArena.cs" />
     <Compile Include="JobDriver_TrainOnDummy.cs" />
     <Compile Include="Ability\KIAbilityKaioKen.cs" />
-    <Compile Include="Ability\KIAbility_KaioKen.cs" />
     <Compile Include="Power  Level\LevelContributionDef.cs" />
     <Compile Include="Power  Level\ScouterMode.cs" />
     <Compile Include="Quest\AbilityOption.cs" />
@@ -143,6 +146,7 @@
     <Compile Include="Quest\Tournament\TournamentMatchResult.cs" />
     <Compile Include="Quest\Tournament\TournamentSettings.cs" />
     <Compile Include="Quest\Tournament\TournamentTracker.cs" />
+    <Compile Include="Window_HairSelection.cs" />
     <Compile Include="Wishes\BaseWish.cs" />
     <Compile Include="Wishes\Building_DragonBallAltar.cs" />
     <Compile Include="DBDefOf.cs" />
@@ -164,7 +168,7 @@
     <Compile Include="Wishes\MapConditionWish.cs" />
     <Compile Include="Wishes\PawnTargetWish.cs" />
     <Compile Include="Quest\QuestNode_CreateRandomReward.cs" />
-    <Compile Include="Quest\QuestNode_LearnRandomAbility.cs" />
+    <Compile Include="Quest\QuestNode_LearnAbility.cs" />
     <Compile Include="Wishes\QuestWish.cs" />
     <Compile Include="Wishes\QuestWishDef.cs" />
     <Compile Include="Wishes\QuestWishOption.cs" />

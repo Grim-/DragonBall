@@ -36,11 +36,7 @@ namespace DragonBall
 
         public override void Grant(Map map, Building_DragonBallAltar altar, Pawn pawn)
         {
-            Slate slate = new Slate();
-            slate.Set("map", map);
-            slate.Set("points", StorytellerUtility.DefaultThreatPointsNow(map));
-
-            Quest quest = QuestUtility.GenerateQuestAndMakeAvailable(questDef.quest, slate);
+            Quest quest = QuestUtility.GenerateQuestAndMakeAvailable(questDef.quest, StorytellerUtility.DefaultThreatPointsNow(map));
             if (quest != null)
             {
                 QuestUtility.SendLetterQuestAvailable(quest);
@@ -51,5 +47,11 @@ namespace DragonBall
                 Messages.Message("The wish could not be granted at this time.", MessageTypeDefOf.RejectInput);
             }
         }
+    }
+
+    public class ItemStashQuestDef : QuestWishDef
+    {
+        public FloatRange rewardValueMultiplier = new FloatRange(0.3f, 0.7f);
+        //public List<ThingDef> rewards = new List<ThingDef>
     }
 }

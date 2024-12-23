@@ -233,9 +233,9 @@ namespace DragonBall
                 footerRect.x,
                 footerRect.y,
                 costBoxWidth,
-                labelHeight
+                costBoxWidth
             );
-            GUI.DrawTexture(costBoxRect, SolidColorMaterials.NewSolidColorTexture(FOOTER_COLOR * 0.8f)); // Slightly darker than footer
+            GUI.DrawTexture(costBoxRect, SolidColorMaterials.NewSolidColorTexture(FOOTER_COLOR * 0.8f));
             Widgets.DrawBox(costBoxRect, 1, SolidColorMaterials.NewSolidColorTexture(Color.grey));
 
             // Label section

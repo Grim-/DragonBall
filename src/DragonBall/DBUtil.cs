@@ -1,4 +1,5 @@
 ﻿using LudeonTK;
+using RimWorld;
 using SaiyanMod;
 using System.Collections.Generic;
 using TaranMagicFramework;
@@ -94,54 +95,70 @@ namespace DragonBall
 
             return false;
         }
-    }
 
-    [StaticConstructorOnStartup]
-    public class DragonBall : Mod
-    {
-        private TournamentTracker tracker;
-        private DragonBallModSettings settings;
 
-        public DragonBall(ModContentPack content) : base(content)
+        public static void DoSenzuBeanHeal(this Pawn Pawn, bool HealInjuries, bool RestoreParts)
         {
-            settings = GetSettings<DragonBallModSettings>();
-        }
 
-        public override void DoSettingsWindowContents(Rect inRect)
-        {
-            if (tracker == null)
+            if (HealInjuries)
             {
-                tracker = Current.Game.GetComponent<TournamentTracker>();
+                List<Hediff> hediffs = Pawn.health.hediffSet.hediffs;
+                for (int i = hediffs.Count - 1; i >= 0; i--)
+                {
+                    Hediff hediff = hediffs[i]; 
+                    if (CanRemoveHediff(hediff))
+                    {
+                        Pawn.health.RemoveHediff(hediff);
+                    }
+                }
             }
 
-            if (tracker == null)
+            if (RestoreParts)
             {
-                return;
+                List<Hediff_MissingPart> missingParts = Pawn.health.hediffSet.GetMissingPartsCommonAncestors();
+                for (int i = missingParts.Count - 1; i >= 0; i--)
+                {
+                    if (IsSaiyanTail(Pawn, missingParts[i].Part))
+                        continue;
+
+                    Pawn.health.RestorePart(missingParts[i].Part);
+                }
             }
 
-            Listing_Standard listingStandard = new Listing_Standard();
-            listingStandard.Begin(inRect);
-
-            if (listingStandard.ButtonText("View Tournament History") && Current.Game != null)
+            Hediff bloodLoss = Pawn.health.hediffSet.GetFirstHediffOfDef(HediffDefOf.BloodLoss);
+            if (bloodLoss != null)
             {
-                tracker.OpenHistoryWindow();
+                Pawn.health.RemoveHediff(bloodLoss);
+            }
+             
+
+            if (Pawn.needs != null)
+            {
+                if (Pawn.needs.rest != null)
+                    Pawn.needs.rest.CurLevel = Pawn.needs.rest.MaxLevel;
+
+                if (Pawn.needs.food != null)
+                    Pawn.needs.food.CurLevel = Pawn.needs.food.MaxLevel;
             }
 
-            listingStandard.End();
-            base.DoSettingsWindowContents(inRect);
+            if (Pawn.TryGetKiAbilityClass(out AbilityClassKI kiClass))
+            {
+                kiClass.abilityResource.energy = kiClass.abilityResource.MaxEnergy;
+            }
         }
 
-        public override string SettingsCategory()
-        {
-            return "Dragon Ball Addon";
-        }
-    }
 
-    public class DragonBallModSettings : ModSettings
-    {
-        public override void ExposeData()
+        private static bool CanRemoveHediff(Hediff hediff)
         {
-            base.ExposeData();
+            bool IsHediffBadAndNotPermanent = hediff.def.isBad && !hediff.IsPermanent();
+            bool IsNonPermanentInjury = hediff is Hediff_Injury injury && injury.def.isBad && !injury.IsPermanent();
+            bool IsNotSaiyanMissingTail = hediff.def != SR_DefOf.SR_SaiyanTailInjured;
+            return IsHediffBadAndNotPermanent && IsNonPermanentInjury && IsNotSaiyanMissingTail;
+        }
+
+        private static bool IsSaiyanTail(Pawn Pawn, BodyPartRecord part)
+        {
+            return part.def == SR_DefOf.SR_Tail;
         }
     }
 }

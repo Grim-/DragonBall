@@ -62,6 +62,9 @@ namespace DragonBall
                                 continue;
                             }
 
+
+                            TryLearnKaioKen(pawn, abilityClassKI);
+
                             var availableAbilities = abilities.Where(a => !abilityClassKI.Learned(a.ability)).ToList();
                             if (!availableAbilities.Any())
                             {
@@ -69,26 +72,54 @@ namespace DragonBall
                                 continue;
                             }
 
-                            float totalWeight = availableAbilities.Sum(a => a.weight);
-                            float roll = Rand.Range(0f, totalWeight);
-                            float currentWeight = 0f;
 
-                            foreach (var option in availableAbilities)
-                            {
-                                currentWeight += option.weight;
-                                if (roll <= currentWeight)
-                                {
-                                    abilityClassKI.LearnAbility(option.ability, false, option.ability.abilityTiers.Count - 1);
-                                    Messages.Message($"{pawn.LabelShort} learned {option.ability.label}!", MessageTypeDefOf.PositiveEvent);
-                                    break;
-                                }
-                            }
+                            TryLearnRandom(pawn, abilityClassKI, availableAbilities);
+
                         }
                     }
                 }
             }
         }
 
+        public bool TryLearnKaioKen(Pawn Pawn, AbilityClass abilityClassKI)
+        {
+            float chanceToLearn = 0.2f;
+
+            if (abilityClassKI.level >= 30)
+                chanceToLearn += 0.2f;
+
+            if (abilityClassKI.def == DBDefOf.SR_Human)
+                chanceToLearn += 0.2f;
+
+            bool canLearn = !abilityClassKI.Learned(DBDefOf.SR_KaioKen) &&
+                            Rand.RangeInclusive(0, 1) >= chanceToLearn;
+            if (canLearn)
+            {
+                abilityClassKI.LearnAbility(DBDefOf.SR_KaioKen, false);
+                Messages.Message($"{Pawn.LabelShort} learned the Kaio ken while training with King Kai!", MessageTypeDefOf.PositiveEvent);
+            }
+
+
+            return canLearn;
+        }
+
+        public void TryLearnRandom(Pawn Pawn, AbilityClass abilityClassKI, List<AbilityOption> Options)
+        {
+            float totalWeight = Options.Sum(a => a.weight);
+            float roll = Rand.Range(0f, totalWeight);
+            float currentWeight = 0f;
+
+            foreach (var option in Options)
+            {
+                currentWeight += option.weight;
+                if (roll <= currentWeight)
+                {
+                    abilityClassKI.LearnAbility(option.ability, false, option.ability.abilityTiers.Count - 1);
+                    Messages.Message($"{Pawn.LabelShort} learned {option.ability.label} while training with King Kai!", MessageTypeDefOf.PositiveEvent);
+                    break;
+                }
+            }
+        }
         public override void ExposeData()
         {
             base.ExposeData();

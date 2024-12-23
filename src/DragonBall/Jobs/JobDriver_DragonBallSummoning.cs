@@ -34,11 +34,21 @@ namespace DragonBall
             Toil initializeSummoning = new Toil();
             initializeSummoning.initAction = delegate
             {
+                AltarBuilding.MakeDragonBallsUntouchable();
                 var dragonBalls = AltarBuilding.GetDragonBallsInProximity().ToList();
                 job.targetA.Thing.Map.weatherManager.TransitionTo(WeatherDef.Named("RainyThunderstorm"));
                 effectController = new DragonBallEffectController(Map, AltarBuilding);
             };
 
+            this.AddEndCondition(delegate
+            {
+                if (this.GetActor().Downed || this.GetActor().Dead)
+                {
+                    AltarBuilding?.MakeDragonBallsTouchable();
+                    return JobCondition.Incompletable;
+                }
+                return JobCondition.Ongoing;
+            });
             yield return initializeSummoning;
 
             // Main summoning sequence

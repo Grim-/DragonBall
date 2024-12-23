@@ -12,9 +12,37 @@ namespace DragonBall
 {
     public class Building_DragonBallAltar : Building
     {
+        private bool isWishInProgress = false;
+
+        public void SetWishInProgress(bool inProgress)
+        {
+            isWishInProgress = inProgress;
+        }
+
+        public void MakeDragonBallsUntouchable()
+        {
+            foreach (Thing dragonBall in GetDragonBallsInProximity())
+            {
+                dragonBall.def.selectable = false;
+                dragonBall.SetForbidden(true, false);
+            }
+        }
+
+        public void MakeDragonBallsTouchable()
+        {
+            foreach (Thing dragonBall in GetDragonBallsInProximity())
+            {
+                dragonBall.def.selectable = true;
+                dragonBall.SetForbidden(false, false);
+            }
+        }
+
+
         public void ShowWishUI(Map map, Pawn TargetPawn)
         {
             Find.WindowStack.Add(new Window_WishSelection(map, this, TargetPawn));
+
+            MakeDragonBallsUntouchable();
         }
 
         public Thing GetDragonBallAtPosition(ThingDef dragonBallDef)
@@ -164,6 +192,21 @@ namespace DragonBall
                 };
             }
 
+            yield return new Command_Action
+            {
+                defaultLabel = $"Show Tournament UI",
+                defaultDesc = "Displays the quest tournament UI.",
+                icon = ContentFinder<Texture2D>.Get("Things/Building/Misc/MarriageSpot"),
+                action = delegate
+                {
+                    TournamentTracker TournamentTracker = Current.Game.GetComponent<TournamentTracker>();
+
+                    if (TournamentTracker != null)
+                    {
+                        TournamentTracker.OpenHistoryWindow();
+                    }
+                }
+            };
             if (HasAllDragonBalls())
             {
                 var summonOptions =  CreateSummonGizmo();

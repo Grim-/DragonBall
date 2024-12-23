@@ -46,7 +46,7 @@ namespace DragonBall
             {
                 Thing carriedThing = pawn.carryTracker.CarriedThing;
                 pawn.carryTracker.TryDropCarriedThing(altar.GetDragonBallPosition(carriedThing.def), ThingPlaceMode.Direct, out Thing DroppedThing);
-
+                carriedThing.SetForbidden(true);
                 // Find next dragon ball
                 Thing nextDragonBall = Map.listerThings.AllThings
                     .Where(t => t.def.thingCategories?.Contains(DBDefOf.DragonBallsCategory) ?? false)

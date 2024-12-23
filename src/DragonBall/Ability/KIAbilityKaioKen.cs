@@ -13,56 +13,48 @@ namespace DragonBall
     {
         protected Color TransformedColor = Color.red;
         protected Color oldColor;
-        //private void TryChangeHair()
-        //{
-        //    var newHair = DefDatabase<HairDef>.GetNamedSilentFail(pawn.story.hairDef.defName + HairPostfix);
-        //    oldColor = pawn.story.hairColor;
-        //    if (newHair != null)
-        //    {
-        //        pawn.story.hairDef = newHair;
-        //    }
-        //    pawn.story.hairColor = TransformedColor;
-        //    pawn.ResolveAllGraphicsSafely();
-        //}
 
         private TaranMagicFramework.Mote_Animation SparksOverlay;
+
+        private AbilityTierKi_KaioKen Tier => (AbilityTierKi_KaioKen)AbilityTier;
+
+
+        private int currentTick = 0;
+        private int ticks => Tier != null ? Tier.severityTickTime : 1250;
 
         public override void Start(bool consumeEnergy = true)
         {
             base.Start(consumeEnergy);
-
-
             if (SparksOverlay == null && DBDefOf.SR_PowerUpOverlaySuperSaiyanIISparks != null)
             {
                 SparksOverlay = MakeAnimation(DBDefOf.SR_PowerUpOverlaySuperSaiyanIISparks);
                 SparksOverlay.Attach(this.pawn, Vector3.zero, false);
             }
 
+            currentTick = 0;
+        }
 
+        public override void Tick()
+        {
+            base.Tick();
 
-
-            Hediff kaiokenStrain = this.pawn.health.GetOrAddHediff(DBDefOf.SR_KaioKenStrainHediff);
-
-            if (kaiokenStrain != null)
+            if (this.Active && this.pawn.IsHashIntervalTick(ticks))
             {
-                float severityIncrease = 0;
+                Hediff kaiokenStrain = this.pawn.health.GetOrAddHediff(DBDefOf.SR_KaioKenStrainHediff);
 
-                if (this.def == DBDefOf.SR_KaioKen)
+                if (kaiokenStrain != null)
                 {
-                    severityIncrease = 0.25f;
-                }
-                else if (this.def == DBDefOf.SR_KaioKenX3)
-                {
-                    severityIncrease = 0.35f;
-                }
-                else if(this.def == DBDefOf.SR_KaioKenX10)
-                {
-                    severityIncrease = 0.5f;
-                }
+                    float severityIncrease = GetTickSeverity();
 
-                kaiokenStrain.Severity += severityIncrease;
+                    kaiokenStrain.Severity += severityIncrease;
+                }
             }
+        }
 
+
+        private float GetTickSeverity()
+        {
+            return Tier != null ? Tier.severityGainedPerTick : 0.05f;
         }
 
         public override void End()
@@ -74,8 +66,22 @@ namespace DragonBall
                 SparksOverlay.Destroy();
                 SparksOverlay = null;
             }
+
+            currentTick = 0;
+        }
+
+        public override void ExposeData()
+        {
+            base.ExposeData();
         }
     }
 
+    public class AbilityTierKi_KaioKen : AbilityTierKIDef
+    {
+        public float severityGainedPerTick = 0.01f;
+        public int severityTickTime = 1250;
+    }
 
+
+   
 }
