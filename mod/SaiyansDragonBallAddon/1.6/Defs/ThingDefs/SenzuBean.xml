@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+  <ThingDef ParentName="ResourceBase">
+    <defName>DragonBallSenzuBean</defName>
+    <label>senzu bean</label>
+    <description>A mystical bean that instantly restores health and stamina when consumed. Originally cultivated by Korin, these rare beans can heal even the most grievous injuries and restore energy to exhausted fighters.</description>
+    <graphicData>
+      <texPath>Things/Item/SaibamenSeed</texPath>
+      <graphicClass>Graphic_Single</graphicClass>
+      <drawSize>0.9</drawSize>
+    </graphicData>
+    <orderedTakeGroup>Medicine</orderedTakeGroup>
+    <tickerType>Rare</tickerType>
+    <statBases>
+      <MarketValue>750</MarketValue>
+      <Mass>0.05</Mass>
+      <Nutrition>0.5</Nutrition>
+      <DeteriorationRate>0</DeteriorationRate>
+    </statBases>
+    <thingCategories>
+      <li>Medicine</li>
+      <li>FoodMeals</li>
+    </thingCategories>
+    <ingestible>
+      <preferability>NeverForNutrition</preferability>
+      <foodType>Plant</foodType>
+      <maxNumToIngestAtOnce>1</maxNumToIngestAtOnce>
+      <baseIngestTicks>120</baseIngestTicks>
+      <chairSearchRadius>0</chairSearchRadius>
+      <outcomeDoers>
+        <li Class="IngestionOutcomeDoer_GiveHediff">
+          <hediffDef>DragonBallSenzuHealing</hediffDef>
+          <severity>1.0</severity>
+        </li>
+        <li Class="IngestionOutcomeDoer_OffsetNeed">
+          <need>Rest</need>
+          <offset>1.0</offset>
+        </li>
+      </outcomeDoers>
+    </ingestible>
+    <tradeTags>
+      <li>Exotic</li>
+      <li>ExoticMisc</li>
+    </tradeTags>
+    <thingSetMakerTags>
+      <li>RewardSpecial</li>
+    </thingSetMakerTags>
+    <comps>
+      <li Class="CompProperties_Usable">
+        <useJob>UseItem</useJob>
+        <useLabel>Eat {0_label}</useLabel>
+        <useDuration>150</useDuration>
+        <showUseGizmo>true</showUseGizmo>
+      </li>
+      <li Class="DragonBall.CompProperties_SenzuBeanUse">
+      </li>
+      <li Class="CompProperties_UseEffectDestroySelf" />
+    </comps>
+  </ThingDef>
+</Defs>

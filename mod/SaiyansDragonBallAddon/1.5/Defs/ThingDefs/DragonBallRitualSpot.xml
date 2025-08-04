@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+  <ThingDef ParentName="BuildingBase">
+    <defName>DragonBallRitualSpot</defName>
+    <label>dragon summoning altar</label>
+    <description>A mystical altar designed to hold the seven dragon balls. When all dragon balls are gathered, a ritual can be performed here to summon the eternal dragon.</description>
+    <thingClass>DragonBall.Building_DragonBallAltar</thingClass>
+    <drawerType>MapMeshAndRealTime</drawerType>
+    <graphicData>
+      <texPath>Things/Building/Misc/CaravanHitchingSpot</texPath>
+      <graphicClass>Graphic_Single</graphicClass>
+      <drawSize>(1,1)</drawSize>
+    </graphicData>
+    <altitudeLayer>Building</altitudeLayer>
+    <passability>Standable</passability>
+    <pathCost>0</pathCost>
+    <fillPercent>0</fillPercent>
+    <canOverlapZones>false</canOverlapZones>
+    <tickerType>Normal</tickerType>
+    <statBases>
+      <WorkToBuild>2000</WorkToBuild>
+      <MaxHitPoints>150</MaxHitPoints>
+      <Flammability>1.0</Flammability>
+    </statBases>
+    <size>(2,2)</size>
+    <costList>
+      <Steel>1</Steel>
+    </costList>
+    <designationCategory>Misc</designationCategory>
+    <placeWorkers>
+      <li>PlaceWorker_NotUnderRoof</li>
+    </placeWorkers>
+    <building>
+      <preventDeteriorationOnTop>true</preventDeteriorationOnTop>
+      <artificialForMeditationPurposes>false</artificialForMeditationPurposes>
+      <fixedStorageSettings>
+        <filter>
+          <categories>
+            <li>DragonBallsCategory</li>
+          </categories>
+        </filter>
+      </fixedStorageSettings>
+      <defaultStorageSettings>
+        <priority>Important</priority>
+        <filter>
+          <categories>
+            <li>DragonBallsCategory</li>
+          </categories>
+        </filter>
+      </defaultStorageSettings>
+    </building>
+    <comps>
+      <li Class="CompProperties_Forbiddable"/>
+    </comps>
+  </ThingDef>
+</Defs>

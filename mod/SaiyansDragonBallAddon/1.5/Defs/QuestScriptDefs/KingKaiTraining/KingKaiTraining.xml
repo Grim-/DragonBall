@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Defs>
+  <QuestScriptDef>
+      <defName>KingKaiTraining</defName>
+      <rootSelectionWeight>1</rootSelectionWeight>
+      <expireDaysRange>4~8</expireDaysRange>
+      <questNameRules>
+        <rulesStrings>
+          <li>questName->King Kai's Training</li>
+          <li>questName->Journey to King Kai</li>
+          <li>questName->Path of Snake Way</li>
+          <li>questName->Other World Training</li>
+        </rulesStrings>
+      </questNameRules>
+      <questDescriptionRules>
+        <rulesStrings>
+          <li>questDescription->King Kai, the legendary martial arts master of the North Galaxy, has sensed potential in one of your colonists. They will need to traverse the perilous Snake Way to reach his small planet, where the intense 10x gravity will test their limits. The journey and training will take 3 days.\n\nFortunately, your colonist won't actually need to die to make this journey - King Yemma has arranged special permission for a living person to travel to Other World.\n\nUpon return, your colonist may have learned the Kaio-ken technique. At minimum, the intense training will greatly enhance their combat abilities.\n\nKing Kai's servant Bubbles will arrive to guide your colonist to Snake Way.</li>
+        </rulesStrings>
+      </questDescriptionRules>
+
+      <root Class="QuestNode_Sequence">
+        <nodes>
+
+          <li Class="QuestNode_GetPawn">
+            <storeAs>asker</storeAs>
+            <mustBeFactionLeader>true</mustBeFactionLeader>
+          </li>
+
+          <li Class="QuestNode_Set">
+            <name>trainingDays</name>
+            <value>3</value>
+          </li>
+
+          <li Class="QuestNode_Set">
+            <name>colonistsToLendCount</name>
+            <value>1</value>
+          </li>
+
+          <li Class="QuestNode_GetMap">
+            <preferMapWithMinFreeColonists>1</preferMapWithMinFreeColonists>
+          </li>
+
+          <!-- Bubbles arrives -->
+          <li Class="QuestNode_ShuttleDelay">
+            <delayTicks>3500</delayTicks>
+            <node Class="QuestNode_Sequence">
+              <nodes>
+                <li Class="QuestNode_SubScript">
+                  <def>Util_TransportShip_PickupKingKai</def>
+                  <parms>
+                    <leaveDelayTicks>60000</leaveDelayTicks>
+                    <leaveImmediatelyWhenSatisfied>true</leaveImmediatelyWhenSatisfied>
+                    <acceptColonists>true</acceptColonists>
+                    <acceptChildren>false</acceptChildren>
+                    <onlyAcceptColonists>true</onlyAcceptColonists>
+                    <onlyAcceptHealthy>true</onlyAcceptHealthy>
+                    <requireColonistCount>1</requireColonistCount>
+                  </parms>
+                </li>
+
+                <li Class="QuestNode_Letter">
+                  <label>Bubbles has arrived</label>
+                  <text>Bubbles, King Kai's playful monkey assistant, has arrived to guide your colonist to Snake Way.</text>
+                  <lookTargets>$pickupShipThing</lookTargets>
+                </li>
+              </nodes>
+            </node>
+          </li>
+
+          <!-- Handle colonist departure -->
+          <li Class="QuestNode_Signal">
+            <inSignal>pickupShipThing.SentSatisfied</inSignal>
+            <node Class="QuestNode_Sequence">
+              <nodes>
+                <li Class="QuestNode_Signal">
+                  <inSignal>pickupShipThing.SentSatisfied</inSignal>
+                  <node Class="QuestNode_LendColonistsToFaction">
+                    <shuttle>$pickupShipThing</shuttle>
+                    <lendColonistsToFactionOf>$asker</lendColonistsToFactionOf>
+                    <returnLentColonistsInTicks>$($trainingDays*60000)</returnLentColonistsInTicks>
+                    <outSignalComplete>ColonistsReturned</outSignalComplete>
+                    <outSignalColonistsDied>ColonistsDied</outSignalColonistsDied>
+                  </node>
+                </li>
+              </nodes>
+            </node>
+          </li>
+
+          <!-- Handle return -->
+          <li Class="QuestNode_Signal">
+            <inSignal>ColonistsReturned</inSignal>
+            <node Class="QuestNode_Sequence">
+              <nodes>
+                <li Class="QuestNode_Letter">
+                  <label>Training Complete</label>
+                  <text>Your colonists have returned.</text>
+                  <letterDef>PositiveEvent</letterDef>
+                  <useColonistsFromCaravanArg>true</useColonistsFromCaravanArg>
+                </li>
+                <li Class="DragonBall.QuestNode_LearnAbility">
+                  <xpChance>0.2</xpChance>
+                  <xpAmount>9000</xpAmount>
+                  <abilities>
+                  </abilities>
+                </li>
+                <li Class="QuestNode_End">
+                  <outcome>Success</outcome>
+                </li>
+              </nodes>
+            </node>
+          </li>
+
+          <!-- Handle death -->
+          <li Class="QuestNode_Signal">
+            <inSignal>ColonistsDied</inSignal>
+            <node Class="QuestNode_Letter">
+              <label>Training Failed</label>
+              <text>Unfortunately, your colonists were unable to survive the intense gravity of King Kai's planet. Even the Dragon Balls can't help now...</text>
+              <letterDef>NegativeEvent</letterDef>
+            </node>
+          </li>
+
+        </nodes>
+      </root>
+  </QuestScriptDef>
+
+</Defs>

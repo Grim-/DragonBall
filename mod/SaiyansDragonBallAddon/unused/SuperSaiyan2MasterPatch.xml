@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Patch>
+    <Operation Class="PatchOperationSequence">
+        <success>Always</success>
+        <operations>
+            <li Class="PatchOperationTest">
+                <xpath>/Defs/TaranMagicFramework.AbilityDef[defName="SR_SuperSaiyan"]</xpath>
+                <success>Normal</success>
+            </li>
+            <li Class="PatchOperationAdd">
+                <xpath>/Defs/TaranMagicFramework.AbilityDef[defName="SR_SuperSaiyan"]</xpath>
+                <value>
+                    <unlockedWhenMastered>
+                        <li>SR_SuperSaiyan2</li>
+                    </unlockedWhenMastered>
+                </value>
+            </li>
+        </operations>
+    </Operation>
+</Patch>
+<TaranMagicFramework.AbilityDef ParentName="SR_RegularSaiyanAbilityTree">
+  <defName>SR_KIVolley</defName>
+  <label>KI Voley</label>
+  <hidden>true</hidden>
+  <abilityTiers>
+    <li Class="SaiyanMod.AbilityTierKIDef">SR_KIVolley_Tier1</li>
+  </abilityTiers>
+</TaranMagicFramework.AbilityDef>
+<SaiyanMod.AbilityTierKIDef>
+  <defName>SR_KIVolley_Tier1</defName>
+  <label>KI Voley</label>
+  <description>A rapid fire volley of Ki blasts.</description>
+  <energyCost>3.33</energyCost>
+  <cooldownTicks>1800</cooldownTicks>
+  <verbProperties>
+    <li Class="TaranMagicFramework.VerbPropertiesAbility">
+      <label>KI Blast Volley</label>
+      <verbClass>TaranMagicFramework.Verb_ShootAbility</verbClass>
+      <hasStandardCommand>true</hasStandardCommand>
+      <defaultProjectile>SR_KI_BlastIII</defaultProjectile>
+      <warmupTime>0.3</warmupTime>
+      <range>25.9</range>
+      <burstShotCount>6</burstShotCount>
+      <ticksBetweenBurstShots>10</ticksBetweenBurstShots>
+      <soundCast>SR_KiVolley</soundCast>
+      <soundCastTail>GunTail_Light</soundCastTail>
+      <muzzleFlashScale>9</muzzleFlashScale>
+      <ai_IsWeapon>false</ai_IsWeapon>
+      <commandIcon>UI/Buttons/KIVolley</commandIcon>
+      <autocast>true</autocast>
+      <autocastChance>1</autocastChance>
+    </li>
+  </verbProperties>
+  <iconTexPath>UI/Buttons/KIVolley</iconTexPath>
+</SaiyanMod.AbilityTierKIDef>

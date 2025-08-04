@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+<!-- Energy Cycling Ability -->
+<TaranMagicFramework.AbilityDef ParentName="SR_AndroidPassives">
+    <defName>SR_EnergyCycling</defName>
+    <label>Energy Cycling</label>
+    <description>Advanced energy regeneration systems.</description>
+    <abilityTiers>
+        <li Class="SaiyanMod.AbilityTierKIDef">SR_EnergyCycling_Tier1</li>
+        <li Class="SaiyanMod.AbilityTierKIDef">SR_EnergyCycling_Tier2</li>
+        <li Class="SaiyanMod.AbilityTierKIDef">SR_EnergyCycling_Tier3</li>
+        <li Class="SaiyanMod.AbilityTierKIDef">SR_EnergyCycling_Tier4</li>
+        <li Class="SaiyanMod.AbilityTierKIDef">SR_EnergyCycling_Tier5</li>
+    </abilityTiers>
+</TaranMagicFramework.AbilityDef>
+
+<SaiyanMod.AbilityTierKIDef Name="SR_EnergyCycling_Tier">
+    <defName>SR_EnergyCycling_Tier1</defName>
+    <label>Energy Cycling I</label>
+    <description>Basic energy regeneration enhancement.</description>
+    <acquireRequirement>
+        <skillPointsToUnlock>1</skillPointsToUnlock>
+    </acquireRequirement>
+    <statOffsets>
+        <SR_KIEnergyRegenRateMultiplier>0.02</SR_KIEnergyRegenRateMultiplier>
+    </statOffsets>
+</SaiyanMod.AbilityTierKIDef>
+
+<SaiyanMod.AbilityTierKIDef ParentName="SR_EnergyCycling_Tier">
+    <defName>SR_EnergyCycling_Tier2</defName>
+    <label>Energy Cycling II</label>
+    <description>Improved energy regeneration.</description>
+    <acquireRequirement>
+        <skillPointsToUnlock>1</skillPointsToUnlock>
+    </acquireRequirement>
+    <statOffsets>
+        <SR_KIEnergyRegenRateMultiplier>0.04</SR_KIEnergyRegenRateMultiplier>
+    </statOffsets>
+</SaiyanMod.AbilityTierKIDef>
+
+<SaiyanMod.AbilityTierKIDef ParentName="SR_EnergyCycling_Tier">
+    <defName>SR_EnergyCycling_Tier3</defName>
+    <label>Energy Cycling III</label>
+    <description>Advanced energy regeneration.</description>
+    <acquireRequirement>
+        <skillPointsToUnlock>1</skillPointsToUnlock>
+    </acquireRequirement>
+    <statOffsets>
+        <SR_KIEnergyRegenRateMultiplier>0.06</SR_KIEnergyRegenRateMultiplier>
+    </statOffsets>
+</SaiyanMod.AbilityTierKIDef>
+
+<SaiyanMod.AbilityTierKIDef ParentName="SR_EnergyCycling_Tier">
+    <defName>SR_EnergyCycling_Tier4</defName>
+    <label>Energy Cycling IV</label>
+    <description>Superior energy regeneration.</description>
+    <acquireRequirement>
+        <skillPointsToUnlock>1</skillPointsToUnlock>
+    </acquireRequirement>
+    <statOffsets>
+        <SR_KIEnergyRegenRateMultiplier>0.08</SR_KIEnergyRegenRateMultiplier>
+    </statOffsets>
+</SaiyanMod.AbilityTierKIDef>
+
+<SaiyanMod.AbilityTierKIDef ParentName="SR_EnergyCycling_Tier">
+    <defName>SR_EnergyCycling_Tier5</defName>
+    <label>Energy Cycling V</label>
+    <description>Maximum energy regeneration capacity.</description>
+    <acquireRequirement>
+        <skillPointsToUnlock>1</skillPointsToUnlock>
+    </acquireRequirement>
+    <statOffsets>
+        <SR_KIEnergyRegenRateMultiplier>0.10</SR_KIEnergyRegenRateMultiplier>
+    </statOffsets>
+    <verbProperties>
+      <li Class="TaranMagicFramework.VerbPropertiesAbility">
+        <label>KI Blast</label>
+        <verbClass>TaranMagicFramework.Verb_ShootAbility</verbClass>
+        <hasStandardCommand>true</hasStandardCommand>
+        <defaultProjectile>SR_KI_BlastIII</defaultProjectile>
+        <warmupTime>0.1</warmupTime>
+        <range>25.9</range>
+        <soundCast>SR_KiBlast</soundCast>
+        <soundCastTail>GunTail_Light</soundCastTail>
+        <muzzleFlashScale>9</muzzleFlashScale>
+        <ai_IsWeapon>false</ai_IsWeapon>
+        <commandIcon>UI/Buttons/KiBlast</commandIcon>
+        <autocast>true</autocast>
+        <autocastChance>1</autocastChance>
+      </li>
+    </verbProperties>
+</SaiyanMod.AbilityTierKIDef>
+</Defs>

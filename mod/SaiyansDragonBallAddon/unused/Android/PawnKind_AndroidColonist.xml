@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+  <PawnKindDef ParentName="BasePlayerPawnKind">
+    <defName>DBZAndroidColonist</defName>
+    <label>android colonist</label>
+    <race>DBZAndroidRace</race>
+    <defaultFactionType>PlayerColony</defaultFactionType>
+    <chemicalAddictionChance>0</chemicalAddictionChance>
+    <minGenerationAge>20</minGenerationAge>
+    <maxGenerationAge>30</maxGenerationAge>
+    <initialResistanceRange>1~1</initialResistanceRange>
+    <initialWillRange>10</initialWillRange>
+    <backstoryFiltersOverride>
+      <li>
+        <categories>
+          <li>RedRibbonAndroid</li>
+        </categories>
+      </li>
+    </backstoryFiltersOverride>
+    <xenotypeSet>
+        <xenotypeChances>
+            <DBZAndroid>1.0</DBZAndroid>
+        </xenotypeChances>
+    </xenotypeSet>
+    <!-- Basic apparel requirements -->
+    <apparelRequired>
+      <li>Apparel_BasicShirt</li>
+      <li>Apparel_Pants</li>
+    </apparelRequired>
+  </PawnKindDef>
+
+</Defs>

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+  <RecipeDef>
+      <defName>DragonBallAdministerSenzuBean</defName>
+      <label>administer senzu bean</label>
+      <description>Administer a senzu bean to instantly heal injuries and restore stamina.</description>
+      <workerClass>Recipe_AdministerUsableItem</workerClass>
+      <jobString>Administering senzu bean.</jobString>
+      <workAmount>150</workAmount>
+      <ingredients>
+          <li>
+              <filter>
+                  <thingDefs>
+                      <li>DragonBallSenzuBean</li>
+                  </thingDefs>
+              </filter>
+              <count>1</count>
+          </li>
+      </ingredients>
+      <fixedIngredientFilter>
+          <thingDefs>
+              <li>DragonBallSenzuBean</li>
+          </thingDefs>
+      </fixedIngredientFilter>
+      <recipeUsers>
+          <li>Human</li>
+      </recipeUsers>
+      <targetsBodyPart>false</targetsBodyPart>
+  </RecipeDef>
+</Defs>

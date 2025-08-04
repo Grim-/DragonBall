@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+<!-- Tier 2 -->
+<TaranMagicFramework.AbilityDef ParentName="SR_AndroidBasicSkill">
+ <defName>SR_RapidStrike</defName>
+ <label>Rapid Strike</label>
+ <uiSkillIcon>UI/Icons/RapidStrike</uiSkillIcon>
+ <abilityTrees>
+     <li>SR_AndroidAbilityTree</li>
+ </abilityTrees>
+ <abilityClass>SaiyanMod.KIAbility_DashAttack</abilityClass>
+ <abilityTiers>
+     <li Class="SaiyanMod.AbilityTier_DashAttack">SR_RapidStrike_Tier1</li>
+     <li Class="SaiyanMod.AbilityTier_DashAttack">SR_RapidStrike_Tier2</li>
+     <li Class="SaiyanMod.AbilityTier_DashAttack">SR_RapidStrike_Tier3</li>
+ </abilityTiers>
+</TaranMagicFramework.AbilityDef>
+
+<SaiyanMod.AbilityTier_DashAttack Name="SR_RapidStrike_Tier">
+ <defName>SR_RapidStrike_Tier1</defName>
+ <label>Rapid Strike</label>
+ <description>Utilizes enhanced servos to dash and strike with mechanical precision.</description>
+ <nextTierDescription>Upgraded servos allow for increased range and efficiency.</nextTierDescription>
+ <acquireRequirement>
+     <skillPointsToUnlock>0</skillPointsToUnlock>
+ </acquireRequirement>
+ <overlayProps>
+   <overlay>SR_DashAttackOverlay</overlay>
+   <scale>1</scale>
+   <overlayOnStart>false</overlayOnStart>
+ </overlayProps>
+ <soundOnCast>SR_RapidStrike</soundOnCast>
+ <energyCost>35</energyCost>
+ <cooldownTicks>1200</cooldownTicks>
+ <cooldownOnStart>true</cooldownOnStart>
+ <cooldownOnEnd>false</cooldownOnEnd>
+ <effectRadius>15</effectRadius>
+ <iconTexPath>UI/Icons/RapidStrike</iconTexPath>
+</SaiyanMod.AbilityTier_DashAttack>
+
+<SaiyanMod.AbilityTier_DashAttack ParentName="SR_RapidStrike_Tier">
+ <defName>SR_RapidStrike_Tier2</defName>
+ <label>Rapid Strike</label>
+ <description>Utilizes enhanced servos to dash and strike with mechanical precision.</description>
+ <nextTierDescription>Maximum servo efficiency achieved for optimal striking capability.</nextTierDescription>
+ <acquireRequirement>
+     <skillPointsToUnlock>1</skillPointsToUnlock>
+ </acquireRequirement>
+ <overlayProps>
+   <overlay>SR_DashAttackOverlay</overlay>
+   <scale>1</scale>
+   <overlayOnStart>false</overlayOnStart>
+ </overlayProps>
+ <soundOnCast>SR_RapidStrike</soundOnCast>
+ <energyCost>30</energyCost>
+ <cooldownTicks>1200</cooldownTicks>
+ <cooldownOnStart>true</cooldownOnStart>
+ <cooldownOnEnd>false</cooldownOnEnd>
+ <effectRadius>20</effectRadius>
+ <iconTexPath>UI/Icons/RapidStrike</iconTexPath>
+</SaiyanMod.AbilityTier_DashAttack>
+
+<SaiyanMod.AbilityTier_DashAttack ParentName="SR_RapidStrike_Tier">
+ <defName>SR_RapidStrike_Tier3</defName>
+ <label>Rapid Strike</label>
+ <description>Utilizes enhanced servos to dash and strike with mechanical precision.</description>
+ <acquireRequirement>
+     <skillPointsToUnlock>1</skillPointsToUnlock>
+ </acquireRequirement>
+ <overlayProps>
+   <overlay>SR_DashAttackOverlay</overlay>
+   <scale>1</scale>
+   <overlayOnStart>false</overlayOnStart>
+ </overlayProps>
+ <soundOnCast>SR_RapidStrike</soundOnCast>
+ <energyCost>10</energyCost>
+ <cooldownTicks>1200</cooldownTicks>
+ <cooldownOnStart>true</cooldownOnStart>
+ <cooldownOnEnd>false</cooldownOnEnd>
+ <effectRadius>40</effectRadius>
+ <iconTexPath>UI/Icons/RapidStrike</iconTexPath>
+</SaiyanMod.AbilityTier_DashAttack>
+</Defs>

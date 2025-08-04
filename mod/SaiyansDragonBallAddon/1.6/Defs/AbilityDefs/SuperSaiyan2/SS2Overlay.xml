@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+  <TaranMagicFramework.AnimationDef ParentName="TMF_AnimationMoteBase">
+    <defName>SR_PowerUpOverlaySuperSaiyanII</defName>
+    <altitudeLayer>MoteOverhead</altitudeLayer>
+    <mote>
+      <solidTime>30</solidTime>
+    </mote>
+    <graphicData>
+      <texPath>Animations/SuperSaiyan</texPath>
+      <drawSize>2</drawSize>
+      <drawOffset>(0, 0, 0.1)</drawOffset>
+      <shaderType>MoteGlow</shaderType>
+      <transparency>0.8</transparency>
+    </graphicData>
+    <fpsRate>2</fpsRate>
+  </TaranMagicFramework.AnimationDef>
+
+</Defs>

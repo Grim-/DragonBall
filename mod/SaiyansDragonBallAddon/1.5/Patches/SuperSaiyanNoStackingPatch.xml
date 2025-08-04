@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Patch>
+  <Operation Class="PatchOperationAdd">
+    <xpath>/Defs/TaranMagicFramework.AbilityDef[defName="SR_SuperSaiyan"]</xpath>
+    <value>
+      <endAbilitiesWhenActive>
+        <li>SR_SuperSaiyan2</li>
+      </endAbilitiesWhenActive>
+    </value>
+  </Operation>
+</Patch>

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+  <TaranMagicFramework.AbilityCategoryDef>
+		<defName>SR_KaioKenCategory</defName>
+		<label>Super Saiyan</label>
+		<order>6</order>
+    <showTitle>false</showTitle>
+	</TaranMagicFramework.AbilityCategoryDef>
+
+  <TaranMagicFramework.AbilityCategoryDef>
+    <defName>SR_ExtrasCategory</defName>
+    <order>5</order>
+    <showTitle>false</showTitle>
+  </TaranMagicFramework.AbilityCategoryDef>
+</Defs>

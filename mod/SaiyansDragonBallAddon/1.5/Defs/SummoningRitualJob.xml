@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+  <JobDef>
+    <defName>DragonBallSummoning</defName>
+    <driverClass>DragonBall.JobDriver_DragonBallSummoning</driverClass>
+    <reportString>performing dragon summoning at TargetA.</reportString>
+    <allowOpportunisticPrefix>true</allowOpportunisticPrefix>
+    <casualInterruptible>false</casualInterruptible>
+    <suspendable>false</suspendable>
+  </JobDef>
+
+  <JobDef>
+    <defName>PlaceDragonBall</defName>
+    <driverClass>DragonBall.JobDriver_PlaceDragonBall</driverClass>
+    <reportString>placing a dragon ball at TargetA.</reportString>
+    <allowOpportunisticPrefix>true</allowOpportunisticPrefix>
+    <casualInterruptible>false</casualInterruptible>
+    <suspendable>false</suspendable>
+  </JobDef>
+
+  <JobDef>
+  <defName>GatherDragonBalls</defName>
+  <driverClass>DragonBall.JobDriver_GatherDragonBalls</driverClass>
+  <reportString>gathering dragon balls</reportString>
+  <allowOpportunisticPrefix>true</allowOpportunisticPrefix>
+</JobDef>
+</Defs>

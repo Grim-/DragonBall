@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Defs>
+  <GenStepDef>
+    <defName>HyperBolicFog</defName>
+    <order>1500</order>
+    <genStep Class="GenStep_Fog"/>
+  </GenStepDef>
+
+  <GenStepDef Name="KamiLookout">
+    <defName>KamiLookout</defName>
+    <order>10</order>
+    <genStep Class="DragonBall.GenStep_KamisPlatform"/>
+  </GenStepDef>
+
+  <GenStepDef Name="KamiLookoutHazards">
+    <defName>KamiLookoutHazards</defName>
+    <order>1000</order>
+    <genStep Class="DragonBall.GenStep_KamisHazards"/>
+  </GenStepDef>
+  <MapGeneratorDef>
+      <defName>KamisLookoutGenerator</defName>
+      <pocketMapProperties>
+          <biome>KamisLookoutBiome</biome>
+          <temperature>21</temperature>
+      </pocketMapProperties>
+      <genSteps>
+          <li>KamiLookout</li>
+          <li>FindPlayerStartSpot</li>
+          <li>HyperBolicFog</li>
+          <li>KamiLookoutHazards</li>
+      </genSteps>
+  </MapGeneratorDef>
+
+  <WorldObjectDef>
+      <defName>HyperbolicMapParent</defName>
+      <worldObjectClass>DragonBall.HyperbolicMapParent</worldObjectClass>
+      <canBePlayerHome>false</canBePlayerHome>
+      <mapGenerator>KamisLookoutGenerator</mapGenerator>
+  </WorldObjectDef>
+
+  <TerrainDef ParentName="NaturalTerrainBase">
+    <defName>KamiTile</defName>
+    <label>pocket dimension floor</label>
+    <texturePath>Terrain/Surfaces/TileStone</texturePath>
+	   <color>(1,1,1)</color>
+    <edgeType>FadeRough</edgeType>
+    <renderPrecedence>350</renderPrecedence>
+    <statBases>
+      <Beauty>100</Beauty>
+  	  <Cleanliness>100</Cleanliness>
+    </statBases>
+    <affordances>
+      <li>Light</li>
+      <li>Medium</li>
+      <li>Heavy</li>
+    </affordances>
+    <fertility>0.00</fertility>
+    <takeFootprints>false</takeFootprints>
+  </TerrainDef>
+
+  <TerrainDef ParentName="WaterDeepBase">
+    <defName>KamiSkyTile</defName>
+    <label>deep ocean water</label>
+    <renderPrecedence>397</renderPrecedence>
+    <tags>
+      <li>Ocean</li>
+    </tags>
+  </TerrainDef>
+
+	<BiomeDef>
+		<defName>KamisLookoutBiome</defName>
+		<label>Pocket Dimension</label>
+		<description>A small pocket of space tucked away in a box.</description>
+		<workerClass>DragonBall.BiomeWorker_NeverSpawn</workerClass>
+		<canAutoChoose>false</canAutoChoose>
+		<canBuildBase>false</canBuildBase>
+		<allowRoads>false</allowRoads>
+		<allowRivers>false</allowRivers>
+		<animalDensity>0</animalDensity>
+		<plantDensity>0</plantDensity>
+		<hasVirtualPlants>false</hasVirtualPlants>
+		<settlementSelectionWeight>0</settlementSelectionWeight>
+		<movementDifficulty>1</movementDifficulty>
+		<texture>World/Biomes/TemperateForest</texture>
+		<forageability>0</forageability>
+		<wildPlantRegrowDays>20</wildPlantRegrowDays>
+		<diseaseMtbDays>999999</diseaseMtbDays>
+		<diseases/>
+		<terrainsByFertility>
+			<li>
+				<terrain>KamiTile</terrain>
+				<min>-999</min>
+				<max>999</max>
+			</li>
+		</terrainsByFertility>
+		<terrainPatchMakers/>
+		<baseWeatherCommonalities>
+			<Fog>99</Fog>
+		</baseWeatherCommonalities>
+		<wildPlants/>
+		<wildAnimals/>
+	</BiomeDef>
+
+</Defs>

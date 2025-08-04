@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Defs>
+  <QuestScriptDef>
+      <defName>OtherWorldTournament</defName>
+      <rootSelectionWeight>1</rootSelectionWeight>
+      <expireDaysRange>4~8</expireDaysRange>
+      <questNameRules>
+          <rulesStrings>
+              <li>questName->The Grand Otherworld Tournament</li>
+              <li>questName->Tournament of Other Realms</li>
+              <li>questName->The Grand Kai's Tournament</li>
+          </rulesStrings>
+      </questNameRules>
+      <questDescriptionRules>
+          <rulesStrings>
+              <li>questDescription->The Grand Kai has issued a prestigious invitation to your colony! You have been chosen to send [colonistsToLendCount] warriors to compete in the legendary Otherworld Tournament, a gathering of the universe's mightiest fighters.\n\nUnder the divine protection of the Grand Kai, your warriors will battle without risk of death in this [trainingDays]-day tournament. Each contestant will compete in their own division, facing [maxFights] challenging battles. Victory requires winning [winsRequired] matches.\n\nThe rewards are extraordinary - winners may claim legendary artifacts including the mystical dragon balls! Even those who don't claim the ultimate prize will return with invaluable combat experience.\n\nNote: Only warriors who have unlocked their ki abilities may compete, though others are welcome to witness this spectacular event. Will your champions rise to the challenge?</li>
+          </rulesStrings>
+      </questDescriptionRules>
+
+      <root Class="QuestNode_Sequence">
+        <nodes>
+          <!-- Initial setup remains the same -->
+          <li Class="QuestNode_GetPawn">
+            <storeAs>asker</storeAs>
+            <mustBeFactionLeader>true</mustBeFactionLeader>
+          </li>
+
+          <li Class="QuestNode_Set">
+            <name>maxFights</name>
+            <value>3</value>
+          </li>
+
+          <li Class="QuestNode_Set">
+            <name>winsRequired</name>
+            <value>2</value>
+          </li>
+
+          <li Class="QuestNode_GetRandomInRangeForChallengeRating">
+            <storeAs>trainingDays</storeAs>
+            <oneStarRange>1~2</oneStarRange>
+            <twoStarRange>2~3</twoStarRange>
+            <threeStarRange>4~5</threeStarRange>
+            <roundRandom>true</roundRandom>
+          </li>
+
+
+          <li Class="QuestNode_GetRandomInRangeInt">
+            <storeAs>colonistsToLendCount</storeAs>
+            <range>1~2</range>
+          </li>
+
+          <li Class="QuestNode_GetMap">
+            <preferMapWithMinFreeColonists>1</preferMapWithMinFreeColonists>
+          </li>
+
+          <!-- Bubbles arrival and initial departure remain the same -->
+          <li Class="QuestNode_ShuttleDelay">
+            <delayTicks>3500</delayTicks>
+            <node Class="QuestNode_Sequence">
+              <nodes>
+                <li Class="QuestNode_SubScript">
+                  <def>Util_TransportShip_PickupKingKai</def>
+                  <parms>
+                    <leaveDelayTicks>60000</leaveDelayTicks>
+                    <leaveImmediatelyWhenSatisfied>true</leaveImmediatelyWhenSatisfied>
+                    <acceptColonists>true</acceptColonists>
+                    <acceptChildren>false</acceptChildren>
+                    <onlyAcceptColonists>true</onlyAcceptColonists>
+                    <onlyAcceptHealthy>true</onlyAcceptHealthy>
+                    <requireColonistCount>$colonistsToLendCount</requireColonistCount>
+                  </parms>
+                </li>
+
+                <li Class="QuestNode_Letter">
+                  <label>Your shuttle has arrived</label>
+                  <text>The shuttle that will take you to Kami's lookout where you will be transported to the Otherworld.</text>
+                  <lookTargets>$pickupShipThing</lookTargets>
+                </li>
+              </nodes>
+            </node>
+          </li>
+
+
+
+          <!-- Handle colonist departure -->
+          <li Class="QuestNode_Signal">
+            <inSignal>pickupShipThing.SentSatisfied</inSignal>
+            <node Class="QuestNode_Sequence">
+              <nodes>
+                <li Class="QuestNode_Signal">
+                  <inSignal>pickupShipThing.SentSatisfied</inSignal>
+                  <node Class="QuestNode_LendColonistsToFaction">
+                    <shuttle>$pickupShipThing</shuttle>
+                    <lendColonistsToFactionOf>$asker</lendColonistsToFactionOf>
+                    <returnLentColonistsInTicks>$($trainingDays*60000)</returnLentColonistsInTicks>
+                    <outSignalComplete>ColonistsReturned</outSignalComplete>
+                    <outSignalColonistsDied>ColonistsDied</outSignalColonistsDied>
+                  </node>
+                </li>
+              </nodes>
+            </node>
+          </li>
+
+          <!-- Tournament progression -->
+          <li Class="DragonBall.QuestNode_TournamentFight">
+            <inSignalEnable>pickupShipThing.SentSatisfied</inSignalEnable>
+            <colonistsReturnSignal>ColonistsReturned</colonistsReturnSignal>
+            <tournamentDurationTicks>$($trainingDays*60000)</tournamentDurationTicks>
+            <luckFactor>0.06</luckFactor>
+            <maxFights>$maxFights</maxFights>
+            <winsRequired>$winsRequired</winsRequired>
+            <timesToRoll>2</timesToRoll>
+            <rewards>
+              <li>
+                <thing>DragonBallOneStar</thing>
+                <count>1</count>
+              </li>
+              <li>
+                <thing>DragonBallTwoStar</thing>
+                <count>1</count>
+              </li>
+              <li>
+                <thing>DragonBallThreeStar</thing>
+                <count>1</count>
+              </li>
+              <li>
+                <thing>DragonBallFourStar</thing>
+                <count>1</count>
+              </li>
+              <li>
+                <thing>DragonBallFiveStar</thing>
+                <count>1</count>
+              </li>
+              <li>
+                <thing>DragonBallSixStar</thing>
+                <count>1</count>
+              </li>
+              <li>
+                <thing>DragonBallSevenStar</thing>
+                <count>1</count>
+              </li>
+              <li>
+                <thing>Gold</thing>
+                <count>50~400</count>
+              </li>
+            </rewards>
+          </li>
+
+
+          <!-- Handle return -->
+          <li Class="QuestNode_Signal">
+            <inSignal>ColonistsReturned</inSignal>
+            <node Class="QuestNode_Sequence">
+              <nodes>
+                <li Class="QuestNode_Letter">
+                  <label>Tournament Complete</label>
+                  <text>Your fighters have returned from the tournament.</text>
+                  <letterDef>PositiveEvent</letterDef>
+                  <useColonistsFromCaravanArg>true</useColonistsFromCaravanArg>
+                </li>
+                <li Class="QuestNode_End">
+                  <outcome>Success</outcome>
+                </li>
+              </nodes>
+            </node>
+          </li>
+        </nodes>
+      </root>
+  </QuestScriptDef>
+</Defs>

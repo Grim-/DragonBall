@@ -3,7 +3,6 @@ using Verse;
 
 namespace DragonBall
 {
-    // Example implementation: Void spread
     public class VoidSpreadArena : ArenaMutator
     {
         private HashSet<IntVec3> voidTiles = new HashSet<IntVec3>();

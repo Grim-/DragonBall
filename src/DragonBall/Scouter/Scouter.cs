@@ -33,7 +33,7 @@ namespace DragonBall
             EquipOwner = null;
         }
 
-        public override void Tick()
+        protected override void Tick()
         {
             base.Tick();
             if (scouterMode == ScouterMode.SCANNING && IsWearerSelected())

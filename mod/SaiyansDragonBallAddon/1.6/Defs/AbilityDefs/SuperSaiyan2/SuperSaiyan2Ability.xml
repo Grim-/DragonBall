@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+  <TaranMagicFramework.AbilityCategoryDef>
+		<defName>SR_SuperSaiyan2</defName>
+		<label>Super Saiyan</label>
+		<order>5</order>
+    <showTitle>false</showTitle>
+	</TaranMagicFramework.AbilityCategoryDef>
+
+<TaranMagicFramework.AbilityDef ParentName="SR_SuperSaiyanKISkill">
+    <defName>SR_SuperSaiyan2</defName>
+    <label>Super Saiyan 2</label>
+    <uiSkillIcon>UI/Icons/SuperSaiyan</uiSkillIcon>
+    <abilityClass>SaiyanMod.KIAbility_SuperSaiyan</abilityClass>
+    <abilityRank>SR_SuperSaiyan2</abilityRank>
+    <hiddenUntilUnlocked>true</hiddenUntilUnlocked>
+    <abilityTiers>
+        <li Class="SaiyanMod.AbilityTierKIDef">SR_SuperSaiyan2_Tier1</li>
+        <li Class="SaiyanMod.AbilityTierKIDef">SR_SuperSaiyan2_Tier2</li>
+        <li Class="SaiyanMod.AbilityTierKIDef">SR_SuperSaiyan2_Tier3</li>
+    </abilityTiers>
+    <abilityTrees>
+      <li>SR_RegularSaiyanAbilityTree</li>
+      <li>SR_HalfSaiyanAbilityTree</li>
+      <li>SR_LegendarySaiyanAbilityTree</li>
+    </abilityTrees>
+    <endAbilitiesWhenActive>
+      <li>SR_SuperSaiyan</li>
+    </endAbilitiesWhenActive>
+    <unlockedWhenMastered>
+        <li>SR_SuperSaiyan</li>
+    </unlockedWhenMastered>
+    <modExtensions>
+        <li Class="SaiyanMod.CancelablePowerUpExt" />
+        <li Class="SaiyanMod.StackablePowerUpExt" />
+    </modExtensions>
+</TaranMagicFramework.AbilityDef>
+
+<SaiyanMod.AbilityTierKIDef Name="SR_SuperSaiyan2_Tier">
+    <defName>SR_SuperSaiyan2_Tier1</defName>
+    <label>Super Saiyan 2</label>
+    <description>An ascended form beyond Super Saiyan. Grants even greater power but at the cost of extreme energy consumption. Lightning crackles around the user's aura, and their strength reaches new heights. This transformation requires mastery of the original Super Saiyan form.</description>
+    <glowProps>
+        <glowColor>255, 230, 70</glowColor>
+        <glowRadius>4</glowRadius>
+    </glowProps>
+    <overlayProps>
+        <overlay>SR_PowerUpOverlaySuperSaiyanII</overlay>
+        <scale>1</scale>
+        <duration>900</duration>
+    </overlayProps>
+    <abilitiesToUnlock>
+    </abilitiesToUnlock>
+    <xpGainWhileActive>
+        <masteryGain>1</masteryGain>
+        <ticksInterval>1250</ticksInterval>
+    </xpGainWhileActive>
+    <hediffProps>
+      <hediff>SR_SuperSaiyan2Hediff</hediff>
+    </hediffProps>
+    <isLearnable>false</isLearnable>
+    <soundOnCast>SR_SuperSaiyan</soundOnCast>
+    <energyCost>30</energyCost>
+    <cooldownTicks>48000</cooldownTicks>
+    <regenRate>-0.06</regenRate>
+    <iconTexPath>UI/Buttons/SuperSaiyan</iconTexPath>
+</SaiyanMod.AbilityTierKIDef>
+
+<SaiyanMod.AbilityTierKIDef ParentName="SR_SuperSaiyan2_Tier">
+    <defName>SR_SuperSaiyan2_Tier2</defName>
+    <label>Super Saiyan 2 Enhanced</label>
+    <energyCost>55</energyCost>
+    <cooldownTicks>24000</cooldownTicks>
+    <regenRate>-0.04216</regenRate>
+    <hediffProps>
+      <hediff>SR_SuperSaiyan2IIHediff</hediff>
+    </hediffProps>
+    <acquireRequirement>
+        <masteryPointsToUnlock>250</masteryPointsToUnlock>
+    </acquireRequirement>
+    <letterTitleKeyGained>SR.PawnLeveledUpSuperSaiyan</letterTitleKeyGained>
+    <letterDescKeysGained>SR.PawnLeveledUpSuperSaiyanDesc</letterDescKeysGained>
+</SaiyanMod.AbilityTierKIDef>
+
+<SaiyanMod.AbilityTierKIDef ParentName="SR_SuperSaiyan2_Tier">
+    <defName>SR_SuperSaiyan2_Tier3</defName>
+    <label>Super Saiyan 2 Mastered</label>
+    <energyCost>40</energyCost>
+    <cooldownTicks>12000</cooldownTicks>
+    <regenRate>-0.012108</regenRate>
+    <hediffProps>
+      <hediff>SR_SuperSaiyan2MasteredHediff</hediff>
+    </hediffProps>
+    <acquireRequirement>
+        <masteryPointsToUnlock>350</masteryPointsToUnlock>
+    </acquireRequirement>
+    <letterTitleKeyGained>SR.PawnMasteredSuperSaiyan</letterTitleKeyGained>
+    <letterDescKeysGained>SR.PawnMasteredSuperSaiyanDesc</letterDescKeysGained>
+</SaiyanMod.AbilityTierKIDef>
+</Defs>

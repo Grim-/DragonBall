@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Defs>
+  <QuestScriptDef>
+    <defName>SupremeKaiTraining</defName>
+    <rootSelectionWeight>1</rootSelectionWeight>
+    <expireDaysRange>4~8</expireDaysRange>
+    <questNameRules>
+      <rulesStrings>
+        <li>questName->Supreme Kai's Training</li>
+        <li>questName->Sacred World Training</li>
+        <li>questName->Training with the Kais</li>
+        <li>questName->World of the Kais</li>
+      </rulesStrings>
+    </questNameRules>
+    <questDescriptionRules>
+      <rulesStrings>
+        <li>questDescription->The Supreme Kai, overseer of the entire universe and guardian of reality itself, has taken notice of your colonists' growing power. Through his divine authority, he offers to train them in the Sacred World of the Kais, where the mystical atmosphere itself enhances one's potential.\n\nThe training will take place over [trainingDays] days in this holy realm, where time flows differently than in the mortal world. Your colonists will learn ancient techniques passed down through generations of Kais, and may even receive the legendary Z-Sword, a weapon of immense power.\n\nHalf-Saiyans may have their hidden potential unlocked, while pure Saiyans might breakthrough to new levels of Super Saiyan power. Humans too can benefit from this divine training, possibly awakening latent abilities they never knew they possessed.\n\nKibito, the Supreme Kai's attendant, will arrive shortly to transport your colonists to the Sacred World of the Kais using his Instantaneous Movement technique.</li>
+      </rulesStrings>
+    </questDescriptionRules>
+
+      <root Class="QuestNode_Sequence">
+        <nodes>
+
+          <li Class="QuestNode_GetPawn">
+            <storeAs>asker</storeAs>
+            <mustBeFactionLeader>true</mustBeFactionLeader>
+          </li>
+
+          <li Class="QuestNode_Set">
+            <name>trainingDays</name>
+            <value>3</value>
+          </li>
+
+          <li Class="QuestNode_Set">
+            <name>colonistsToLendCount</name>
+            <value>1</value>
+          </li>
+
+          <li Class="QuestNode_GetMap">
+            <preferMapWithMinFreeColonists>1</preferMapWithMinFreeColonists>
+          </li>
+
+          <!-- Bubbles arrives -->
+          <li Class="QuestNode_ShuttleDelay">
+            <delayTicks>3500</delayTicks>
+            <node Class="QuestNode_Sequence">
+              <nodes>
+                <li Class="QuestNode_SubScript">
+                  <def>Util_TransportShip_PickupKingKai</def>
+                  <parms>
+                    <leaveDelayTicks>60000</leaveDelayTicks>
+                    <leaveImmediatelyWhenSatisfied>true</leaveImmediatelyWhenSatisfied>
+                    <acceptColonists>true</acceptColonists>
+                    <acceptChildren>false</acceptChildren>
+                    <onlyAcceptColonists>true</onlyAcceptColonists>
+                    <onlyAcceptHealthy>true</onlyAcceptHealthy>
+                    <requireColonistCount>1</requireColonistCount>
+                  </parms>
+                </li>
+
+                <li Class="QuestNode_Letter">
+                  <label>Kibito has arrived</label>
+                  <text>Kibito, Supreme Kai's assistant, has arrived to guide your colonist to the realm of the Kai's.</text>
+                  <lookTargets>$pickupShipThing</lookTargets>
+                </li>
+              </nodes>
+            </node>
+          </li>
+
+          <!-- Handle colonist departure -->
+          <li Class="QuestNode_Signal">
+            <inSignal>pickupShipThing.SentSatisfied</inSignal>
+            <node Class="QuestNode_Sequence">
+              <nodes>
+                <li Class="QuestNode_Signal">
+                  <inSignal>pickupShipThing.SentSatisfied</inSignal>
+                  <node Class="QuestNode_LendColonistsToFaction">
+                    <shuttle>$pickupShipThing</shuttle>
+                    <lendColonistsToFactionOf>$asker</lendColonistsToFactionOf>
+                    <returnLentColonistsInTicks>$(3*60000)</returnLentColonistsInTicks>
+                    <outSignalComplete>ColonistsReturned</outSignalComplete>
+                    <outSignalColonistsDied>ColonistsDied</outSignalColonistsDied>
+                  </node>
+                </li>
+              </nodes>
+            </node>
+          </li>
+
+          <!-- Handle return -->
+          <li Class="QuestNode_Signal">
+            <inSignal>ColonistsReturned</inSignal>
+            <node Class="QuestNode_Sequence">
+              <nodes>
+                <li Class="QuestNode_Letter">
+                  <label>Training Complete</label>
+                  <text>Your colonists have completed their training with the Supreme Kai. They return wearing ceremonial robes and carrying mystical weapons, their power levels significantly increased.</text>
+                  <letterDef>PositiveEvent</letterDef>
+                  <useColonistsFromCaravanArg>true</useColonistsFromCaravanArg>
+                </li>
+                <li Class="DragonBall.QuestNode_LearnFromSupremeKai">
+                  <BaseXPGain>25000</BaseXPGain>
+                  <halfSaiyansUnlockPotential>true</halfSaiyansUnlockPotential>
+                  <halfSaiyanAbilityUnlock>SR_Potential</halfSaiyanAbilityUnlock>
+                  <humanAbilityUnlock>SR_Awakened</humanAbilityUnlock>
+                  <nonKiHumansGainKi>true</nonKiHumansGainKi>
+                  <kiHumansGainXP>true</kiHumansGainXP>
+                  <saiyansLearnSuperSaiyanORSuperSaiyanTwo>true</saiyansLearnSuperSaiyanORSuperSaiyanTwo>
+                </li>
+                <li Class="QuestNode_End">
+                  <outcome>Success</outcome>
+                </li>
+              </nodes>
+            </node>
+          </li>
+
+          <!-- Handle death -->
+          <li Class="QuestNode_Signal">
+            <inSignal>ColonistsDied</inSignal>
+            <node Class="QuestNode_Letter">
+              <label>Training Failed</label>
+              <text>Unfortunately, [colonist_nameDef] was unable to survive the intense gravity of King Kai's planet. Even the Dragon Balls can't help now...</text>
+              <letterDef>NegativeEvent</letterDef>
+            </node>
+          </li>
+
+        </nodes>
+      </root>
+  </QuestScriptDef>
+
+</Defs>

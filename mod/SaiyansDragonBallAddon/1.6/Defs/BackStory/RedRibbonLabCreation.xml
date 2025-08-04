@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+  <BackstoryDef>
+    <defName>RedRibbonCreation</defName>
+    <title>Laboratory Creation</title>
+    <titleShort>Lab Android</titleShort>
+    <baseDesc>[PAWN_nameDef] was created in Dr. Gero's laboratory as part of the Red Ribbon Army's android program. Their early activation period was spent learning basic functions and combat protocols.</baseDesc>
+    <slot>Childhood</slot>
+    <spawnCategories>
+      <li>RedRibbonAndroid</li>
+    </spawnCategories>
+    <skillGains>
+      <Shooting>4</Shooting>
+      <Melee>4</Melee>
+    </skillGains>
+    <workDisables>
+      <li>Caring</li>
+    </workDisables>
+  </BackstoryDef>
+
+</Defs>

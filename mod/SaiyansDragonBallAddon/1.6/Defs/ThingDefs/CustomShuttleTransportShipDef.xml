@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+<TransportShipDef>
+  <defName>KingKaiShuttle</defName>
+  <label>shuttle</label>
+  <shipThing>KingKaiShuttleThing</shipThing>
+  <arrivingSkyfaller>ShuttleIncoming</arrivingSkyfaller>
+  <leavingSkyfaller>ShuttleLeaving</leavingSkyfaller>
+  <worldObject>TravelingShuttle</worldObject>
+  <maxLaunchDistance>70</maxLaunchDistance>
+</TransportShipDef>
+</Defs>

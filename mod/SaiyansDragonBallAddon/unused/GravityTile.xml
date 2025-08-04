@@ -1,0 +1,17 @@
+<TerrainDef ParentName="FloorBase">
+  <defName>GravityTrainingTile</defName>
+  <label>x10 gravity training tile</label>
+  <description>A specialized training tile that increases gravity tenfold. Training here is far more effective but much more strenuous.</description>
+  <texturePath>Terrain/Floors/MetalTile</texturePath>
+  <color>(136,136,136)</color>
+  <statBases>
+    <WorkToBuild>1800</WorkToBuild>
+    <Beauty>1</Beauty>
+    <Cleanliness>0.6</Cleanliness>
+  </statBases>
+  <costList>
+    <Plasteel>4</Plasteel>
+    <ComponentIndustrial>1</ComponentIndustrial>
+  </costList>
+  <constructEffect>ConstructMetal</constructEffect>
+</TerrainDef>

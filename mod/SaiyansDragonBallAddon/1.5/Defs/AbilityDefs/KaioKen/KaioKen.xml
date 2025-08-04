@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+  <!-- Base KaioKen -->
+  <TaranMagicFramework.AbilityDef>
+      <defName>SR_KaioKen</defName>
+      <label>Kaio-Ken</label>
+      <uiSkillIcon>UI/Kaioken</uiSkillIcon>
+      <abilityRank>SR_ExtrasCategory</abilityRank>
+      <abilityClass>DragonBall.KIAbilityKaioKen</abilityClass>
+      <abilityTrees>
+        <li>SR_RegularSaiyanAbilityTree</li>
+        <li>SR_HumanAbilityTree</li>
+        <li>SR_HalfSaiyanAbilityTree</li>
+        <li>SR_LegendarySaiyanAbilityTree</li>
+      </abilityTrees>
+      <hiddenUntilUnlocked>true</hiddenUntilUnlocked>
+      <abilityTiers>
+          <li Class="DragonBall.AbilityTierKi_KaioKen">SR_KaioKen_Tier1</li>
+          <li Class="DragonBall.AbilityTierKi_KaioKen">SR_KaioKen_Tier2</li>
+          <li Class="DragonBall.AbilityTierKi_KaioKen">SR_KaioKen_Tier3</li>
+      </abilityTiers>
+  </TaranMagicFramework.AbilityDef>
+
+  <!-- Base KaioKen Tiers -->
+  <DragonBall.AbilityTierKi_KaioKen Name="SR_KaioKen_BaseTier">
+      <defName>SR_KaioKen_Tier1</defName>
+      <label>Kaio-Ken</label>
+      <description>A powerful technique taught by King Kai that multiplies the user's power. While effective, it puts considerable strain on the body.</description>
+      <glowProps>
+          <glowColor>255, 0, 0</glowColor>
+          <glowRadius>3</glowRadius>
+      </glowProps>
+      <overlayProps>
+          <overlay>SR_PowerUpOverlayKaioKen</overlay>
+          <scale>1.5</scale>
+          <duration>900</duration>
+      </overlayProps>
+      <xpGainWhileActive>
+          <masteryGain>1.2</masteryGain>
+          <ticksInterval>2500</ticksInterval>
+      </xpGainWhileActive>
+      <autoGain>false</autoGain>
+      <isLearnable>false</isLearnable>
+      <soundOnCast>SR_SuperSaiyan</soundOnCast>
+      <energyCost>0</energyCost>
+      <cooldownTicks>2400</cooldownTicks>
+      <regenRate>0</regenRate>
+      <iconTexPath>UI/Kaioken</iconTexPath>
+      <hediffProps>
+          <hediff>SR_KaioKenHediff</hediff>
+      </hediffProps>
+      <severityGainedPerTick>0.05</severityGainedPerTick>
+      <severityTickTime>1250</severityTickTime>
+  </DragonBall.AbilityTierKi_KaioKen>
+
+  <DragonBall.AbilityTierKi_KaioKen ParentName="SR_KaioKen_BaseTier">
+      <defName>SR_KaioKen_Tier2</defName>
+      <acquireRequirement>
+          <masteryPointsToUnlock>250</masteryPointsToUnlock>
+      </acquireRequirement>
+  </DragonBall.AbilityTierKi_KaioKen>
+
+  <DragonBall.AbilityTierKi_KaioKen ParentName="SR_KaioKen_BaseTier">
+      <defName>SR_KaioKen_Tier3</defName>
+      <acquireRequirement>
+          <masteryPointsToUnlock>400</masteryPointsToUnlock>
+      </acquireRequirement>
+  </DragonBall.AbilityTierKi_KaioKen>
+
+</Defs>

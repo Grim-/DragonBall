@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+  <ThoughtDef>
+      <defName>DragonWishOpinionBoost</defName>
+      <thoughtClass>Thought_MemorySocial</thoughtClass>
+      <durationDays>60</durationDays>
+      <stackLimit>1</stackLimit>
+      <stages>
+          <li>
+              <label>magically enhanced relations</label>
+              <baseOpinionOffset>100</baseOpinionOffset>
+          </li>
+      </stages>
+  </ThoughtDef>
+
+  <ThoughtDef>
+    <defName>DragonBallWonTournament</defName>
+    <durationDays>15</durationDays>
+    <stackLimit>5</stackLimit>
+    <stages>
+      <li>
+        <label>won martial arts tournament</label>
+        <description>I proved my strength in the tournament! My training has paid off!</description>
+        <baseMoodEffect>15</baseMoodEffect>
+      </li>
+    </stages>
+  </ThoughtDef>
+
+  <ThoughtDef>
+    <defName>DragonBallTookPartInTournament</defName>
+    <durationDays>15</durationDays>
+    <stackLimit>5</stackLimit>
+    <stages>
+      <li>
+        <label>took part in a martial arts tournament</label>
+        <description>I proved my strength in the tournament! I didn't win but I can get stronger!</description>
+        <baseMoodEffect>5</baseMoodEffect>
+      </li>
+    </stages>
+  </ThoughtDef>
+</Defs>

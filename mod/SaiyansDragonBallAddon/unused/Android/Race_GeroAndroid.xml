@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Defs>
+
+  <AlienRace.ThingDef_AlienRace ParentName="Human">
+      <defName>DBZAndroidRace</defName>
+      <label>android</label>
+      <description>An artificial human created by Dr. Gero, possessing incredible power and requiring no sustenance.</description>
+      <statBases>
+          <MarketValue>4375</MarketValue>
+          <PainShockThreshold>0.95</PainShockThreshold>
+          <ArmorRating_Blunt>0.4</ArmorRating_Blunt>
+          <ArmorRating_Sharp>0.4</ArmorRating_Sharp>
+          <ArmorRating_Heat>0.4</ArmorRating_Heat>
+          <ComfyTemperatureMin>-100</ComfyTemperatureMin>
+          <ComfyTemperatureMax>100</ComfyTemperatureMax>
+          <ToxicResistance>1.0</ToxicResistance>
+          <ToxicEnvironmentResistance>1.0</ToxicEnvironmentResistance>
+          <SR_KIEnergyRegenRateMultiplier>10</SR_KIEnergyRegenRateMultiplier>
+          <SR_KIDamageResistance>2</SR_KIDamageResistance>
+          <SR_KIDamageMultiplier>2</SR_KIDamageMultiplier>
+      </statBases>
+
+      <tools Inherit="False">
+  			<li>
+  				<label>left fist</label>
+  				<capacities>
+  					<li>Blunt</li>
+  				</capacities>
+  				<power>18</power>
+  				<cooldownTime>1</cooldownTime>
+  				<armorPenetration>0.1</armorPenetration>
+  				<linkedBodyPartsGroup>LeftHand</linkedBodyPartsGroup>
+  				<surpriseAttack>
+  					<extraMeleeDamages>
+  						<li>
+  							<def>Stun</def>
+  							<amount>14</amount>
+  						</li>
+  					</extraMeleeDamages>
+  				</surpriseAttack>
+  			</li>
+  			<li>
+  				<label>right fist</label>
+  				<capacities>
+  					<li>Blunt</li>
+  				</capacities>
+  				<power>18</power>
+  				<cooldownTime>1</cooldownTime>
+  				<linkedBodyPartsGroup>RightHand</linkedBodyPartsGroup>
+  				<armorPenetration>0.5</armorPenetration>
+  				<surpriseAttack>
+  					<extraMeleeDamages>
+  						<li>
+  							<def>Stun</def>
+  							<amount>14</amount>
+  						</li>
+  					</extraMeleeDamages>
+  				</surpriseAttack>
+  			</li>
+  		</tools>
+      <verbs>
+      </verbs>
+      <race>
+          <lifeExpectancy>1000</lifeExpectancy>
+          <baseBodySize>1</baseBodySize>
+          <baseHealthScale>1.2</baseHealthScale>
+          <baseHungerRate>0</baseHungerRate>
+          <foodType>None</foodType>
+      </race>
+
+      <alienRace>
+          <generalSettings>
+    				<humanRecipeImport>true</humanRecipeImport>
+    				<allowHumanBios>false</allowHumanBios>
+            <immuneToAge>true</immuneToAge>
+    				<alienPartGenerator Inherit="False">
+    					<bodyTypes>
+    						<li>Male</li>
+    						<li>Hulk</li>
+    						<li>Female</li>
+    						<li MayRequire="Ludeon.RimWorld.Biotech">Child</li>
+    						<li MayRequire="Ludeon.RimWorld.Biotech">Baby</li>
+    					</bodyTypes>
+    					<headTypes>
+        						<li>Male_AverageNormal</li>
+        						<li>Female_AverageNormal</li>
+    					</headTypes>
+    				</alienPartGenerator>
+    				<reproduction>
+            <maleFertilityAgeFactor>
+              <points>
+                <li>(14, 0)</li>
+                <li>(18, 0)</li>
+                <li>(70, 0)</li>
+                <li>(90, 0)</li>
+              </points>
+            </maleFertilityAgeFactor>
+            <femaleFertilityAgeFactor>
+              <points>
+                <li>(14, 0)</li>
+                <li>(20, 0)</li>
+                <li>(35, 0)</li>
+                <li>(50, 0)</li>
+                <li>(60, 0)</li>
+                <li>(65, 0)</li>
+                <li>(70, 0)</li>
+              </points>
+            </femaleFertilityAgeFactor>
+    				</reproduction>
+    			</generalSettings>
+          <raceRestriction>
+            <onlyUseRaceRestrictedXenotypes>true</onlyUseRaceRestrictedXenotypes>
+            <whiteXenotypeList>
+              <li>DBZAndroid</li>
+            </whiteXenotypeList>
+            <xenotypeList>
+              <li>DBZAndroid</li>
+            </xenotypeList>
+        </raceRestriction>
+          <graphicPaths>
+              <body>Things/Pawn/Humanlike/Bodies/</body>
+              <head>Things/Pawn/Humanlike/Heads/</head>
+              <skinShader>Cutout</skinShader>
+          </graphicPaths>
+      </alienRace>
+  </AlienRace.ThingDef_AlienRace>
+
+</Defs>

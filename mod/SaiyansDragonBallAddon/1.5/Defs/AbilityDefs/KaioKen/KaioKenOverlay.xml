@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+  <!-- Animation Definition -->
+  <TaranMagicFramework.AnimationDef ParentName="TMF_AnimationMoteBase">
+      <defName>SR_PowerUpOverlayKaioKen</defName>
+      <altitudeLayer>MoteOverhead</altitudeLayer>
+      <mote>
+          <solidTime>300</solidTime>
+      </mote>
+      <graphicData>
+          <texPath>Animations/GenericAura</texPath>
+          <drawSize>1</drawSize>
+          <drawOffset>(0, 0, 0.1)</drawOffset>
+          <shaderType>MoteGlow</shaderType>
+          <transparency>0.9</transparency>
+          <color>(255, 0, 0, 255)</color>
+      </graphicData>
+      <fpsRate>3</fpsRate>
+  </TaranMagicFramework.AnimationDef>
+
+</Defs>

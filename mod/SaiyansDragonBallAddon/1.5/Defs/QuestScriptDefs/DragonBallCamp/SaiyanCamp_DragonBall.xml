@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Defs>
+<QuestScriptDef>
+  <defName>DragonBall_DragonBallOpportunity</defName>
+  <rootSelectionWeight>1.0</rootSelectionWeight>
+  <rootMinPoints>350</rootMinPoints>
+  <canGiveRoyalFavor>true</canGiveRoyalFavor>
+  <expireDaysRange>4~8</expireDaysRange>
+  <successHistoryEvent MayRequire="Ludeon.RimWorld.Ideology">Raided_BanditCamp</successHistoryEvent>
+  <questNameRules>
+      <rulesStrings>
+        <li>questName->The [dragonball] [detection]</li>
+        <li>questName->[detection] of the [dragonball]</li>
+        <li>questName->[asker_nameDef]'s [dragonball] Hunt</li>
+        <li>dragonball->Dragon Ball</li>
+        <li>detection->Signal</li>
+        <li>detection->Reading</li>
+        <li>detection->Energy</li>
+        <li>detection->Presence</li>
+      </rulesStrings>
+  </questNameRules>
+  <questDescriptionRules>
+      <rulesStrings>
+        <li>questDescription->[asker_nameFull], a [asker_faction_leaderTitle] searching for the legendary Dragon Balls, has detected unusual energy readings. Their instruments indicate the presence of a Dragon Ball in a nearby area, but it's currently occupied by [siteFaction_pawnsPlural]. The site is controlled by [siteFaction_name].
+  \n[asker_nameDef] believes retrieving this Dragon Ball is crucial, as it could grant immense power if united with the others. However, [sitePart0_description].</li>
+
+        <li>questDescription->Our sensors have detected the distinct energy signature of a Dragon Ball in a nearby location. However, [siteFaction_pawnsPlural] from [siteFaction_name] have already established a presence there. [asker_nameFull], a [asker_faction_leaderTitle] who has been tracking these mystical artifacts, warns that [sitePart0_description].</li>
+
+        <li>questDescription->A Dragon Radar signal has led [asker_nameFull], [asker_faction_leaderTitle] of [asker_faction_name], to believe a Dragon Ball is hidden at a nearby site. Unfortunately, the area is currently occupied by [siteFaction_name] forces. [asker_nameDef] reports that [sitePart0_description]. The [siteFaction_pawnsPlural] must be dealt with to secure the Dragon Ball.</li>
+      </rulesStrings>
+  </questDescriptionRules>
+  <root Class="QuestNode_Sequence">
+    <nodes>
+      <li Class="QuestNode_SubScript">
+        <def>Util_RandomizePointsChallengeRating</def>
+        <parms>
+          <pointsFactorTwoStar>3</pointsFactorTwoStar>
+          <pointsFactorThreeStar>6</pointsFactorThreeStar>
+        </parms>
+      </li>
+      <li Class="QuestNode_SubScript">
+        <def>Util_AdjustPointsForDistantFight</def>
+      </li>
+      <li Class="QuestNode_GetMap" />
+
+      <li Class="QuestNode_GetPawn">
+        <storeAs>asker</storeAs>
+        <mustBeFactionLeader>true</mustBeFactionLeader>
+        <allowPermanentEnemyFaction>false</allowPermanentEnemyFaction>
+        <hostileWeight>0.15</hostileWeight>
+      </li>
+
+      <li Class="QuestNode_GetSiteTile">
+        <storeAs>siteTile</storeAs>
+        <preferCloserTiles>true</preferCloserTiles>
+      </li>
+
+      <li Class="QuestNode_GetSitePartDefsByTagsAndFaction">
+        <storeAs>sitePartDefs</storeAs>
+        <storeFactionAs>siteFaction</storeFactionAs>
+        <sitePartsTags>
+          <li><tag>BanditCamp</tag></li>
+        </sitePartsTags>
+        <mustBeHostileToFactionOf>$asker</mustBeHostileToFactionOf>
+      </li>
+
+      <li Class="QuestNode_GetDefaultSitePartsParams">
+        <tile>$siteTile</tile>
+        <faction>DragonBall_RaidingSaiyanBase</faction>
+        <sitePartDefs>$sitePartDefs</sitePartDefs>
+        <storeSitePartsParamsAs>sitePartsParams</storeSitePartsParamsAs>
+      </li>
+
+      <li Class="QuestNode_GetSiteThreatPoints">
+        <storeAs>sitePoints</storeAs>
+        <sitePartsParams>$sitePartsParams</sitePartsParams>
+      </li>
+      <li Class="QuestNode_SubScript">
+        <def>Util_GetDefaultRewardValueFromPoints</def>
+        <parms>
+          <!-- Use the actual threat points generated (some site parts define a minimum threshold) -->
+          <points>$sitePoints</points>
+        </parms>
+      </li>
+
+      <!-- Inflate reward value. Since we're basing the reward value on the threat points generated, we need to do this
+           even though the threat points was deflated from the input points already. -->
+      <li Class="QuestNode_Multiply">
+          <value1>$rewardValue</value1>
+          <value2>1.75</value2>
+          <storeAs>rewardValue</storeAs>
+      </li>
+
+      <li Class="QuestNode_SubScript">
+        <def>Util_GenerateSiteSaiyan</def>
+      </li>
+      <li Class="DragonBall.QuestNode_CreateRandomReward">
+        <countRange>1~2</countRange>
+        <rewardOptions>
+          <li>DragonBallOneStar</li>
+          <li>DragonBallTwoStar</li>
+          <li>DragonBallThreeStar</li>
+          <li>DragonBallFourStar</li>
+          <li>DragonBallFiveStar</li>
+          <li>DragonBallSixStar</li>
+          <li>DragonBallSevenStar</li>
+        </rewardOptions>
+      </li>
+      <li Class="QuestNode_SpawnWorldObjects">
+        <worldObjects>$site</worldObjects>
+      </li>
+
+      <li Class="QuestNode_WorldObjectTimeout">
+        <worldObject>$site</worldObject>
+        <isQuestTimeout>true</isQuestTimeout>
+        <delayTicks>$(randInt(12,28)*60000)</delayTicks>
+        <inSignalDisable>site.MapGenerated</inSignalDisable>
+        <destroyOnCleanup>true</destroyOnCleanup>
+        <node Class="QuestNode_Sequence">
+          <nodes>
+            <li Class="QuestNode_Letter">
+                <label TKey="LetterLabelQuestExpired">Quest expired: [resolvedQuestName]</label>
+                <text TKey="LetterTextQuestExpired">The Dragon Ball's energy signature has vanished from the area. The Saiyans must have moved it to another location. The quest [resolvedQuestName] has expired.</text>
+            </li>
+            <li Class="QuestNode_End">
+              <outcome>Fail</outcome>
+            </li>
+          </nodes>
+        </node>
+      </li>
+
+      <!-- If we enter and leave, the map is destroyed. Fail the quest. -->
+      <li Class="QuestNode_Signal">
+        <inSignal>site.Destroyed</inSignal>
+        <node Class="QuestNode_Sequence">
+          <nodes>
+            <li Class="QuestNode_Letter">
+                <label TKey="LetterLabelQuestFailed">Quest failed: [resolvedQuestName]</label>
+                <text TKey="LetterTextQuestFailed">Upon detecting our interest, the Saiyans have fled with the Dragon Ball, disappearing without a trace. The quest [resolvedQuestName] has ended.</text>
+            </li>
+            <li Class="QuestNode_End">
+              <outcome>Fail</outcome>
+            </li>
+          </nodes>
+        </node>
+      </li>
+
+
+      <li Class="QuestNode_Signal">
+        <inSignal>site.AllEnemiesDefeated</inSignal>
+        <node Class="QuestNode_Sequence">
+          <nodes>
+            <li Class="QuestNode_Notify_PlayerRaidedSomeone">
+              <getRaidersFromMapParent>$site</getRaidersFromMapParent>
+            </li>
+            <li Class="QuestNode_GiveRewards">
+              <parms>
+                <allowGoodwill>true</allowGoodwill>
+                <allowRoyalFavor>true</allowRoyalFavor>
+                <chosenPawnSignal>ChosenPawnForReward</chosenPawnSignal>
+              </parms>
+              <addCampLootReward>true</addCampLootReward>
+              <customLetterLabel TKey="LetterLabelPaymentArrived">Dragon Ball Acquired</customLetterLabel>
+              <customLetterText TKey="LetterTextPaymentArrived">You have successfully defeated the Saiyan camp and acquired the Dragon Ball!\n\n[asker_faction_name] has provided the promised reward for this legendary discovery.</customLetterText>
+              <nodeIfChosenPawnSignalUsed Class="QuestNode_Letter">
+                <letterDef>ChoosePawn</letterDef>
+                <label TKey="LetterLabelFavorReceiver">[asker_faction_royalFavorLabel]</label>
+                <text TKey="LetterTextFavorReceiver">These colonists participated in the victory for the quest [resolvedQuestName]. [asker_definite] wants to know who should receive the [royalFavorReward_amount] [asker_faction_royalFavorLabel] for this service.</text>
+                <useColonistsOnMap>$site</useColonistsOnMap>
+                <chosenPawnSignal>ChosenPawnForReward</chosenPawnSignal>
+              </nodeIfChosenPawnSignalUsed>
+            </li>
+          </nodes>
+        </node>
+      </li>
+      <li Class="QuestNode_End">
+        <inSignal>site.AllEnemiesDefeated</inSignal>
+        <outcome>Success</outcome>
+      </li>
+    </nodes>
+  </root>
+</QuestScriptDef>
+</Defs>

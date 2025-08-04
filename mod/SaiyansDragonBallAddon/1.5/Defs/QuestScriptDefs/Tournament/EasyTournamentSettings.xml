@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+  <DragonBall.TournamentSettings>
+    <defName>DefaultTournamentSettings</defName>
+    <label>Tournament Settings</label>
+
+    <!-- Base stat multipliers -->
+    <meleeSkillMultiplier>2</meleeSkillMultiplier>
+    <shootingSkillMultiplier>1.5</shootingSkillMultiplier>
+    <movementMultiplier>10</movementMultiplier>
+    <manipulationMultiplier>8</manipulationMultiplier>
+    <kiLevelMultiplier>15</kiLevelMultiplier>
+
+    <!-- Ability bonuses -->
+    <abilityBonuses>
+      <li>
+        <ability>SR_SuperSaiyan</ability>
+        <baseBonus>30</baseBonus>
+        <perLevelBonus>1</perLevelBonus>
+      </li>
+      <li>
+        <ability>SR_KaioKen</ability>
+        <baseBonus>10</baseBonus>
+        <perLevelBonus>1</perLevelBonus>
+      </li>
+    </abilityBonuses>
+
+    <!-- Reward settings -->
+    <baseXpGainWin>1000</baseXpGainWin>
+    <baseXpGainLoss>500</baseXpGainLoss>
+    <baseGoldReward>1000</baseGoldReward>
+    <dragonBallBaseChance>1</dragonBallBaseChance>
+    
+    <!-- Tournament balance -->
+    <minDifficultyVariance>0.8</minDifficultyVariance>
+    <maxDifficultyVariance>1.2</maxDifficultyVariance>
+  </DragonBall.TournamentSettings>
+</Defs>

@@ -15,7 +15,7 @@ namespace DragonBall
             Scribe_Values.Look(ref ticksInChamber, "ticksInChamber", 0);
         }
 
-        public override void Tick()
+        protected override void Tick()
         {
             base.Tick();
             //ticksInChamber++;

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+  <BackstoryDef>
+    <defName>RedRibbonSoldier</defName>
+    <title>Red Ribbon Android</title>
+    <titleShort>RR Android</titleShort>
+    <baseDesc>[PAWN_nameDef] served as one of Dr. Gero's combat androids, programmed for ultimate efficiency in battle. After the fall of the Red Ribbon Army, they continued to operate independently, driven by their core programming.</baseDesc>
+    <slot>Adulthood</slot>
+    <spawnCategories>
+      <li>RedRibbonAndroid</li>
+    </spawnCategories>
+    <skillGains>
+      <Shooting>6</Shooting>
+      <Melee>6</Melee>
+      <Construction>4</Construction>
+    </skillGains>
+    <workDisables>
+      <li>Caring</li>
+    </workDisables>
+  </BackstoryDef>
+
+</Defs>

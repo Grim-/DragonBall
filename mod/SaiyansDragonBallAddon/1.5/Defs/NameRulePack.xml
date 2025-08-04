@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Defs>
+<RulePackDef>
+  <defName>NamerFighterDragonBall</defName>
+  <rulePack>
+    <rulesStrings>
+      <!-- Saiyan Names (Vegetable Puns) -->
+      <li>name->Kakarot</li>
+      <li>name->Raditz</li>
+      <li>name->Nappa</li>
+      <li>name->Vegeta</li>
+      <li>name->Tarble</li>
+      <li>name->Broly</li>
+      <li>name->Paragus</li>
+      <li>name->Cabba</li>
+      <li>name->Caulifla</li>
+      <li>name->Kale</li>
+
+      <li>name->Little-green</li>
+      <li>name->Big-green</li>
+      <li>name->Super-kami-guru</li>
+      <li>name->Nail</li>
+      <!-- Earth Fighter Names -->
+      <li>name->Krillin</li>
+      <li>name->Yamcha</li>
+      <li>name->Tien</li>
+      <li>name->Chiaotzu</li>
+      <li>name->Roshi</li>
+      <li>name->Ox</li>
+
+      <!-- Namekian Names (Musical Instruments) -->
+      <li>name->Piccolo</li>
+      <li>name->Tambourine</li>
+      <li>name->Cymbal</li>
+      <li>name->Drum</li>
+      <li>name->Piano</li>
+      <li>name->Viola</li>
+
+      <!-- Frieza Race Names (Cold Puns) -->
+      <li>name->Frieza</li>
+      <li>name->Cooler</li>
+      <li>name->Cold</li>
+      <li>name->Frost</li>
+      <li>name->Chilled</li>
+
+      <!-- Demon Names -->
+      <li>name->Dabura</li>
+      <li>name->Mira</li>
+      <li>name->Towa</li>
+      <li>name->Demigra</li>
+
+      <!-- God Names -->
+      <li>name->Beerus</li>
+      <li>name->Champa</li>
+      <li>name->Whis</li>
+      <li>name->Vados</li>
+
+      <!-- Patterns for generating new names -->
+      <li>saiyanPattern->[saiyanFirst][saiyanEnd]</li>
+      <li>saiyanFirst->Asp</li>
+      <li>saiyanFirst->Cabb</li>
+      <li>saiyanFirst->Lett</li>
+      <li>saiyanFirst->Ruta</li>
+      <li>saiyanFirst->Spin</li>
+      <li>saiyanEnd->age</li>
+      <li>saiyanEnd->ach</li>
+      <li>saiyanEnd->uce</li>
+      <li>saiyanEnd->ot</li>
+      <li>saiyanEnd->ita</li>
+
+      <!-- Title patterns -->
+      <li>title->the Saiyan</li>
+      <li>title->the Warrior</li>
+      <li>title->the Destroyer</li>
+      <li>title->the Namekian</li>
+      <li>title->the Emperor</li>
+      <li>title->the Legend</li>
+      <li>title->the Guardian</li>
+      <li>title->the Master</li>
+      <li>title->the Supreme</li>
+
+      <!-- Full name patterns -->
+      <li>fullname->[name]</li>
+      <li>fullname->[name] [title]</li>
+      <li>fullname->[saiyanPattern]</li>
+      <li>fullname->[saiyanPattern] [title]</li>
+    </rulesStrings>
+  </rulePack>
+</RulePackDef>
+
+<RulePackDef>
+    <defName>TournamentFight</defName>
+    <rulePack>
+        <rulesStrings>
+            <li>r_logentry->[winner_name] defeated [loser_name] in a tournament match.</li>
+            <li>r_logentry->[winner_name] emerged victorious against [loser_name] in tournament combat.</li>
+            <li>r_logentry->[winner_name] triumphed over [loser_name] in their tournament battle.</li>
+        </rulesStrings>
+    </rulePack>
+</RulePackDef>
+
+<RulePackDef>
+    <defName>TournamentFightKaioKen</defName>
+    <rulePack>
+        <rulesStrings>
+            <li>r_logentry->[winner_name] unleashed Kaio-Ken to defeat [loser_name].</li>
+            <li>r_logentry->[winner_name]'s Kaio-Ken proved too much for [loser_name].</li>
+        </rulesStrings>
+    </rulePack>
+</RulePackDef>
+
+<RulePackDef>
+    <defName>TournamentFightSS</defName>
+    <rulePack>
+        <rulesStrings>
+            <li>r_logentry->[winner_name] transformed into a Super Saiyan to overcome [loser_name].</li>
+            <li>r_logentry->[winner_name]'s Super Saiyan power overwhelmed [loser_name].</li>
+        </rulesStrings>
+    </rulePack>
+</RulePackDef>
+
+<RulePackDef>
+    <defName>TournamentFightSS2</defName>
+    <rulePack>
+        <rulesStrings>
+            <li>r_logentry->[winner_name] ascended to Super Saiyan 2 to defeat [loser_name].</li>
+            <li>r_logentry->[winner_name]'s Super Saiyan 2 transformation crushed [loser_name].</li>
+        </rulesStrings>
+    </rulePack>
+</RulePackDef>
+
+<RulePackDef>
+    <defName>TournamentFightTrueSS</defName>
+    <rulePack>
+        <rulesStrings>
+            <li>r_logentry->[winner_name] revealed their True Super Saiyan form to defeat [loser_name].</li>
+            <li>r_logentry->[winner_name]'s True Super Saiyan power dominated [loser_name].</li>
+        </rulesStrings>
+    </rulePack>
+</RulePackDef>
+
+<RulePackDef>
+    <defName>TournamentFightLegendary</defName>
+    <rulePack>
+        <rulesStrings>
+            <li>r_logentry->[winner_name], the Legendary Saiyan, crushed [loser_name] in combat.</li>
+            <li>r_logentry->[winner_name] demonstrated their legendary power against [loser_name].</li>
+        </rulesStrings>
+    </rulePack>
+</RulePackDef>
+<RulePackDef>
+    <defName>DBZAndroidNames</defName>
+    <include>
+      <li>GlobalBasicNames</li>
+    </include>
+    <rulePack>
+      <rulesStrings>
+        <li>name->Android-[numbersDigits]</li>
+      </rulesStrings>
+      <rulesFiles>
+        <li>numbersDigits->digits</li>
+      </rulesFiles>
+    </rulePack>
+  </RulePackDef>
+</Defs>

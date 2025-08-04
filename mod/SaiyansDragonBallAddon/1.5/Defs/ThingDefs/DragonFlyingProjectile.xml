@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+  <ThingDef ParentName="BaseBullet">
+    <defName>DragonBallFlying</defName>
+    <label>blood bullet</label>
+      <thingClass>DragonBall.DragonBallFlying</thingClass>
+      <graphicData>
+          <graphicClass>Graphic_Single</graphicClass>
+          <texPath>Things/DragonBalls/DragonBall1</texPath>
+          <drawSize>1</drawSize>
+      </graphicData>
+    <projectile>
+      <damageDef>Blunt</damageDef>
+      <damageAmountBase>0</damageAmountBase>
+      <speed>3</speed>
+    </projectile>
+  </ThingDef>
+</Defs>

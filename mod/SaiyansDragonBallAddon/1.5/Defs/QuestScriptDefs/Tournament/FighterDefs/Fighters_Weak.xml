@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+    <!-- Tien -->
+  <TournamentFighterDef>
+    <defName>Tien</defName>
+    <Name>Tien Shinhan</Name>
+    <MeleeSkill>15</MeleeSkill>
+    <ShootingSkill>16</ShootingSkill>
+    <MeleePassion>Major</MeleePassion>
+    <MovementCapacity>1.2</MovementCapacity>
+    <ManipulationCapacity>1.1</ManipulationCapacity>
+    <KiLevel>100</KiLevel>
+    <HasKaioKen>false</HasKaioKen>
+    <KaioKenLevel>0</KaioKenLevel>
+    <HasSuperSaiyan>false</HasSuperSaiyan>
+    <SuperSaiyanLevel>0</SuperSaiyanLevel>
+    <HasSuperSaiyan2>false</HasSuperSaiyan2>
+    <SuperSaiyan2Level>0</SuperSaiyan2Level>
+    <HasTrueSuperSaiyan>false</HasTrueSuperSaiyan>
+    <TrueSuperSaiyanLevel>0</TrueSuperSaiyanLevel>
+    <IsLegendary>false</IsLegendary>
+        <ScoreBonus>0</ScoreBonus>
+  </TournamentFighterDef>
+
+  <!-- Yamcha -->
+  <TournamentFighterDef>
+    <defName>Yamcha</defName>
+    <Name>Yamcha</Name>
+    <MeleeSkill>12</MeleeSkill>
+    <ShootingSkill>13</ShootingSkill>
+    <MeleePassion>Major</MeleePassion>
+    <MovementCapacity>1.1</MovementCapacity>
+    <ManipulationCapacity>1.0</ManipulationCapacity>
+    <KiLevel>10</KiLevel>
+    <HasKaioKen>false</HasKaioKen>
+    <KaioKenLevel>0</KaioKenLevel>
+    <HasSuperSaiyan>false</HasSuperSaiyan>
+    <SuperSaiyanLevel>0</SuperSaiyanLevel>
+    <HasSuperSaiyan2>false</HasSuperSaiyan2>
+    <SuperSaiyan2Level>0</SuperSaiyan2Level>
+    <HasTrueSuperSaiyan>false</HasTrueSuperSaiyan>
+    <TrueSuperSaiyanLevel>0</TrueSuperSaiyanLevel>
+    <IsLegendary>false</IsLegendary>
+    <ScoreBonus>0</ScoreBonus>
+  </TournamentFighterDef>
+
+  <!-- Chiaotzu -->
+  <TournamentFighterDef>
+    <defName>Chiaotzu</defName>
+    <Name>Chiaotzu</Name>
+    <MeleeSkill>10</MeleeSkill>
+    <ShootingSkill>12</ShootingSkill>
+    <MeleePassion>Minor</MeleePassion>
+    <MovementCapacity>1.0</MovementCapacity>
+    <ManipulationCapacity>1.2</ManipulationCapacity>
+    <KiLevel>90</KiLevel>
+    <HasKaioKen>false</HasKaioKen>
+    <KaioKenLevel>0</KaioKenLevel>
+    <HasSuperSaiyan>false</HasSuperSaiyan>
+    <SuperSaiyanLevel>0</SuperSaiyanLevel>
+    <HasSuperSaiyan2>false</HasSuperSaiyan2>
+    <SuperSaiyan2Level>0</SuperSaiyan2Level>
+    <HasTrueSuperSaiyan>false</HasTrueSuperSaiyan>
+    <TrueSuperSaiyanLevel>0</TrueSuperSaiyanLevel>
+    <IsLegendary>false</IsLegendary>
+    <ScoreBonus>0</ScoreBonus>
+  </TournamentFighterDef>
+
+  <!-- Pikkon -->
+  <TournamentFighterDef>
+    <defName>Pikkon</defName>
+    <Name>Pikkon</Name>
+    <MeleeSkill>17</MeleeSkill>
+    <ShootingSkill>16</ShootingSkill>
+    <MeleePassion>Major</MeleePassion>
+    <MovementCapacity>1.4</MovementCapacity>
+    <ManipulationCapacity>1.2</ManipulationCapacity>
+    <KiLevel>200</KiLevel>
+    <HasKaioKen>false</HasKaioKen>
+    <KaioKenLevel>0</KaioKenLevel>
+    <HasSuperSaiyan>false</HasSuperSaiyan>
+    <SuperSaiyanLevel>0</SuperSaiyanLevel>
+    <HasSuperSaiyan2>false</HasSuperSaiyan2>
+    <SuperSaiyan2Level>0</SuperSaiyan2Level>
+    <HasTrueSuperSaiyan>false</HasTrueSuperSaiyan>
+    <TrueSuperSaiyanLevel>0</TrueSuperSaiyanLevel>
+    <IsLegendary>false</IsLegendary>
+        <ScoreBonus>0</ScoreBonus>
+  </TournamentFighterDef>
+</Defs>

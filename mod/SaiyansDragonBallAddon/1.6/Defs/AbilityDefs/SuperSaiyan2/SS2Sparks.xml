@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+<TaranMagicFramework.AnimationDef ParentName="TMF_AnimationMoteBase">
+  <defName>SR_PowerUpOverlaySuperSaiyanIISparks</defName>
+  <altitudeLayer>MoteOverhead</altitudeLayer>
+  <mote>
+    <solidTime>30</solidTime>
+  </mote>
+  <graphicData>
+    <texPath>Animations/lightning_spark</texPath>
+    <drawSize>2</drawSize>
+    <drawOffset>(0, 0, 0.1)</drawOffset>
+    <shaderType>MoteGlow</shaderType>
+    <color>(0, 0, 255)</color>
+    <transparency>1</transparency>
+  </graphicData>
+  <fpsRate>2</fpsRate>
+</TaranMagicFramework.AnimationDef>
+</Defs>

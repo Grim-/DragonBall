@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+    <TaranMagicFramework.AnimationDef ParentName="TMF_AnimationMoteBase">
+  		<defName>BeamClashMeetingPoint</defName>
+  		<altitudeLayer>MoteOverhead</altitudeLayer>
+  		<mote>
+  			<solidTime>99999</solidTime>
+  		</mote>
+  		<graphicData>
+  			<texPath>Animations/Ki_BlastCharging</texPath>
+  			<drawSize>3</drawSize>
+  			<shaderType>MoteGlow</shaderType>
+  		</graphicData>
+  		<fpsRate>3</fpsRate>
+  		<maxLoopCount>99999</maxLoopCount>
+  	</TaranMagicFramework.AnimationDef>
+</Defs>

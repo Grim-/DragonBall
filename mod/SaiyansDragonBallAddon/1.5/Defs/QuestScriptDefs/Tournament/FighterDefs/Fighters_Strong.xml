@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+  <!-- Goku -->
+  <TournamentFighterDef>
+    <defName>Goku</defName>
+    <Name>Son Goku</Name>
+    <FighterKind>SR_Saiyan</FighterKind>
+    <MeleeSkill>20</MeleeSkill>
+    <ShootingSkill>15</ShootingSkill>
+    <MeleePassion>Major</MeleePassion>
+    <MovementCapacity>1.5</MovementCapacity>
+    <ManipulationCapacity>1.2</ManipulationCapacity>
+    <KiLevel>150</KiLevel>
+    <HasKaioKen>true</HasKaioKen>
+    <KaioKenLevel>20</KaioKenLevel>
+    <HasSuperSaiyan>true</HasSuperSaiyan>
+    <SuperSaiyanLevel>3</SuperSaiyanLevel>
+    <HasSuperSaiyan2>true</HasSuperSaiyan2>
+    <SuperSaiyan2Level>2</SuperSaiyan2Level>
+    <HasTrueSuperSaiyan>true</HasTrueSuperSaiyan>
+    <TrueSuperSaiyanLevel>1</TrueSuperSaiyanLevel>
+    <IsLegendary>false</IsLegendary>
+  </TournamentFighterDef>
+
+  <!-- Vegeta -->
+  <TournamentFighterDef>
+    <defName>Vegeta</defName>
+    <Name>Prince Vegeta</Name>
+    <MeleeSkill>19</MeleeSkill>
+    <FighterKind>SR_Saiyan</FighterKind>
+    <ShootingSkill>17</ShootingSkill>
+    <MeleePassion>Major</MeleePassion>
+    <MovementCapacity>1.4</MovementCapacity>
+    <ManipulationCapacity>1.2</ManipulationCapacity>
+    <KiLevel>150</KiLevel>
+    <HasKaioKen>false</HasKaioKen>
+    <KaioKenLevel>0</KaioKenLevel>
+    <HasSuperSaiyan>true</HasSuperSaiyan>
+    <SuperSaiyanLevel>2</SuperSaiyanLevel>
+    <HasSuperSaiyan2>true</HasSuperSaiyan2>
+    <SuperSaiyan2Level>1</SuperSaiyan2Level>
+    <HasTrueSuperSaiyan>false</HasTrueSuperSaiyan>
+    <TrueSuperSaiyanLevel>0</TrueSuperSaiyanLevel>
+    <IsLegendary>false</IsLegendary>
+  </TournamentFighterDef>
+
+  <!-- Broly -->
+  <TournamentFighterDef>
+    <defName>Broly</defName>
+    <Name>Broly</Name>
+    <MeleeSkill>18</MeleeSkill>
+    <FighterKind>SR_Saiyan</FighterKind>
+    <ShootingSkill>12</ShootingSkill>
+    <MeleePassion>Major</MeleePassion>
+    <MovementCapacity>1.3</MovementCapacity>
+    <ManipulationCapacity>1.1</ManipulationCapacity>
+    <KiLevel>180</KiLevel>
+    <HasKaioKen>false</HasKaioKen>
+    <KaioKenLevel>0</KaioKenLevel>
+    <HasSuperSaiyan>true</HasSuperSaiyan>
+    <SuperSaiyanLevel>1</SuperSaiyanLevel>
+    <HasSuperSaiyan2>false</HasSuperSaiyan2>
+    <SuperSaiyan2Level>0</SuperSaiyan2Level>
+    <HasTrueSuperSaiyan>false</HasTrueSuperSaiyan>
+    <TrueSuperSaiyanLevel>0</TrueSuperSaiyanLevel>
+    <IsLegendary>true</IsLegendary>
+        <ScoreBonus>100</ScoreBonus>
+  </TournamentFighterDef>
+
+  <!-- Gohan -->
+  <TournamentFighterDef>
+    <defName>Gohan</defName>
+    <Name>Son Gohan</Name>
+    <MeleeSkill>17</MeleeSkill>
+    <FighterKind>SR_HalfSaiyan</FighterKind>
+    <ShootingSkill>16</ShootingSkill>
+    <MeleePassion>Major</MeleePassion>
+    <MovementCapacity>1.4</MovementCapacity>
+    <ManipulationCapacity>1.2</ManipulationCapacity>
+    <KiLevel>130</KiLevel>
+    <HasKaioKen>false</HasKaioKen>
+    <KaioKenLevel>0</KaioKenLevel>
+    <HasSuperSaiyan>true</HasSuperSaiyan>
+    <SuperSaiyanLevel>2</SuperSaiyanLevel>
+    <HasSuperSaiyan2>true</HasSuperSaiyan2>
+    <SuperSaiyan2Level>2</SuperSaiyan2Level>
+    <HasTrueSuperSaiyan>false</HasTrueSuperSaiyan>
+    <TrueSuperSaiyanLevel>0</TrueSuperSaiyanLevel>
+    <IsLegendary>false</IsLegendary>
+        <ScoreBonus>19</ScoreBonus>
+  </TournamentFighterDef>
+
+  <!-- Piccolo -->
+  <TournamentFighterDef>
+    <defName>Piccolo</defName>
+    <Name>Piccolo</Name>
+    <MeleeSkill>18</MeleeSkill>
+    <FighterKind>Human</FighterKind>
+    <ShootingSkill>17</ShootingSkill>
+    <MeleePassion>Major</MeleePassion>
+    <MovementCapacity>1.3</MovementCapacity>
+    <ManipulationCapacity>1.4</ManipulationCapacity>
+    <KiLevel>120</KiLevel>
+    <HasKaioKen>false</HasKaioKen>
+    <KaioKenLevel>0</KaioKenLevel>
+    <HasSuperSaiyan>false</HasSuperSaiyan>
+    <SuperSaiyanLevel>0</SuperSaiyanLevel>
+    <HasSuperSaiyan2>false</HasSuperSaiyan2>
+    <SuperSaiyan2Level>0</SuperSaiyan2Level>
+    <HasTrueSuperSaiyan>false</HasTrueSuperSaiyan>
+    <TrueSuperSaiyanLevel>0</TrueSuperSaiyanLevel>
+    <IsLegendary>false</IsLegendary>
+        <ScoreBonus>20</ScoreBonus>
+  </TournamentFighterDef>
+
+  <!-- Frieza -->
+<TournamentFighterDef>
+  <defName>Frieza</defName>
+  <Name>Frieza</Name>
+  <FighterKind>Human</FighterKind>
+  <MeleeSkill>18</MeleeSkill>
+  <ShootingSkill>19</ShootingSkill>
+  <MeleePassion>Major</MeleePassion>
+  <MovementCapacity>1.4</MovementCapacity>
+  <ManipulationCapacity>1.3</ManipulationCapacity>
+  <KiLevel>190</KiLevel>
+  <HasKaioKen>false</HasKaioKen>
+  <KaioKenLevel>0</KaioKenLevel>
+  <HasSuperSaiyan>false</HasSuperSaiyan>
+  <SuperSaiyanLevel>0</SuperSaiyanLevel>
+  <HasSuperSaiyan2>false</HasSuperSaiyan2>
+  <SuperSaiyan2Level>0</SuperSaiyan2Level>
+  <HasTrueSuperSaiyan>false</HasTrueSuperSaiyan>
+  <TrueSuperSaiyanLevel>0</TrueSuperSaiyanLevel>
+  <IsLegendary>false</IsLegendary>
+      <ScoreBonus>100</ScoreBonus>
+</TournamentFighterDef>
+</Defs>

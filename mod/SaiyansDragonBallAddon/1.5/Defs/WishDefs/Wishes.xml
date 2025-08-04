@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+
+  <DragonBall.WishDef>
+    <defName>ResurrectWishDef</defName>
+    <label>I wish to bring back the fallen!</label>
+    <category>Health</category>
+    <description>Resurrect a deceased colonist back to life.</description>
+    <wishClass>DragonBall.ResurrectWish</wishClass>
+  </DragonBall.WishDef>
+
+  <DragonBall.WishDef>
+    <defName>ResurrectAllWishDef</defName>
+    <label>I wish to bring everyone back to life!</label>
+    <category>Health</category>
+    <description>Resurrect all deceased colonists back to life.</description>
+    <wishClass>DragonBall.ResurrectAllWish</wishClass>
+  </DragonBall.WishDef>
+
+  <DragonBall.WishDef>
+    <defName>RestoreTheLand</defName>
+    <label>I wish to restore this land to its former beauty!</label>
+    <category>Map</category>
+    <description>Removes all negative map conditions and weathers, including pollution.</description>
+    <wishClass>DragonBall.MapConditionWish</wishClass>
+  </DragonBall.WishDef>
+
+  <DragonBall.WishDef>
+      <defName>HealColonistPawn</defName>
+      <label>I wish to heal a friend!</label>
+      <category>Health</category>
+      <description>Heals all health problems.</description>
+      <wishClass>DragonBall.HealWish</wishClass>
+    </DragonBall.WishDef>
+
+  <DragonBall.ItemWishDef>
+    <defName>ItemWishDef</defName>
+    <label>I wish for great riches!</label>
+    <description>Receive valuable treasures.</description>
+    <wishClass>DragonBall.ItemWish</wishClass>
+    <category>Items</category>
+    <iconPath>Things/Item/SaibamenSeed</iconPath>
+    <itemOptions>
+      <li>
+        <thing>Silver</thing>
+        <count>7000</count>
+      </li>
+      <li>
+        <thing>Gold</thing>
+        <count>700</count>
+      </li>
+      <li>
+        <thing>DragonBallSenzuBean</thing>
+        <count>10</count>
+      </li>
+    </itemOptions>
+  </DragonBall.ItemWishDef>
+
+  <DragonBall.ItemWishDef>
+    <defName>PowerArmorWish</defName>
+    <label>I wish for the ultimate armor!</label>
+    <description>Receive a complete set of legendary-quality power armor.</description>
+    <category>Items</category>
+    <wishClass>DragonBall.ItemWish</wishClass>
+    <itemOptions>
+      <li>
+        <thing>Apparel_PowerArmor</thing>
+        <quality>Legendary</quality>
+        <count>1</count>
+      </li>
+      <li>
+        <thing>Apparel_PowerArmorHelmet</thing>
+        <quality>Legendary</quality>
+        <count>1</count>
+      </li>
+    </itemOptions>
+  </DragonBall.ItemWishDef>
+
+  <DragonBall.TraitWishDef>
+    <defName>BeautifulTraitWish</defName>
+    <label>I wish to be beautiful!</label>
+    <description>Gain the Beautiful trait.</description>
+    <wishClass>DragonBall.TraitWish</wishClass>
+    <category>Items</category>
+    <iconPath>Things/Item/SaibamenSeed</iconPath>
+    <trait>Beauty</trait>
+  </DragonBall.TraitWishDef>
+
+  <DragonBall.TraitWishDef>
+    <defName>ToughTraitWish</defName>
+    <label>I wish to become tough as steel!</label>
+    <description>Gain the Tough trait, increasing your durability.</description>
+    <wishClass>DragonBall.TraitWish</wishClass>
+    <category>Items</category>
+    <iconPath>Things/Item/SaibamenSeed</iconPath>
+    <trait>Tough</trait>
+  </DragonBall.TraitWishDef>
+
+  <DragonBall.RelationsWishDef>
+    <defName>ImproveRelationsWish</defName>
+    <label>I wish for harmony among us all!</label>
+    <description>Improve relationships with all members of the colony.</description>
+    <thoughtDef>DragonWishOpinionBoost</thoughtDef>
+    <wishClass>DragonBall.RelationsWish</wishClass>
+  </DragonBall.RelationsWishDef>
+
+  <DragonBall.ResearchWishDef>
+    <defName>ResearchBoostWish</defName>
+    <label>I wish for knowledge!</label>
+    <description>Gain 70% completion towards your current research project.</description>
+    <researchPercentage>0.7</researchPercentage>
+    <wishClass>DragonBall.ResearchWish</wishClass>
+  </DragonBall.ResearchWishDef>
+
+  <DragonBall.WishDef>
+    <defName>WishImmortality</defName>
+    <label>I wish to be 21 and live forever!</label>
+    <category>Health</category>
+    <description>Increases lifespan and sets age to 21.</description>
+    <wishClass>DragonBall.ImmortalityWish</wishClass>
+  </DragonBall.WishDef>
+
+  <DragonBall.HediffWishDef>
+    <defName>WishBlessingOfFullBelly</defName>
+    <label>I wish to not go hungry for a year!</label>
+    <description>Pawn gains a health condition that periodically provides food.</description>
+    <hediff>DragonBallBlessingOfFullBelly</hediff>
+    <wishClass>DragonBall.HediffWish</wishClass>
+  </DragonBall.HediffWishDef>
+
+  <DragonBall.QuestWishDef>
+      <defName>WishForGrandTournament</defName>
+      <label>Quest Wish</label>
+      <description>Summon a specific quest to appear.</description>
+      <wishClass>DragonBall.QuestWish</wishClass>
+      <showQuestName>true</showQuestName>
+      <availableQuests>
+          <li>
+              <quest>OpportunitySite_ItemStash</quest>
+              <questLabel>I want to find a stash!</questLabel>
+              <questDescription>Triggers an ItemStash quest</questDescription>
+          </li>
+          <li>
+              <quest>TradeRequest</quest>
+              <questLabel>Trading Opportunity</questLabel>
+              <questDescription>Engage in trade with nearby settlements</questDescription>
+          </li>
+          <li>
+              <quest>OtherWorldTournament</quest>
+              <questLabel>Other World Tournament</questLabel>
+              <questDescription>Participate in the standard tournament</questDescription>
+          </li>
+          <li>
+              <quest>KingKaiTraining</quest>
+              <questLabel>Train with King Kai</questLabel>
+              <questDescription>Triggers an ItemStash quest</questDescription>
+          </li>
+          <li>
+              <quest>OtherWorldTournamentLong</quest>
+              <questLabel>Extended Other World Tournament</questLabel>
+              <questDescription>Participate in the extended tournament version, more wins are required but you gain more rewards.</questDescription>
+          </li>
+          <li>
+              <quest>DragonBall_DragonBallOpportunity</quest>
+              <questLabel>Dragon Ball Hunt</questLabel>
+              <questDescription>Search for the mystical Dragon Balls</questDescription>
+          </li>
+      </availableQuests>
+  </DragonBall.QuestWishDef>
+
+</Defs>

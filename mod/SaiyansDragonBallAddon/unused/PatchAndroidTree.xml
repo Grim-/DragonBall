@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Patch>
+  <Operation Class="PatchOperationAdd">
+    <xpath>Defs/TaranMagicFramework.AbilityTabDef[defName="SR_KiTab"]/abilityClasses</xpath>
+    <value>
+      <li>SR_AndroidClass</li>
+    </value>
+  </Operation>
+
+  <Operation Class="PatchOperationAdd">
+    <xpath>Defs/TaranMagicFramework.AbilityDef[defName="SR_KIBlast"]/abilityTrees</xpath>
+    <value>
+      <li>SR_AndroidAbilityTree</li>
+    </value>
+  </Operation>
+
+  <Operation Class="PatchOperationAdd">
+    <xpath>Defs/TaranMagicFramework.AbilityDef[defName="SR_Disc"]/abilityTrees</xpath>
+    <value>
+      <li>SR_AndroidAbilityTree</li>
+    </value>
+  </Operation>
+
+  <Operation Class="PatchOperationAdd">
+    <xpath>Defs/TaranMagicFramework.AbilityDef[defName="SR_Flight"]/abilityTrees</xpath>
+    <value>
+      <li>SR_AndroidAbilityTree</li>
+    </value>
+  </Operation>
+
+  <Operation Class="PatchOperationAdd">
+    <xpath>Defs/TaranMagicFramework.AbilityDef[defName="SR_PowerUp"]/abilityTrees</xpath>
+    <value>
+      <li>SR_AndroidAbilityTree</li>
+    </value>
+  </Operation>
+
+  <Operation Class="PatchOperationAdd">
+    <xpath>Defs/TaranMagicFramework.AbilityDef[defName="SR_KIBeam"]/abilityTrees</xpath>
+    <value>
+      <li>SR_AndroidAbilityTree</li>
+    </value>
+  </Operation>
+
+</Patch>

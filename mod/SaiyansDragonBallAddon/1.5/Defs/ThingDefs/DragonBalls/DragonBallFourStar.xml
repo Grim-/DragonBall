@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+  <ThingDef ParentName="ResourceBase">
+    <defName>DragonBallFourStar</defName>
+    <label>dragon ball (four star)</label>
+    <description>A mysterious orange crystalline sphere with stars inside it. Ancient legends speak of wish-granting powers when all seven are gathered.</description>
+    <graphicData>
+      <texPath>Things/DragonBalls/DragonBall4</texPath>
+      <graphicClass>Graphic_Single</graphicClass>
+    </graphicData>
+        <orderedTakeGroup>Medicine</orderedTakeGroup>
+    <resourceReadoutPriority>First</resourceReadoutPriority>
+    <soundInteract>Metal_Drop</soundInteract>
+    <soundDrop>Metal_Drop</soundDrop>
+    <statBases>
+      <MaxHitPoints>100</MaxHitPoints>
+      <MarketValue>2000</MarketValue>
+      <Mass>2</Mass>
+      <Flammability>0</Flammability>
+      <DeteriorationRate>0</DeteriorationRate>
+    </statBases>
+    <thingCategories>
+      <li>DragonBallsCategory</li>
+    </thingCategories>
+    <tradeTags>
+      <li>ExoticMisc</li>
+      <li>Artifact</li>
+    </tradeTags>
+    <thingSetMakerTags>
+      <li>RewardSpecial</li>
+    </thingSetMakerTags>
+    <techLevel>Spacer</techLevel>
+    <comps>
+      <li Class="CompProperties_Forbiddable"/>
+    </comps>
+  </ThingDef>
+</Defs>

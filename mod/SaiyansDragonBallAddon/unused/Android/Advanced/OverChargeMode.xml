@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+  <TaranMagicFramework.AbilityDef ParentName="SR_AndroidBasicSkill">
+      <defName>SR_OverchargeMode</defName>
+      <label>Overcharge Mode</label>
+      <abilityTrees>
+          <li>SR_AndroidAbilityTree</li>
+      </abilityTrees>
+      <abilityClass>SaiyanMod.KIAbility_PowerUp</abilityClass>
+      <abilityTiers>
+          <li Class="SaiyanMod.AbilityTierKIDef">SR_OverchargeMode_Tier1</li>
+          <li Class="SaiyanMod.AbilityTierKIDef">SR_OverchargeMode_Tier2</li>
+          <li Class="SaiyanMod.AbilityTierKIDef">SR_OverchargeMode_Tier3</li>
+      </abilityTiers>
+  </TaranMagicFramework.AbilityDef>
+
+  <SaiyanMod.AbilityTierKIDef Name="SR_OverchargeMode_Tier">
+      <defName>SR_OverchargeMode_Tier1</defName>
+      <label>Overcharge Mode I</label>
+      <description>Temporarily overclocks android systems for enhanced performance.</description>
+      <acquireRequirement>
+          <skillPointsToUnlock>1</skillPointsToUnlock>
+      </acquireRequirement>
+      <energyCost>50</energyCost>
+      <cooldownTicks>3000</cooldownTicks>
+      <overlayProps>
+  			<overlay>SR_PowerUpOverlay</overlay>
+  			<scale>1</scale>
+  		</overlayProps>
+      <hediffProps><hediff>SR_OverchargeModeI</hediff></hediffProps>
+      <iconTexPath>UI/Icons/OverchargeMode</iconTexPath>
+  </SaiyanMod.AbilityTierKIDef>
+
+  <SaiyanMod.AbilityTierKIDef ParentName="SR_OverchargeMode_Tier">
+      <defName>SR_OverchargeMode_Tier2</defName>
+      <label>Overcharge Mode II</label>
+      <description>Enhanced overclocking capabilities for superior performance.</description>
+      <acquireRequirement>
+          <skillPointsToUnlock>1</skillPointsToUnlock>
+      </acquireRequirement>
+      <energyCost>75</energyCost>
+      <cooldownTicks>3000</cooldownTicks>
+      <overlayProps>
+  			<overlay>SR_PowerUpOverlay</overlay>
+  			<scale>1</scale>
+  		</overlayProps>
+      <hediffProps><hediff>SR_OverchargeModeII</hediff></hediffProps>
+      <iconTexPath>UI/Icons/OverchargeMode</iconTexPath>
+  </SaiyanMod.AbilityTierKIDef>
+
+  <SaiyanMod.AbilityTierKIDef ParentName="SR_OverchargeMode_Tier">
+      <defName>SR_OverchargeMode_Tier3</defName>
+      <label>Overcharge Mode III</label>
+      <description>Maximum overclocking potential unlocked for peak android performance.</description>
+      <acquireRequirement>
+          <skillPointsToUnlock>1</skillPointsToUnlock>
+      </acquireRequirement>
+      <energyCost>100</energyCost>
+      <cooldownTicks>3000</cooldownTicks>
+      <overlayProps>
+  			<overlay>SR_PowerUpOverlay</overlay>
+  			<scale>1</scale>
+  		</overlayProps>
+      <hediffProps><hediff>SR_OverchargeModeIII</hediff></hediffProps>
+      <iconTexPath>UI/Icons/OverchargeMode</iconTexPath>
+  </SaiyanMod.AbilityTierKIDef>
+
+  <HediffDef>
+        <defName>SR_OverchargeModeI</defName>
+        <label>Overcharge Mode I</label>
+        <description>Android systems operating above normal parameters. Enhanced performance at the cost of increased energy consumption.</description>
+        <stages>
+            <li>
+                <statOffsets>
+                    <MoveSpeed>1.0</MoveSpeed>
+                    <SR_KIEnergyRegenRateMultiplier>0.5</SR_KIEnergyRegenRateMultiplier>
+                </statOffsets>
+                <statFactors>
+                    <MeleeDodgeChance>1.25</MeleeDodgeChance>
+                    <MeleeHitChance>1.25</MeleeHitChance>
+                    <WorkSpeedGlobal>1.15</WorkSpeedGlobal>
+                </statFactors>
+                <capMods>
+                    <li>
+                        <capacity>Consciousness</capacity>
+                        <offset>0.15</offset>
+                    </li>
+                </capMods>
+            </li>
+        </stages>
+    </HediffDef>
+
+    <HediffDef>
+        <defName>SR_OverchargeModeII</defName>
+        <label>Overcharge Mode II</label>
+        <description>Android systems operating at high efficiency. Significantly enhanced performance with optimized energy usage.</description>
+        <stages>
+            <li>
+                <statOffsets>
+                    <MoveSpeed>1.5</MoveSpeed>
+                    <SR_KIEnergyRegenRateMultiplier>0.6</SR_KIEnergyRegenRateMultiplier>
+                </statOffsets>
+                <statFactors>
+                    <MeleeDodgeChance>1.5</MeleeDodgeChance>
+                    <MeleeHitChance>1.5</MeleeHitChance>
+                    <WorkSpeedGlobal>1.25</WorkSpeedGlobal>
+                </statFactors>
+                <capMods>
+                    <li>
+                        <capacity>Consciousness</capacity>
+                        <offset>0.25</offset>
+                    </li>
+                </capMods>
+            </li>
+        </stages>
+    </HediffDef>
+
+    <HediffDef>
+        <defName>SR_OverchargeModeIII</defName>
+        <label>Overcharge Mode III</label>
+        <description>Android systems operating at maximum potential. Peak performance achieved through advanced power management.</description>
+        <stages>
+            <li>
+                <statOffsets>
+                    <MoveSpeed>2.0</MoveSpeed>
+                    <SR_KIEnergyRegenRateMultiplier>0</SR_KIEnergyRegenRateMultiplier>
+                </statOffsets>
+                <statFactors>
+                    <MeleeDodgeChance>2.0</MeleeDodgeChance>
+                    <MeleeHitChance>2.0</MeleeHitChance>
+                    <WorkSpeedGlobal>1.5</WorkSpeedGlobal>
+                </statFactors>
+                <capMods>
+                    <li>
+                        <capacity>Consciousness</capacity>
+                        <offset>0.35</offset>
+                    </li>
+                </capMods>
+            </li>
+        </stages>
+    </HediffDef>
+</Defs>

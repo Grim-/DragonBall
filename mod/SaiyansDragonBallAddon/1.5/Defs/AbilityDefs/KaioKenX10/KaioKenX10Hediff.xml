@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+  <HediffDef>
+    <defName>SR_KaioKenX10Hediff</defName>
+    <label>Kaio-Ken x10</label>
+    <description>A technique that multiplies the user's power tenfold but puts extreme strain on their body.</description>
+    <isBad>false</isBad>
+    <stages>
+      <li>
+        <hungerRateFactor>2.0</hungerRateFactor>
+        <restFallFactor>2.0</restFallFactor>
+        <painFactor>2.0</painFactor>
+        <capMods>
+          <li>
+            <capacity>Manipulation</capacity>
+            <offset>0.40</offset>
+          </li>
+          <li>
+            <capacity>Consciousness</capacity>
+            <offset>0.25</offset>
+          </li>
+          <li>
+            <capacity>Moving</capacity>
+            <offset>2.5</offset>
+          </li>
+        </capMods>
+        <statFactors>
+          <StaggerDurationFactor>0.5</StaggerDurationFactor>
+          <IncomingDamageFactor>0.7</IncomingDamageFactor>
+        </statFactors>
+        <statOffsets>
+          <PainShockThreshold>0.20</PainShockThreshold>
+          <MeleeDodgeChance>0.25</MeleeDodgeChance>
+          <MeleeHitChance>12</MeleeHitChance>
+          <SR_KIDamageMultiplier>1.5</SR_KIDamageMultiplier>
+        </statOffsets>
+      </li>
+    </stages>
+    <modExtensions>
+        <li Class="SaiyanMod.AdjustedMeleeDamageExt">
+          <adjustAmount>15</adjustAmount>
+        </li>
+        <li Class="SaiyanMod.AdjustedMeleeCooldownExt">
+          <adjustAmount>0.87</adjustAmount>
+        </li>
+    </modExtensions>
+  </HediffDef>
+
+</Defs>

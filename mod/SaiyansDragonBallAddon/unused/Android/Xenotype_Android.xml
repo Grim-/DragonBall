@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+  <XenotypeDef>
+    <defName>DBZAndroid</defName>
+    <label>android</label>
+    <description>An artificial being created by Dr. Gero, possessing incredible power and advanced technology.</description>
+    <descriptionShort>A powerful artificial being created through Dr. Gero's advanced technology.</descriptionShort>
+    <iconPath>UI/Icons/Xenotypes/Baseliner</iconPath>
+    <inheritable>false</inheritable>
+    <!-- Customization -->
+    <displayPriority>100</displayPriority>
+    <nameMaker>DBZAndroidNames</nameMaker>
+    <genes>
+        <li>SR_AndroidGene</li>
+    </genes>
+  </XenotypeDef>
+</Defs>

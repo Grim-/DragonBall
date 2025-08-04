@@ -39,5 +39,8 @@ namespace DragonBall
 
         // Override this to use 0-1 range for internal slider
         protected override FloatRange DragRange => new FloatRange(0f, 1f);
+
+        protected bool _DraggingBar = true;
+        protected override bool DraggingBar { get => _DraggingBar; set => _DraggingBar = value; }
     }
 }

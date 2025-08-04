@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+  <!-- Skill Power Contributions -->
+   <DragonBall.SkillPowerContributionDef>
+     <defName>SR_MeleePowerContribution</defName>
+     <label>Melee Combat Power</label>
+     <skill>Melee</skill>
+     <multiplier>5</multiplier>
+   </DragonBall.SkillPowerContributionDef>
+
+   <DragonBall.SkillPowerContributionDef>
+     <defName>SR_ShootingPowerContribution</defName>
+     <label>Ranged Combat Power</label>
+     <skill>Shooting</skill>
+     <multiplier>3</multiplier>
+   </DragonBall.SkillPowerContributionDef>
+
+   <!-- Capacity Power Contributions -->
+   <DragonBall.CapacityPowerContributionDef>
+     <defName>SR_MovementPowerContribution</defName>
+     <label>Movement Power</label>
+     <capacity>Moving</capacity>
+     <multiplier>25</multiplier>
+   </DragonBall.CapacityPowerContributionDef>
+
+   <DragonBall.CapacityPowerContributionDef>
+     <defName>SR_ManipulationPowerContribution</defName>
+     <label>Manipulation Power</label>
+     <capacity>Manipulation</capacity>
+     <multiplier>25</multiplier>
+   </DragonBall.CapacityPowerContributionDef>
+
+   <!-- Ki Power Contribution -->
+   <DragonBall.KiPowerContributionDef>
+     <defName>SR_KiPowerContribution</defName>
+     <label>Ki Energy</label>
+     <multiplier>50</multiplier>
+   </DragonBall.KiPowerContributionDef>
+
+   <!-- Passion Multiplier -->
+   <DragonBall.PassionPowerContributionDef>
+     <defName>SR_PassionPowerContribution</defName>
+     <label>Fighting Spirit</label>
+     <skill>Melee</skill>
+     <minorPassionMultiplier>1.25</minorPassionMultiplier>
+     <majorPassionMultiplier>1.5</majorPassionMultiplier>
+     <isMultiplier>true</isMultiplier>
+   </DragonBall.PassionPowerContributionDef>
+
+   <!-- Transformation Multipliers -->
+   <DragonBall.ActiveAbilityPowerContributionDef>
+     <defName>SR_KaioKenPowerMultiplier</defName>
+     <label>Kaio-Ken</label>
+     <ability>SR_KaioKen</ability>
+     <multiplier>1.2</multiplier>
+     <isMultiplier>true</isMultiplier>
+   </DragonBall.ActiveAbilityPowerContributionDef>
+
+   <DragonBall.ActiveAbilityPowerContributionDef>
+     <defName>SR_SuperSaiyanPowerMultiplier</defName>
+     <label>Super Saiyan</label>
+     <ability>SR_SuperSaiyan</ability>
+     <multiplier>2.0</multiplier>
+     <isMultiplier>true</isMultiplier>
+   </DragonBall.ActiveAbilityPowerContributionDef>
+
+   <DragonBall.ActiveAbilityPowerContributionDef>
+     <defName>SR_SuperSaiyan2PowerMultiplier</defName>
+     <label>Super Saiyan 2</label>
+     <ability>SR_SuperSaiyan2</ability>
+     <multiplier>4.0</multiplier>
+     <isMultiplier>true</isMultiplier>
+   </DragonBall.ActiveAbilityPowerContributionDef>
+
+   <DragonBall.ActiveAbilityPowerContributionDef>
+     <defName>SR_TrueSuperSaiyanPowerMultiplier</defName>
+     <label>True Super Saiyan</label>
+     <ability>SR_TrueSuperSaiyan</ability>
+     <multiplier>8.0</multiplier>
+     <isMultiplier>true</isMultiplier>
+   </DragonBall.ActiveAbilityPowerContributionDef>
+
+   <!-- Hediff/Implant Contributions -->
+<DragonBall.HediffPowerContributionDef>
+  <defName>SR_BionicArmPowerContribution</defName>
+  <label>Bionic Arm Power</label>
+  <hediff>BionicArm</hediff>
+  <multiplierPerSeverity>50</multiplierPerSeverity>
+</DragonBall.HediffPowerContributionDef>
+
+<!-- Example for something like Super Soldier Serum
+<DragonBall.HediffPowerContributionDef>
+  <defName>SR_SuperSerumPowerContribution</defName>
+  <label>Super Serum Enhancement</label>
+  <hediff>SuperSoldierSerum</hediff>
+  <multiplierPerSeverity>2.0</multiplierPerSeverity>
+  <isMultiplier>true</isMultiplier>
+</DragonBall.HediffPowerContributionDef>
+-->
+
+<!-- Race Contributions -->
+<DragonBall.RacePowerContributionDef>
+  <defName>SR_SaiyanRacePowerContribution</defName>
+  <label>Saiyan Heritage</label>
+  <race>SR_SaiyanRace</race>
+  <multiplier>100</multiplier>
+  <isMultiplier>false</isMultiplier>
+</DragonBall.RacePowerContributionDef>
+
+<DragonBall.RacePowerContributionDef>
+  <defName>SR_HumanRacePowerContribution</defName>
+  <label>Human Heritage</label>
+  <race>Human</race>
+  <multiplier>20</multiplier>
+  <isMultiplier>false</isMultiplier>
+</DragonBall.RacePowerContributionDef>
+
+<DragonBall.RacePowerContributionDef>
+  <defName>SR_HalfSaiyanRacePowerContribution</defName>
+  <label>Half Saiyan Heritage</label>
+  <race>SR_HalfSaiyanRace</race>
+  <multiplier>80</multiplier>
+  <isMultiplier>false</isMultiplier>
+</DragonBall.RacePowerContributionDef>
+
+<DragonBall.LevelContributionDef>
+  <defName>SR_LevelPowerContribution</defName>
+  <label>Level</label>
+  <multiplier>1.1</multiplier>
+  <isMultiplier>false</isMultiplier>
+</DragonBall.LevelContributionDef>
+</Defs>

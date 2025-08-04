@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+  <TaranMagicFramework.AbilityDef Name="SR_AndroidBasicSkill" ParentName="SR_AndroidAbilityTree" Abstract="True">
+      <abilityRank>SR_BasicRank</abilityRank>
+      <abilityTrees>
+          <li>SR_AndroidAbilityTree</li>
+      </abilityTrees>
+  </TaranMagicFramework.AbilityDef>
+
+  <!-- Android class, an AbilityClassDef contains atleast one AbilityTree -->
+  <TaranMagicFramework.AbilityClassDef ParentName="SR_AbilityClassKIBase">
+      <defName>SR_AndroidClass</defName>
+      <label>Android class</label>
+      <abilityTrees>
+          <li>SR_AndroidAbilityTree</li>
+      </abilityTrees>
+  </TaranMagicFramework.AbilityClassDef>
+
+    <TaranMagicFramework.AbilityTreeDef>
+          <defName>SR_AndroidAbilityTree</defName>
+          <backgroundTexPath>UI/Backgrounds/Human</backgroundTexPath>
+      </TaranMagicFramework.AbilityTreeDef>
+
+      <TaranMagicFramework.AbilityDef Name="SR_AndroidAbilityTree" ParentName="SR_SaiyanAbilityBase" Abstract="True">
+          <abilityTrees>
+              <li>SR_AndroidAbilityTree</li>
+          </abilityTrees>
+      </TaranMagicFramework.AbilityDef>
+
+      <!-- Tier 1 -->
+      <TaranMagicFramework.AbilityDef Name="SR_AndroidPassives" ParentName="SR_AndroidAbilityTree" Abstract="True">
+          <abilityRank>SR_LightPassiveRank</abilityRank>
+		        <abilityClass>SaiyanMod.KIAbilityPassive</abilityClass>
+          <showMastered>false</showMastered>
+          <abilityTrees>
+              <li>SR_AndroidAbilityTree</li>
+          </abilityTrees>
+      </TaranMagicFramework.AbilityDef>
+</Defs>

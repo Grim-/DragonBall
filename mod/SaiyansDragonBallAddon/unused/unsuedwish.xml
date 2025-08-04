@@ -1,0 +1,19 @@
+<DragonBall.AbilityWishDef>
+  <defName>SuperSaiyan2Wish</defName>
+  <label>I wish for the power of a Super Saiyan 2!</label>
+  <category>Power</category>
+  <description>Gain the ability to transform into a Super Saiyan 2.</description>
+  <wishClass>DragonBall.AbilityWish</wishClass>
+  <ability>SR_SuperSaiyan2</ability>
+  <iconPath>UI/Icons/SuperSaiyan</iconPath>
+</DragonBall.AbilityWishDef>
+
+<DragonBall.AbilityWishDef>
+  <defName>KaioKenWish</defName>
+  <label>I wish for the power of the Kaio-ken!</label>
+  <category>Power</category>
+  <description>Gain the ability to use the Kaio-ken technique.</description>
+  <wishClass>DragonBall.AbilityWish</wishClass>
+  <ability>SR_KaioKen</ability>
+  <iconPath>UI/Icons/SuperSaiyan</iconPath>
+</DragonBall.AbilityWishDef>

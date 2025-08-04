@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+  <BackstoryDef>
+    <defName>FreeAndroid</defName>
+    <title>Liberated Android</title>
+    <titleShort>Free Android</titleShort>
+    <baseDesc>After breaking free from Dr. Gero's control, [PAWN_nameDef] chose to live among humans and other beings, developing their own identity and purpose. They learned to balance their incredible capabilities with a growing sense of empathy and understanding.</baseDesc>
+    <slot>Adulthood</slot>
+    <spawnCategories>
+      <li>RedRibbonAndroid</li>
+    </spawnCategories>
+    <skillGains>
+      <Social>6</Social>
+      <Medicine>4</Medicine>
+      <Crafting>4</Crafting>
+      <Shooting>3</Shooting>
+      <Melee>3</Melee>
+    </skillGains>
+  </BackstoryDef>
+</Defs>

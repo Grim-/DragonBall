@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+  <ThingDef ParentName="BuildingBase">
+    <defName>DragonBallTrainingDummy</defName>
+    <label>training dummy</label>
+    <description>A simple wooden dummy used for combat training. Helps pawns improve their melee skills.</description>
+    <thingClass>Building</thingClass>
+    <graphicData>
+      <texPath>Things/Building/BuildingStyles/Rustic/RusticColumn</texPath>
+      <graphicClass>Graphic_Single</graphicClass>
+      <drawSize>(1,1)</drawSize>
+      <shadowData>
+        <volume>(0.3, 0.6, 0.3)</volume>
+      </shadowData>
+    </graphicData>
+    <altitudeLayer>Building</altitudeLayer>
+    <passability>PassThroughOnly</passability>
+    <pathCost>50</pathCost>
+    <castEdgeShadows>true</castEdgeShadows>
+    <fillPercent>0.30</fillPercent>
+    <canOverlapZones>false</canOverlapZones>
+    <statBases>
+      <MaxHitPoints>150</MaxHitPoints>
+      <WorkToBuild>1000</WorkToBuild>
+      <Mass>20</Mass>
+      <Flammability>1.0</Flammability>
+    </statBases>
+    <size>(1,1)</size>
+    <costList>
+      <WoodLog>30</WoodLog>
+    </costList>
+    <terrainAffordanceNeeded>Light</terrainAffordanceNeeded>
+    <designationCategory>Misc</designationCategory>
+    <rotatable>false</rotatable>
+    <selectable>true</selectable>
+    <constructEffect>ConstructWood</constructEffect>
+    <designationHotKey>Misc3</designationHotKey>
+    <comps>
+      <li Class="DragonBall.CompProperties_TrainingDummy">
+        <xpPerHour>4000</xpPerHour>
+        <minTrainingHours>1</minTrainingHours>
+        <maxTrainingHours>8</maxTrainingHours>
+      </li>
+    </comps>
+  </ThingDef>
+</Defs>

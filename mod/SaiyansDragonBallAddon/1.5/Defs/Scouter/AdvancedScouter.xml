@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+  <ThingDef ParentName="ApparelArmorHelmetReconBase">
+      <defName>SR_Apparel_ScouterRedAdvanced</defName>
+      <label>scouter (red)</label>
+      <description>A saiyan scouter used to gauge the power levels and track opponents.</description>
+      <thingClass>DragonBall.Scouter</thingClass>
+      <tickerType>Normal</tickerType>
+      <drawerType>MapMeshAndRealTime</drawerType>
+      <graphicData>
+      <texPath>Things/Pawn/Humanlike/Apparel/Scouter/ScouterRed</texPath>
+      </graphicData>
+      <apparel>
+          <wornGraphicPath>Things/Pawn/Humanlike/Apparel/Scouter/ScouterRed</wornGraphicPath>
+          <renderSkipFlags>
+              <li>None</li>
+          </renderSkipFlags>
+          <bodyPartGroups Inherit="False">
+              <li>UpperHead</li>
+          </bodyPartGroups>
+          <tags Inherit="False">
+              <li>SaiyanApparel</li>
+          </tags>
+      </apparel>
+      <equippedStatOffsets>
+          <ShootingAccuracyPawn>3</ShootingAccuracyPawn>
+          <SR_KISkillCooldown>-0.1</SR_KISkillCooldown>
+      </equippedStatOffsets>
+      <statBases>
+          <MaxHitPoints>150</MaxHitPoints>
+          <ArmorRating_Sharp>0</ArmorRating_Sharp>
+          <ArmorRating_Blunt>0</ArmorRating_Blunt>
+          <ArmorRating_Heat>0</ArmorRating_Heat>
+          <Insulation_Cold>0</Insulation_Cold>
+          <Insulation_Heat>0</Insulation_Heat>
+      </statBases>
+      <recipeMaker>
+          <researchPrerequisite>SR_ScouterResearch</researchPrerequisite>
+      </recipeMaker>
+      <costList>
+          <ComponentSpacer>1</ComponentSpacer>
+          <ComponentIndustrial>1</ComponentIndustrial>
+          <Plasteel>15</Plasteel>
+      </costList>
+  </ThingDef>
+
+</Defs>

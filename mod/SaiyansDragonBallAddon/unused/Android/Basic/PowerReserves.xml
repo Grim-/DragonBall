@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+
+<!-- Power Reserves Ability -->
+<TaranMagicFramework.AbilityDef ParentName="SR_AndroidPassives">
+    <defName>SR_PowerReserves</defName>
+    <label>Power Reserves</label>
+    <description>Enhanced energy storage capabilities.</description>
+    <abilityTiers>
+        <li Class="SaiyanMod.AbilityTierKIDef">SR_PowerReserves_Tier1</li>
+        <li Class="SaiyanMod.AbilityTierKIDef">SR_PowerReserves_Tier2</li>
+        <li Class="SaiyanMod.AbilityTierKIDef">SR_PowerReserves_Tier3</li>
+        <li Class="SaiyanMod.AbilityTierKIDef">SR_PowerReserves_Tier4</li>
+        <li Class="SaiyanMod.AbilityTierKIDef">SR_PowerReserves_Tier5</li>
+    </abilityTiers>
+</TaranMagicFramework.AbilityDef>
+
+<SaiyanMod.AbilityTierKIDef Name="SR_PowerReserves_Tier">
+    <defName>SR_PowerReserves_Tier1</defName>
+    <label>Power Reserves I</label>
+    <description>Increased energy storage capacity.</description>
+    <acquireRequirement>
+        <skillPointsToUnlock>1</skillPointsToUnlock>
+    </acquireRequirement>
+    <statFactors>
+        <SR_MaxKIEnergy>1.10</SR_MaxKIEnergy>
+    </statFactors>
+</SaiyanMod.AbilityTierKIDef>
+
+<SaiyanMod.AbilityTierKIDef ParentName="SR_PowerReserves_Tier">
+    <defName>SR_PowerReserves_Tier2</defName>
+    <label>Power Reserves II</label>
+    <description>Further increased energy storage capacity.</description>
+    <acquireRequirement>
+        <skillPointsToUnlock>1</skillPointsToUnlock>
+    </acquireRequirement>
+    <statFactors>
+        <SR_MaxKIEnergy>1.20</SR_MaxKIEnergy>
+    </statFactors>
+</SaiyanMod.AbilityTierKIDef>
+
+<SaiyanMod.AbilityTierKIDef ParentName="SR_PowerReserves_Tier">
+    <defName>SR_PowerReserves_Tier3</defName>
+    <label>Power Reserves III</label>
+    <description>Significantly increased energy storage capacity.</description>
+    <acquireRequirement>
+        <skillPointsToUnlock>1</skillPointsToUnlock>
+    </acquireRequirement>
+    <statFactors>
+        <SR_MaxKIEnergy>1.30</SR_MaxKIEnergy>
+    </statFactors>
+</SaiyanMod.AbilityTierKIDef>
+
+<SaiyanMod.AbilityTierKIDef ParentName="SR_PowerReserves_Tier">
+    <defName>SR_PowerReserves_Tier4</defName>
+    <label>Power Reserves IV</label>
+    <description>Greatly increased energy storage capacity.</description>
+    <acquireRequirement>
+        <skillPointsToUnlock>1</skillPointsToUnlock>
+    </acquireRequirement>
+    <statFactors>
+        <SR_MaxKIEnergy>1.40</SR_MaxKIEnergy>
+    </statFactors>
+</SaiyanMod.AbilityTierKIDef>
+
+<SaiyanMod.AbilityTierKIDef ParentName="SR_PowerReserves_Tier">
+    <defName>SR_PowerReserves_Tier5</defName>
+    <label>Power Reserves V</label>
+    <description>Maximum energy storage capacity enhancement.</description>
+    <acquireRequirement>
+        <skillPointsToUnlock>1</skillPointsToUnlock>
+    </acquireRequirement>
+    <statFactors>
+        <SR_MaxKIEnergy>1.50</SR_MaxKIEnergy>
+    </statFactors>
+</SaiyanMod.AbilityTierKIDef>
+</Defs>

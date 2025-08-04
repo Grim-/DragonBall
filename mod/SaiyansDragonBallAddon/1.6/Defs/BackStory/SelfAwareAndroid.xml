@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+  <BackstoryDef>
+    <defName>SelfAwareAndroid</defName>
+    <title>Self-Aware Android</title>
+    <titleShort>Free Mind</titleShort>
+    <baseDesc>[PAWN_nameDef] developed consciousness during their early activation period in Dr. Gero's laboratory. Unlike their militant counterparts, they began questioning their purpose and developing genuine curiosity about the world around them.</baseDesc>
+    <slot>Childhood</slot>
+    <spawnCategories>
+      <li>RedRibbonAndroid</li>
+    </spawnCategories>
+    <skillGains>
+      <Intellectual>4</Intellectual>
+      <Social>3</Social>
+      <Crafting>3</Crafting>
+    </skillGains>
+  </BackstoryDef>
+
+</Defs>

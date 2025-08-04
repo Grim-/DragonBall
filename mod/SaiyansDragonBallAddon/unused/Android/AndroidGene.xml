@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+    <GeneDef ParentName="SR_GeneClassBase">
+      <defName>SR_AndroidGene</defName>
+      <label>Android Gene</label>
+      <description>An Android.</description>
+      <iconPath>UI/Icons/Genes/SaiyanLow</iconPath>
+      <statOffsets>
+        <SR_MaxKIEnergy>300</SR_MaxKIEnergy>
+      </statOffsets>
+      <statFactors>
+      </statFactors>
+      <modExtensions>
+        <li Class="TaranMagicFramework.AbilityExtension">
+          <abilityClasses>
+            <li>SR_AndroidClass</li>
+          </abilityClasses>
+        </li>
+        <li Class="SaiyanMod.GeneExtension">
+          <commonality>0.1</commonality>
+        </li>
+      </modExtensions>
+    </GeneDef>
+</Defs>
