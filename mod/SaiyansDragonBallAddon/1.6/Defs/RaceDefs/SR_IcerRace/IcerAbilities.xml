@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Defs>
+  <TaranMagicFramework.AbilityTreeDef>
+		<defName>SR_IcerAbilityTree</defName>
+		<backgroundTexPath>SkillBkFriza</backgroundTexPath>
+	</TaranMagicFramework.AbilityTreeDef>
+
+	<TaranMagicFramework.AbilityDef Name="SR_IcerAbilityTree" ParentName="SR_SaiyanAbilityBase" Abstract="True">
+		<abilityTrees>
+			<li>SR_IcerAbilityTree</li>
+		</abilityTrees>
+	</TaranMagicFramework.AbilityDef>
+
+	<TaranMagicFramework.AbilityDef Name="SR_IcerLightPassives" ParentName="SR_IcerAbilityTree" Abstract="True">
+		<abilityRank>SR_LightPassiveRank</abilityRank>
+		<abilityClass>SaiyanMod.KIAbilityPassive</abilityClass>
+		<showMastered>false</showMastered>
+	</TaranMagicFramework.AbilityDef>
+
+	<TaranMagicFramework.AbilityDef Name="SR_BasicIcerKISkill" ParentName="SR_IcerAbilityTree" Abstract="True">
+		<abilityRank>SR_BasicRank</abilityRank>
+	</TaranMagicFramework.AbilityDef>
+
+	<TaranMagicFramework.AbilityDef Name="SR_PassiveIcerKISkill" ParentName="SR_IcerAbilityTree" Abstract="True">
+		<abilityRank>SR_PassiveRank</abilityRank>
+	</TaranMagicFramework.AbilityDef>
+
+	<TaranMagicFramework.AbilityDef Name="SR_AdvancedIcerKISkill" ParentName="SR_IcerAbilityTree" Abstract="True">
+		<abilityRank>SR_AdvancedRank</abilityRank>
+	</TaranMagicFramework.AbilityDef>
+
+	<TaranMagicFramework.AbilityDef Name="SR_SuperIcerKISkill" ParentName="SR_IcerAbilityTree" Abstract="True">
+		<abilityRank>SR_SuperSaiyan</abilityRank>
+	</TaranMagicFramework.AbilityDef>
+</Defs>

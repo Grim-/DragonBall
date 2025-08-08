@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Defs>
+<GeneDef ParentName="SR_GeneClassBase">
+  <defName>SR_IcerGene</defName>
+  <label>Icer</label>
+  <description>A Icer.</description>
+  <iconPath>UI/Icons/Genes/SaiyanLow</iconPath>
+  <statOffsets>
+    <SR_MaxKIEnergy>500</SR_MaxKIEnergy>
+  </statOffsets>
+  <statFactors>
+    <ResearchSpeed>0.3</ResearchSpeed>
+  </statFactors>
+  <modExtensions>
+    <li Class="TaranMagicFramework.AbilityExtension">
+      <abilityClasses>
+        <li>SR_IcerClass</li>
+      </abilityClasses>
+    </li>
+  </modExtensions>
+</GeneDef>
+</Defs>

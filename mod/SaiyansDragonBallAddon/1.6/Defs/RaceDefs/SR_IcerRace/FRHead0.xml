@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+
+  <HeadTypeDef ParentName="AverageBase">
+    <defName>SR_FriezaHeadM</defName>
+    <graphicPath>FriezaRace/FriezaHead1</graphicPath>
+    <gender>Male</gender>
+    <eyeOffsetEastWest>(0.18, 0, 0.17)</eyeOffsetEastWest>
+  </HeadTypeDef>
+
+    <HeadTypeDef ParentName="AverageBase">
+      <defName>SR_FriezaHeadF</defName>
+      <graphicPath>FriezaRace/FriezaHead1</graphicPath>
+      <gender>Female</gender>
+      <eyeOffsetEastWest>(0.18, 0, 0.17)</eyeOffsetEastWest>
+    </HeadTypeDef>
+
+</Defs>

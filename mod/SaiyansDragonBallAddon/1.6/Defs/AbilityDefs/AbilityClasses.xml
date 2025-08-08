@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Defs>
+	<TaranMagicFramework.AbilityClassDef ParentName="SR_AbilityClassKIBase">
+      <defName>SR_MajinClass</defName>
+      <label>Majin class</label>
+      <abilityTrees>
+          <li>SR_MajinAbilityTree</li>
+      </abilityTrees>
+  </TaranMagicFramework.AbilityClassDef>
+
+</Defs>

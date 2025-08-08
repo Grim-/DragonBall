@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Defs>
+  <TaranMagicFramework.AbilityTreeDef>
+		<defName>SR_NamekianAbilityTree</defName>
+		<backgroundTexPath>SkillBkFriza</backgroundTexPath>
+	</TaranMagicFramework.AbilityTreeDef>
+
+	<TaranMagicFramework.AbilityDef Name="SR_NamekianAbilityTree" ParentName="SR_SaiyanAbilityBase" Abstract="True">
+		<abilityTrees>
+			<li>SR_NamekianAbilityTree</li>
+		</abilityTrees>
+	</TaranMagicFramework.AbilityDef>
+
+	<TaranMagicFramework.AbilityDef Name="SR_NamekianLightPassives" ParentName="SR_NamekianAbilityTree" Abstract="True">
+		<abilityRank>SR_LightPassiveRank</abilityRank>
+		<abilityClass>SaiyanMod.KIAbilityPassive</abilityClass>
+		<showMastered>false</showMastered>
+	</TaranMagicFramework.AbilityDef>
+
+	<TaranMagicFramework.AbilityDef Name="SR_BasicNamekianKISkill" ParentName="SR_NamekianAbilityTree" Abstract="True">
+		<abilityRank>SR_BasicRank</abilityRank>
+	</TaranMagicFramework.AbilityDef>
+
+	<TaranMagicFramework.AbilityDef Name="SR_PassiveNamekianKISkill" ParentName="SR_NamekianAbilityTree" Abstract="True">
+		<abilityRank>SR_PassiveRank</abilityRank>
+	</TaranMagicFramework.AbilityDef>
+
+	<TaranMagicFramework.AbilityDef Name="SR_AdvancedNamekianKISkill" ParentName="SR_NamekianAbilityTree" Abstract="True">
+		<abilityRank>SR_AdvancedRank</abilityRank>
+	</TaranMagicFramework.AbilityDef>
+
+	<TaranMagicFramework.AbilityDef Name="SR_SuperNamekianKISkill" ParentName="SR_NamekianAbilityTree" Abstract="True">
+		<abilityRank>SR_SuperSaiyan</abilityRank>
+	</TaranMagicFramework.AbilityDef>
+</Defs>

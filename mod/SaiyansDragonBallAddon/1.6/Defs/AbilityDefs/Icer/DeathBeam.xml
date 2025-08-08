@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+  <TaranMagicFramework.AbilityDef ParentName="SR_BasicIcerKISkill">
+		<defName>SR_DeathBeam</defName>
+		<label>Death Beam</label>
+		<uiSkillIcon>UI/Icons/KIBeam</uiSkillIcon>
+		<abilityTrees>
+			<li>SR_IcerAbilityTree</li>
+		</abilityTrees>
+		<abilityTiers>
+			<li Class="SaiyanMod.AbilityTier_KIBeam">SR_DeathBeam_Tier1</li>
+			<li Class="SaiyanMod.AbilityTier_KIBeam">SR_DeathBeam_Tier2</li>
+			<li Class="SaiyanMod.AbilityTier_KIBeam">SR_DeathBeam_Tier3</li>
+		</abilityTiers>
+	</TaranMagicFramework.AbilityDef>
+
+	<SaiyanMod.AbilityTier_KIBeam>
+		<defName>SR_DeathBeam_Tier1</defName>
+		<label>Death Beam</label>
+		<description>Fire a beam that causes heavy damage.</description>
+		<nextTierDescription>Beam does increased damage.</nextTierDescription>
+		<acquireRequirement>
+			<skillPointsToUnlock>3</skillPointsToUnlock>
+		</acquireRequirement>
+		<soundOnCast>SR_KiBeam</soundOnCast>
+		<energyCost>80</energyCost>
+		<cooldownTicks>7200</cooldownTicks>
+		<effectRadius>20</effectRadius>
+		<iconTexPath>UI/Buttons/KIBeam</iconTexPath>
+	</SaiyanMod.AbilityTier_KIBeam>
+
+	<SaiyanMod.AbilityTier_KIBeam>
+		<defName>SR_DeathBeam_Tier2</defName>
+		<label>Death Beam</label>
+		<description>Fire a beam that causes heavy damage.</description>
+		<nextTierDescription>Beam does increased damage.</nextTierDescription>
+		<acquireRequirement>
+			<skillPointsToUnlock>3</skillPointsToUnlock>
+		</acquireRequirement>
+		<soundOnCast>SR_KiBeam</soundOnCast>
+		<energyCost>75</energyCost>
+		<cooldownTicks>5000</cooldownTicks>
+		<effectRadius>30</effectRadius>
+		<iconTexPath>UI/Buttons/KIBeam</iconTexPath>
+	</SaiyanMod.AbilityTier_KIBeam>
+
+	<SaiyanMod.AbilityTier_KIBeam>
+		<defName>SR_DeathBeam_Tier3</defName>
+		<label>Death Beam</label>
+		<description>Fire a beam that causes heavy damage.</description>
+		<acquireRequirement>
+			<skillPointsToUnlock>3</skillPointsToUnlock>
+		</acquireRequirement>
+		<soundOnCast>SR_KiBeam</soundOnCast>
+		<energyCost>70</energyCost>
+		<cooldownTicks>2500</cooldownTicks>
+		<effectRadius>40</effectRadius>
+		<iconTexPath>UI/Buttons/KIBeam</iconTexPath>
+	</SaiyanMod.AbilityTier_KIBeam>
+
+</Defs>

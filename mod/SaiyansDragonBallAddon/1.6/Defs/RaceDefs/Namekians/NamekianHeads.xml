@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+
+  <HeadTypeDef ParentName="AverageBase">
+    <defName>SR_NamekianHead</defName>
+    <graphicPath>NamekiansHead/Namekian_Head1</graphicPath>
+    <gender>None</gender>
+    <eyeOffsetEastWest>(0.18, 0, 0.17)</eyeOffsetEastWest>
+  </HeadTypeDef>
+
+    <HeadTypeDef ParentName="AverageBase">
+      <defName>SR_NamekianHead_Fat</defName>
+      <graphicPath>NamekiansHead/Namekian_Head2</graphicPath>
+      <gender>None</gender>
+      <eyeOffsetEastWest>(0.18, 0, 0.17)</eyeOffsetEastWest>
+    </HeadTypeDef>
+
+</Defs>
