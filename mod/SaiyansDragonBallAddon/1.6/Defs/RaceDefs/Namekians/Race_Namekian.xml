@@ -1,31 +1,5 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <Defs>
-  <PawnKindDef Name="ColdClanBase" ParentName="BasePlayerPawnKind">
-    <defName>SR_Namekian</defName>
-    <race>SR_Namekian</race>
-    <defaultFactionType>PlayerColony</defaultFactionType>
-    <chemicalAddictionChance>0</chemicalAddictionChance>
-    <invNutrition>2.55</invNutrition>
-    <itemQuality>Normal</itemQuality>
-    <backstoryCryptosleepCommonality>0.01</backstoryCryptosleepCommonality>
-    <maxGenerationAge>15</maxGenerationAge>
-    <combatEnhancingDrugsChance>0</combatEnhancingDrugsChance>
-    <combatEnhancingDrugsCount>0</combatEnhancingDrugsCount>
-    <biocodeWeaponChance>0.1</biocodeWeaponChance>
-    <initialResistanceRange>1~10</initialResistanceRange>
-  </PawnKindDef>
-
-  <XenotypeDef>
-    <defName>SR_Namekian</defName>
-    <label>Namekian</label>
-    <description>Namekian</description>
-    <descriptionShort>Namekian</descriptionShort>
-    <iconPath>UI/Icons/Genes/Gene_Hemogenic</iconPath>
-    <inheritable>true</inheritable>
-    <genes>
-      <li>SR_NamekianGene</li>
-    </genes>
-  </XenotypeDef>
 
   <AlienRace.ThingDef_AlienRace ParentName="Human">
     <defName>SR_Namekian</defName>
@@ -45,7 +19,7 @@
         <capacities>
           <li>Blunt</li>
         </capacities>
-        <power>12</power>
+        <power>22</power>
         <cooldownTime>2</cooldownTime>
         <armorPenetration>0.1</armorPenetration>
         <linkedBodyPartsGroup>LeftHand</linkedBodyPartsGroup>
@@ -63,7 +37,7 @@
         <capacities>
           <li>Blunt</li>
         </capacities>
-        <power>12</power>
+        <power>16</power>
         <cooldownTime>2</cooldownTime>
         <linkedBodyPartsGroup>RightHand</linkedBodyPartsGroup>
         <armorPenetration>0.1</armorPenetration>
@@ -102,7 +76,7 @@
     </tools>
     <race>
       <lifeExpectancy>190</lifeExpectancy>
-      <body>Human</body>
+      <body>Namekian_Body</body>
       <baseBodySize>1</baseBodySize>
       <baseHealthScale>1</baseHealthScale>
       <baseHungerRate>1.5</baseHungerRate>
@@ -116,30 +90,41 @@
       <raceRestriction>
         <whiteGeneList>
         </whiteGeneList>
+        <blackGeneList>
+          <li>HairStyle</li>
+          <li>BeardStyle</li>
+        </blackGeneList>
         <onlyUseRaceRestrictedXenotypes>true</onlyUseRaceRestrictedXenotypes>
         <whiteXenotypeList>
+          <li>SR_Namekian</li>
         </whiteXenotypeList>
         <xenotypeList>
           <li>SR_Namekian</li>
         </xenotypeList>
+        <canReproduce>false</canReproduce>
+        <blackEndoCategories>
+          <li>HairColor</li>
+        </blackEndoCategories>
       </raceRestriction>
       <generalSettings>
         <humanRecipeImport>true</humanRecipeImport>
         <allowHumanBios>true</allowHumanBios>
+        <maleGenderProbability>1</maleGenderProbability>
         <alienPartGenerator Inherit="False">
           <bodyTypes>
             <li>Hulk</li>
+            <li>Fat</li>
           </bodyTypes>
           <headTypes>
             <li>SR_NamekianHead</li>
           </headTypes>
           <bodyAddons>
             <li>
-              <path>namekiansExtras/NamekianAntenna</path>
+              <path>Namekian/Extra/NamekianAntenna</path>
               <alignWithHead>true</alignWithHead>
               <inFrontOfBody>true</inFrontOfBody>
               <colorChannel>skin</colorChannel>
-              <userCustomizable>true</userCustomizable>
+              <userCustomizable>false</userCustomizable>
               <drawSize>(1.0, 1.0)</drawSize>
               <offsets>
                 <south>
@@ -155,8 +140,29 @@
                   <layerOffset>0.1</layerOffset>
                 </east>
               </offsets>
+              <conditions>
+                <BodyPart>
+                  <bodyPartLabel>Left Antenna</bodyPartLabel>
+                  <drawWithoutPart>false</drawWithoutPart>
+                </BodyPart>
+                <BodyPart>
+                  <bodyPartLabel>Right Antenna</bodyPartLabel>
+                  <drawWithoutPart>false</drawWithoutPart>
+                </BodyPart>
+              </conditions>
             </li>
           </bodyAddons>
+          <colorChannels>
+          <li>
+            <name>skin</name>
+            <first Class="ColorGenerator_Single">
+              <color>RGBA(128, 255, 0, 255)</color>
+            </first>
+            <second Class="ColorGenerator_Single">
+              <color>RGBA(255, 255, 255, 255)</color>
+            </second>
+          </li>
+        </colorChannels>
         </alienPartGenerator>
         <reproduction>
           <maleFertilityAgeFactor>
@@ -180,8 +186,20 @@
           </femaleFertilityAgeFactor>
         </reproduction>
       </generalSettings>
-      <graphicPaths>
-        <body>NamekiansBody/NamekianBody_Hulk</body>
+      <graphicPaths Inherit="False">
+        <body>
+          <path>Namekian/Body/Naked_Male</path>
+        </body>
+        <bodyMasks>
+          <path>Namekian/BodyMasks/Naked_Male</path>
+        </bodyMasks>
+        <head>
+          <path>Namekian/Head/Namekian_Head1</path>
+        </head>
+        <headMasks>
+          <path>Namekian/HeadMasks/Namekian_Head1</path>
+        </headMasks>
+        <skinShader>Cutout</skinShader>
       </graphicPaths>
     </alienRace>
   </AlienRace.ThingDef_AlienRace>

@@ -1,15 +1,5 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <Defs>
-  <BodyPartDef>
-    <defName>Antenna</defName>
-    <label>antenna</label>
-    <hitPoints>15</hitPoints>
-    <skinCovered>false</skinCovered>
-    <solid>true</solid>
-    <alive>true</alive>
-    <canSuggestAmputation>true</canSuggestAmputation>
-  </BodyPartDef>
-
   <BodyDef>
     <defName>Namekian_Body</defName>
     <label>Namekian</label>
@@ -124,7 +114,7 @@
           <parts>
             <li>
               <def>Head</def>
-              <coverage>0.80</coverage>
+              <coverage>0.66</coverage>
               <groups>
                 <li>UpperHead</li>
                 <li>FullHead</li>
@@ -226,26 +216,24 @@
                     </li>
                   </parts>
                 </li>
-                <li>
-                  <def>Antenna</def>
-                  <customLabel>left antenna</customLabel>
-                  <coverage>0.08</coverage>
-                  <flipGraphic>true</flipGraphic>
-                  <groups>
-                    <li>UpperHead</li>
-                    <li>FullHead</li>
-                  </groups>
-                </li>
-                <li>
-                  <def>Antenna</def>
-                  <customLabel>right antenna</customLabel>
-                  <coverage>0.08</coverage>
-                  <groups>
-                    <li>UpperHead</li>
-                    <li>FullHead</li>
-                  </groups>
-                </li>
               </parts>
+            </li>
+            <li>
+              <def>LeftAntenna</def>
+              <customLabel>left antenna</customLabel>
+              <coverage>0.08</coverage>
+              <flipGraphic>true</flipGraphic>
+              <groups>
+                <li>UpperHead</li>
+              </groups>
+            </li>
+            <li>
+              <def>RightAntenna</def>
+              <customLabel>right antenna</customLabel>
+              <coverage>0.08</coverage>
+              <groups>
+                <li>UpperHead</li>
+              </groups>
             </li>
           </parts>
         </li>
@@ -638,4 +626,5 @@
       </parts>
     </corePart>
   </BodyDef>
+
 </Defs>

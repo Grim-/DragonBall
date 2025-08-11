@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+  <PawnKindDef Name="ColdClanBase" ParentName="BasePlayerPawnKind">
+    <defName>SR_Namekian</defName>
+    <race>SR_Namekian</race>
+    <defaultFactionType>PlayerColony</defaultFactionType>
+    <chemicalAddictionChance>0</chemicalAddictionChance>
+    <invNutrition>2.55</invNutrition>
+    <itemQuality>Normal</itemQuality>
+    <backstoryCryptosleepCommonality>0.01</backstoryCryptosleepCommonality>
+    <maxGenerationAge>15</maxGenerationAge>
+    <combatEnhancingDrugsChance>0</combatEnhancingDrugsChance>
+    <combatEnhancingDrugsCount>0</combatEnhancingDrugsCount>
+    <biocodeWeaponChance>0.1</biocodeWeaponChance>
+    <initialResistanceRange>1~10</initialResistanceRange>
+    <xenotypeSet>
+      <xenotypeChances>
+        <SR_Namekian>999</SR_Namekian>
+      </xenotypeChances>
+    </xenotypeSet>
+  </PawnKindDef>
+
+  <XenotypeDef>
+    <defName>SR_Namekian</defName>
+    <label>Namekian</label>
+    <description>Namekian</description>
+    <descriptionShort>Namekian</descriptionShort>
+    <iconPath>UI/Icons/Genes/Gene_Hemogenic</iconPath>
+    <inheritable>true</inheritable>
+    <genes>
+      <li>SR_NamekianGene</li>
+      <li>Skin_Green</li>
+    </genes>
+  </XenotypeDef>
+</Defs>

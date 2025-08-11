@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+  <BodyPartDef>
+    <defName>RightAntenna</defName>
+    <label>right antenna</label>
+    <hitPoints>15</hitPoints>
+    <skinCovered>false</skinCovered>
+    <solid>true</solid>
+    <alive>true</alive>
+    <canSuggestAmputation>true</canSuggestAmputation>
+  </BodyPartDef>
+
+  <BodyPartDef>
+    <defName>LeftAntenna</defName>
+    <label>left antenna</label>
+    <hitPoints>15</hitPoints>
+    <skinCovered>false</skinCovered>
+    <solid>true</solid>
+    <alive>true</alive>
+    <canSuggestAmputation>true</canSuggestAmputation>
+  </BodyPartDef>
+
+</Defs>
