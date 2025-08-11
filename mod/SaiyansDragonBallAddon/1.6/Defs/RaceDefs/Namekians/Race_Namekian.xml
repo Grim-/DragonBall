@@ -142,11 +142,11 @@
               </offsets>
               <conditions>
                 <BodyPart>
-                  <bodyPartLabel>Left Antenna</bodyPartLabel>
+                  <bodyPartLabel>left antenna</bodyPartLabel>
                   <drawWithoutPart>false</drawWithoutPart>
                 </BodyPart>
                 <BodyPart>
-                  <bodyPartLabel>Right Antenna</bodyPartLabel>
+                  <bodyPartLabel>right antenna</bodyPartLabel>
                   <drawWithoutPart>false</drawWithoutPart>
                 </BodyPart>
               </conditions>
